@@ -1,0 +1,3 @@
+# used to ignore inside vs-code webpack files, sentry file and whatever else js file would be added at the root level, where ts rules would not apply.
+# it could be used a separate eslintrc for these files
+*.js
