@@ -1,10 +1,11 @@
-import { fork } from 'child_process';
+import { ChildProcess, fork } from 'child_process';
 import { app, BrowserWindow } from 'electron';
 import isDev from 'electron-is-dev';
 import * as path from 'path';
 import * as url from 'url';
 
 let win: BrowserWindow | null;
+let serverProcess: ChildProcess;
 
 const installExtensions = async () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -41,20 +42,13 @@ const createWindow = async () => {
     );
   }
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (isDev) {
     // Open DevTools, see https://github.com/electron/electron/issues/12438 for why we wait for dom-ready
     win.webContents.once('dom-ready', () => {
       win!.webContents.openDevTools();
     });
   }
 
-  win.on('closed', () => {
-    win = null;
-  });
-};
-
-app.on('ready', async () => {
-  createWindow();
   if (isDev) {
     const serverWindow = new BrowserWindow({
       width: 800,
@@ -63,10 +57,19 @@ app.on('ready', async () => {
     });
     serverWindow.loadURL('http://localhost:3000');
   } else {
-    const serverProcess = fork(path.resolve(__dirname, './server.js'));
+    serverProcess = fork(path.resolve(__dirname, './server.js'));
     serverProcess.on('message', console.log);
   }
-});
+
+  win.on('closed', () => {
+    win = null;
+    if (!isDev && serverProcess) {
+      serverProcess.kill();
+    }
+  });
+};
+
+app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
