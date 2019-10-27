@@ -1,27 +1,53 @@
-import * as express from 'express';
+import { ApolloServer } from 'apollo-server';
 import * as path from 'path';
 import 'reflect-metadata';
-import { createConnection } from 'typeorm';
+import { buildSchema } from 'type-graphql';
+import { Container } from 'typedi';
+import { createConnection, useContainer } from 'typeorm';
 import { Event } from './entities/Event';
-const app = express();
+import { EventResolver } from './resolvers/event.resolver';
 
-app.get('/', (_, res: express.Response) => {
-  res.send('Server is running dude!');
-});
+useContainer(Container);
 
-app.listen(3000, () =>
-  console.log('Backend for frontend listening on port 3000!'),
-);
-createConnection({
-  type: 'sqlite',
-  synchronize: true,
-  logging: true,
-  database: path.resolve(process.argv.slice(-1)[0], 'database.sqlite'),
-  entities: [Event],
-})
-  .then(async () => {
-    console.log(
-      await Event.findOne({ id: 'eec78699-9f6a-4e64-8151-a0d663351e57' }),
-    );
-  })
-  .catch(e => console.log(e));
+async function bootstrap() {
+  try {
+    await createConnection({
+      type: 'sqlite',
+      synchronize: true,
+      logging: true,
+      database: path.resolve(process.argv.slice(-1)[0], 'database.sqlite'),
+      entities: [Event],
+    });
+    // build TypeGraphQL executable schema
+    const schema = await buildSchema({
+      resolvers: [EventResolver],
+      container: Container,
+      // authChecker, // register auth checking function
+    });
+
+    // Create GraphQL server
+    const server = new ApolloServer({
+      schema,
+      // context: () => {
+      //   const ctx: Context = {
+      //     // create mocked user in context
+      //     // in real app you would be mapping user from `req.user` or sth
+      //     user: {
+      //       id: 1,
+      //       name: 'Sample user',
+      //       roles: ['REGULAR'],
+      //     },
+      //   };
+      //   return ctx;
+      // },
+    });
+
+    // Start the server
+    const { url } = await server.listen(4000);
+    console.log(`Server is running, GraphQL Playground available at ${url}`);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+bootstrap();
