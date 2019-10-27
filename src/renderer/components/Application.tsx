@@ -5,7 +5,7 @@ import { hot } from 'react-hot-loader/root';
 export const Application = () => {
   React.useEffect(() => {
     axios
-      .get('localhost:3000')
+      .get('http://localhost:3000/')
       .then(resp => console.log(resp))
       .catch(err => console.log(err));
   }, []);

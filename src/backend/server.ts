@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as path from 'path';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import { Event } from './entities/Event';
@@ -15,7 +16,7 @@ createConnection({
   type: 'sqlite',
   synchronize: true,
   logging: true,
-  database: 'src/data/database.sqlite',
+  database: path.resolve(process.argv.slice(-1)[0], 'database.sqlite'),
   entities: [Event],
 })
   .then(async () => {

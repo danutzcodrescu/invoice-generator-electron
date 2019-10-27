@@ -18,6 +18,22 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
+function startBEforFE() {
+  if (isDev) {
+    const serverWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: { nodeIntegration: true },
+    });
+    serverWindow.loadURL('http://localhost:3000');
+  } else {
+    serverProcess = fork(path.resolve(__dirname, './server.js'), [
+      `${app.getPath('documents')}/invoices/database`,
+    ]);
+    serverProcess.on('message', console.log);
+  }
+}
+
 const createWindow = async () => {
   if (isDev) {
     await installExtensions();
@@ -26,7 +42,11 @@ const createWindow = async () => {
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    webPreferences: { nodeIntegration: true },
+    webPreferences: {
+      nodeIntegration: true,
+      webSecurity: false,
+      allowRunningInsecureContent: false,
+    },
   });
 
   if (isDev) {
@@ -49,18 +69,6 @@ const createWindow = async () => {
     });
   }
 
-  if (isDev) {
-    const serverWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
-      webPreferences: { nodeIntegration: true },
-    });
-    serverWindow.loadURL('http://localhost:3000');
-  } else {
-    serverProcess = fork(path.resolve(__dirname, './server.js'));
-    serverProcess.on('message', console.log);
-  }
-
   win.on('closed', () => {
     win = null;
     if (!isDev && serverProcess) {
@@ -69,7 +77,10 @@ const createWindow = async () => {
   });
 };
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  startBEforFE();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
