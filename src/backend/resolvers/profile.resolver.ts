@@ -1,20 +1,20 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
-import { Client } from '../entities/Client.entity';
+import { Profile } from '../entities/Profile.entity';
 import { insertTransaction, nonNullObjectProperties } from '../utils/helpers';
 
-@Resolver(Client)
-export class ClientResolver {
+@Resolver(Profile)
+export class ProfileResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query(returns => [Client])
-  clients(): Promise<Client[]> {
-    return this.entityManager.find(Client);
+  @Query(returns => [Profile])
+  clients(): Promise<Profile[]> {
+    return this.entityManager.find(Profile);
   }
 
-  @Mutation(returns => Client)
+  @Mutation(returns => Profile)
   async addClient(
     @Arg('firstName', { nullable: true }) firstName?: string,
     @Arg('lastName', { nullable: true }) lastName?: string,
@@ -22,8 +22,8 @@ export class ClientResolver {
     @Arg('email', { nullable: true }) email?: string,
     @Arg('address', { nullable: true }) address?: string,
     @Arg('vat', { nullable: true }) vat?: string,
-  ): Promise<Client> {
-    let client: Client;
+  ): Promise<Profile> {
+    let profile: Profile;
     const obj = nonNullObjectProperties({
       firstName,
       lastName,
@@ -33,8 +33,12 @@ export class ClientResolver {
       vat,
     });
     await this.entityManager.transaction(async transactionManager => {
-      client = await insertTransaction(Client, transactionManager, obj as any);
+      profile = await insertTransaction(
+        Profile,
+        transactionManager,
+        obj as any,
+      );
     });
-    return client!;
+    return profile!;
   }
 }

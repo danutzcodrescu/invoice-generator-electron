@@ -1,9 +1,8 @@
-import { identity, pickBy } from 'lodash';
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
-import { Event } from '../entities/Event.entity';
 import { VatRule } from '../entities/VatRule.entity';
+import { insertTransaction, nonNullObjectProperties } from '../utils/helpers';
 
 @Resolver(VatRule)
 export class VatRuleResolver {
@@ -21,20 +20,16 @@ export class VatRuleResolver {
     @Arg('name', { nullable: true }) name?: string,
   ): Promise<VatRule> {
     let vatRule: VatRule;
-    const obj = pickBy(
-      {
-        name,
-        percentage,
-      },
-      identity,
-    );
+    const obj = nonNullObjectProperties({
+      name,
+      percentage,
+    });
     await this.entityManager.transaction(async transactionManager => {
-      const vatRuleEntity = await this.entityManager.create(VatRule, obj);
-      const eventEntity = await this.entityManager.create(Event, {
-        data: JSON.stringify(obj),
-      });
-      vatRule = await transactionManager.save(vatRuleEntity);
-      await transactionManager.save(eventEntity);
+      vatRule = await insertTransaction(
+        VatRule,
+        transactionManager,
+        obj as any,
+      );
     });
     return vatRule!;
   }

@@ -6,9 +6,11 @@ import { Container } from 'typedi';
 import { createConnection, useContainer } from 'typeorm';
 import { Client } from './entities/Client.entity';
 import { Event } from './entities/Event.entity';
+import { Profile } from './entities/Profile.entity';
 import { VatRule } from './entities/VatRule.entity';
 import { ClientResolver } from './resolvers/client.resolver';
 import { EventResolver } from './resolvers/event.resolver';
+import { ProfileResolver } from './resolvers/profile.resolver';
 import { VatRuleResolver } from './resolvers/vatRules.resolver';
 
 useContainer(Container);
@@ -20,12 +22,17 @@ async function bootstrap() {
       synchronize: true,
       logging: true,
       database: path.resolve(process.argv.slice(-1)[0], 'database.sqlite'),
-      entities: [Event, Client, VatRule],
+      entities: [Event, Client, VatRule, Profile],
     });
     console.log(await Event.find());
     // build TypeGraphQL executable schema
     const schema = await buildSchema({
-      resolvers: [EventResolver, ClientResolver, VatRuleResolver],
+      resolvers: [
+        EventResolver,
+        ClientResolver,
+        VatRuleResolver,
+        ProfileResolver,
+      ],
       container: Container,
       // authChecker, // register auth checking function
     });
