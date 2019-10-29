@@ -31,7 +31,11 @@ module.exports = merge.smart(baseConfig, {
         },
       },
       {
-        test: /\.(gif|png|jpe?g|svg)$/,
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(gif|png|jpe?g|svg|woff|woff2)$/,
         use: [
           'file-loader',
           {
