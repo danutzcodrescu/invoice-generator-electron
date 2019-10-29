@@ -112,3 +112,4 @@ dist
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+src/data/database.sqlite

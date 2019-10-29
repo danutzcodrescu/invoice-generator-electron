@@ -4,8 +4,12 @@ import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { Container } from 'typedi';
 import { createConnection, useContainer } from 'typeorm';
-import { Event } from './entities/Event';
+import { Client } from './entities/Client.entity';
+import { Event } from './entities/Event.entity';
+import { VatRule } from './entities/VatRule.entity';
+import { ClientResolver } from './resolvers/client.resolver';
 import { EventResolver } from './resolvers/event.resolver';
+import { VatRuleResolver } from './resolvers/vatRules.resolver';
 
 useContainer(Container);
 
@@ -16,11 +20,12 @@ async function bootstrap() {
       synchronize: true,
       logging: true,
       database: path.resolve(process.argv.slice(-1)[0], 'database.sqlite'),
-      entities: [Event],
+      entities: [Event, Client, VatRule],
     });
+    console.log(await Event.find());
     // build TypeGraphQL executable schema
     const schema = await buildSchema({
-      resolvers: [EventResolver],
+      resolvers: [EventResolver, ClientResolver, VatRuleResolver],
       container: Container,
       // authChecker, // register auth checking function
     });

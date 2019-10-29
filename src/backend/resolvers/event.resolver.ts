@@ -1,18 +1,15 @@
 import { Query, Resolver } from 'type-graphql';
-import { Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
-import { Event } from '../entities/Event';
+import { EntityManager } from 'typeorm';
+import { InjectManager } from 'typeorm-typedi-extensions';
+import { Event } from '../entities/Event.entity';
 
 @Resolver(Event)
 export class EventResolver {
-  constructor(
-    @InjectRepository(Event)
-    private readonly eventRepository: Repository<Event>,
-  ) {}
+  @InjectManager()
+  private entityManager: EntityManager;
 
-  // @ts-ignore
   @Query(returns => [Event])
   events(): Promise<Event[]> {
-    return this.eventRepository.find();
+    return this.entityManager.find(Event);
   }
 }

@@ -3,9 +3,6 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "lib": ["esnext", "esnext.asynciterable"],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false
+    "lib": ["esnext", "esnext.asynciterable"]
   }
 }
