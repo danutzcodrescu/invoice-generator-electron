@@ -15,10 +15,11 @@ import { NoPaddingGrid, PaddingCard, PaddingGrid } from './ClientForm.styles';
 
 interface Props {
   createClient: MutationFunction;
+  title: string;
 }
 
 export function ClientForm(props: Props) {
-  const { createClient } = props;
+  const { createClient, title } = props;
   const submit = React.useCallback(
     function onSubmit(values: MutationAddClientArgs) {
       createClient({ variables: values });
@@ -33,7 +34,7 @@ export function ClientForm(props: Props) {
           <PaddingGrid container>
             <Grid item xs={6}>
               <Typography color="textPrimary" variant="h1">
-                New client
+                {title}
               </Typography>
             </Grid>
             <Grid
