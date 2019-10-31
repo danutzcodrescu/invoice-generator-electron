@@ -1,6 +1,8 @@
 import { amber, deepPurple } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
 
+const defaultTheme = createMuiTheme();
+
 export const theme = createMuiTheme({
   palette: {
     primary: deepPurple,
@@ -22,12 +24,21 @@ export const theme = createMuiTheme({
         fontSize: '2.3rem',
         fontWeight: 600,
       },
+      h2: {
+        fontSize: '2rem',
+        fontWeight: 600,
+      },
     },
     MuiInput: {
       underline: {
         '&:hover:not(.Mui-disabled):before': {
           borderBottom: `2px solid ${deepPurple[800]}`,
         },
+      },
+    },
+    MuiPaper: {
+      root: {
+        padding: defaultTheme.spacing(3),
       },
     },
   },

@@ -26,3 +26,11 @@ export const CREATE_CLIENT = gql`
     }
   }
 `;
+
+export const CREATE_VAT_RULE = gql`
+  mutation CreateVatRule($name: String, $vat: Float!) {
+    addVatRule(percentage: $vat, name: $name) {
+      id
+    }
+  }
+`;
