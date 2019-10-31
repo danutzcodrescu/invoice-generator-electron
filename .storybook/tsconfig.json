@@ -2,9 +2,9 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "build/lib",
-    "module": "commonjs",
-    "target": "es5",
-    "lib": ["es5", "es6", "es7", "es2017", "dom"],
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["es2017", "dom"],
     "sourceMap": true,
     "allowJs": false,
     "jsx": "react",

@@ -25,7 +25,7 @@ function startBEforFE() {
       height: 600,
       webPreferences: { nodeIntegration: true },
     });
-    serverWindow.loadURL('http://localhost:3000');
+    serverWindow.loadURL('http://localhost:4000');
   } else {
     serverProcess = fork(path.resolve(__dirname, './server.js'), [
       `${app.getPath('documents')}/invoices/database`,

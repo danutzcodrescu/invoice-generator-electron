@@ -10,12 +10,12 @@ export class ProfileResolver {
   private entityManager: EntityManager;
 
   @Query(returns => [Profile])
-  clients(): Promise<Profile[]> {
+  profiles(): Promise<Profile[]> {
     return this.entityManager.find(Profile);
   }
 
   @Mutation(returns => Profile)
-  async addClient(
+  async addProfile(
     @Arg('firstName', { nullable: true }) firstName?: string,
     @Arg('lastName', { nullable: true }) lastName?: string,
     @Arg('company', { nullable: true }) company?: string,

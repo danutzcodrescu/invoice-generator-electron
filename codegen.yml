@@ -1,0 +1,12 @@
+overwrite: true
+schema: "http://localhost:4000"
+generates:
+  src/renderer/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+    config:
+      declarationKind: "interface"
+hooks:
+  afterOneFileWrite:
+    - prettier --write
