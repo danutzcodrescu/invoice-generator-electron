@@ -4,10 +4,10 @@ import {
   CardActionArea,
   CardMedia,
   Grid,
+  TextField,
   Typography,
 } from '@material-ui/core';
 import { EmailOutlined, Receipt, Room } from '@material-ui/icons';
-import { TextField } from 'final-form-material-ui';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
 import { MutationAddClientArgs } from '../../generated/graphql';
@@ -82,31 +82,42 @@ export function ClientForm(props: Props) {
                 >
                   <NoPaddingGrid item container spacing={1}>
                     <Grid item xs={6}>
-                      <Field
-                        component={TextField}
-                        name="firstName"
-                        placeholder="First Name"
-                        label="First name"
-                        fullWidth
-                      />
+                      <Field name="firstName">
+                        {({ input }) => (
+                          <TextField
+                            name="firstName"
+                            placeholder="First Name"
+                            label="First name"
+                            fullWidth
+                            {...input}
+                          />
+                        )}
+                      </Field>
                     </Grid>
                     <Grid item xs={6}>
-                      <Field
-                        name="lastName"
-                        placeholder="Last Name"
-                        label="Last Name"
-                        fullWidth
-                        component={TextField}
-                      />
+                      <Field name="lastName">
+                        {({ input }) => (
+                          <TextField
+                            name="lastName"
+                            placeholder="Last Name"
+                            label="Last Name"
+                            fullWidth
+                            {...input}
+                          />
+                        )}
+                      </Field>
                     </Grid>
                   </NoPaddingGrid>
-                  <Field
-                    name="company"
-                    placeholder="Company"
-                    fullWidth
-                    label="Company"
-                    component={TextField}
-                  />
+                  <Field name="company">
+                    {({ input }) => (
+                      <TextField
+                        placeholder="Company"
+                        fullWidth
+                        label="Company"
+                        {...input}
+                      />
+                    )}
+                  </Field>
                   <Grid container>
                     <Grid item xs={2} md={1} alignItems="center" container>
                       <EmailOutlined
@@ -115,14 +126,17 @@ export function ClientForm(props: Props) {
                       ></EmailOutlined>
                     </Grid>
                     <Grid item xs={10} md={11} alignItems="center" container>
-                      <Field
-                        name="email"
-                        placeholder="Email address"
-                        fullWidth
-                        label="Email address"
-                        component={TextField}
-                        type="email"
-                      />
+                      <Field name="email">
+                        {({ input }) => (
+                          <TextField
+                            placeholder="Email address"
+                            fullWidth
+                            label="Email address"
+                            type="email"
+                            {...input}
+                          ></TextField>
+                        )}
+                      </Field>
                     </Grid>
                   </Grid>
                   <Grid container>
@@ -133,13 +147,16 @@ export function ClientForm(props: Props) {
                       ></Room>
                     </Grid>
                     <Grid item xs={10} md={11}>
-                      <Field
-                        name="address"
-                        placeholder="Address"
-                        fullWidth
-                        label="Address"
-                        component={TextField}
-                      />
+                      <Field name="address">
+                        {({ input }) => (
+                          <TextField
+                            placeholder="Address"
+                            fullWidth
+                            label="Address"
+                            {...input}
+                          />
+                        )}
+                      </Field>
                     </Grid>
                   </Grid>
                   <Grid container>
@@ -150,13 +167,16 @@ export function ClientForm(props: Props) {
                       ></Receipt>
                     </Grid>
                     <Grid item xs={10} md={11}>
-                      <Field
-                        name="vatnb"
-                        placeholder="VAT number"
-                        fullWidth
-                        label="Tax number"
-                        component={TextField}
-                      />
+                      <Field name="vatnb">
+                        {({ input }) => (
+                          <TextField
+                            placeholder="VAT number"
+                            fullWidth
+                            label="Tax number"
+                            {...input}
+                          />
+                        )}
+                      </Field>
                     </Grid>
                   </Grid>
                 </Grid>
