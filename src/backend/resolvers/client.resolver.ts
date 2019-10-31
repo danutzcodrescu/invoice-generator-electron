@@ -11,7 +11,8 @@ export class ClientResolver {
 
   @Query(returns => [Client])
   clients(): Promise<Client[]> {
-    return this.entityManager.find(Client);
+    // need to add data-loader
+    return this.entityManager.find(Client, { relations: ['invoices'] });
   }
 
   @Mutation(returns => Client)
