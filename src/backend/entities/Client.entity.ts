@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
+  BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
@@ -39,15 +40,21 @@ export class Client extends BaseEntity {
   vat?: string;
 
   @Field()
-  @Column({ type: 'text', default: new Date().toUTCString() })
+  @Column({ type: 'text' })
   updatedAt: string;
 
   @Field()
-  @Column({ type: 'text', default: new Date().toUTCString() })
+  @Column({ type: 'text' })
   createdAt: string;
 
   @BeforeUpdate()
   updateDate() {
+    this.updatedAt = new Date().toUTCString();
+  }
+
+  @BeforeInsert()
+  createDate() {
+    this.createdAt = new Date().toUTCString();
     this.updatedAt = new Date().toUTCString();
   }
 }
