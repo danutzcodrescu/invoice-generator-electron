@@ -1,3 +1,4 @@
+import { MutationFunction } from '@apollo/react-common';
 import {
   Button,
   CardActionArea,
@@ -6,27 +7,35 @@ import {
   Typography,
 } from '@material-ui/core';
 import { EmailOutlined, Receipt, Room } from '@material-ui/icons';
-import { Input, TextField } from 'final-form-material-ui';
+import { TextField } from 'final-form-material-ui';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
-import { PaddingCard, PaddingGrid } from './ClientForm.styles';
+import { MutationAddClientArgs } from '../../generated/graphql';
+import { NoPaddingGrid, PaddingCard, PaddingGrid } from './ClientForm.styles';
 
-interface Props {}
+interface Props {
+  createClient: MutationFunction;
+}
 
 export function ClientForm(props: Props) {
-  function onSubmit(values: any) {
-    console.log(values);
-  }
+  const { createClient } = props;
+  console.log(createClient);
+  const submit = React.useCallback(
+    function onSubmit(values: MutationAddClientArgs) {
+      createClient({ variables: values });
+    },
+    [createClient],
+  );
+  console.log(submit);
   return (
     <Form
-      onSubmit={onSubmit}
+      onSubmit={submit}
       render={({ handleSubmit, submitting, pristine, values }) => (
         <form onSubmit={handleSubmit}>
-          <PaddingGrid container xs={12}>
+          <PaddingGrid container>
             <Grid item xs={6}>
               <Typography color="textPrimary" variant="h1">
                 New client
-                {JSON.stringify(values)}
               </Typography>
             </Grid>
             <Grid
@@ -34,17 +43,16 @@ export function ClientForm(props: Props) {
               container
               xs={6}
               alignItems="center"
-              justify="space-between"
+              justify="space-around"
             >
-              <Grid xs={4}>
-                <Button color="secondary" variant="contained" fullWidth>
+              <Grid item xs={5}>
+                <Button color="secondary" fullWidth>
                   Cancel
                 </Button>
               </Grid>
-              <Grid xs={4}>
+              <Grid item xs={5}>
                 <Button
                   color="primary"
-                  variant="contained"
                   fullWidth
                   type="submit"
                   disabled={submitting || pristine}
@@ -57,7 +65,6 @@ export function ClientForm(props: Props) {
               <Grid container>
                 <Grid item xs={4}>
                   <CardActionArea>
-                    <Field component={Input} type="file" name="logo"></Field>
                     <CardMedia
                       component="img"
                       height="140"
@@ -67,8 +74,15 @@ export function ClientForm(props: Props) {
                     ></CardMedia>
                   </CardActionArea>
                 </Grid>
-                <Grid item container xs={8} justify="space-around">
-                  <Grid item container spacing={1}>
+                <Grid
+                  item
+                  container
+                  xs={8}
+                  justify="space-around"
+                  direction="column"
+                  spacing={2}
+                >
+                  <NoPaddingGrid item container spacing={1}>
                     <Grid item xs={6}>
                       <Field
                         component={TextField}
@@ -87,7 +101,7 @@ export function ClientForm(props: Props) {
                         component={TextField}
                       />
                     </Grid>
-                  </Grid>
+                  </NoPaddingGrid>
                   <Field
                     name="company"
                     placeholder="Company"
@@ -96,13 +110,13 @@ export function ClientForm(props: Props) {
                     component={TextField}
                   />
                   <Grid container>
-                    <Grid item xs={1} alignItems="center" container>
+                    <Grid item xs={2} md={1} alignItems="center" container>
                       <EmailOutlined
                         style={{ marginTop: '15px' }}
                         fontSize="default"
                       ></EmailOutlined>
                     </Grid>
-                    <Grid item xs={11} alignItems="center">
+                    <Grid item xs={10} md={11} alignItems="center" container>
                       <Field
                         name="email"
                         placeholder="Email address"
@@ -114,13 +128,13 @@ export function ClientForm(props: Props) {
                     </Grid>
                   </Grid>
                   <Grid container>
-                    <Grid item xs={1} alignItems="center" container>
+                    <Grid item xs={2} md={1} alignItems="center" container>
                       <Room
                         fontSize="default"
                         style={{ marginTop: '15px' }}
                       ></Room>
                     </Grid>
-                    <Grid item xs={11}>
+                    <Grid item xs={10} md={11}>
                       <Field
                         name="address"
                         placeholder="Address"
@@ -131,13 +145,13 @@ export function ClientForm(props: Props) {
                     </Grid>
                   </Grid>
                   <Grid container>
-                    <Grid item xs={1} container>
+                    <Grid item xs={2} md={1} container>
                       <Receipt
                         fontSize="default"
                         style={{ marginTop: '19px' }}
                       ></Receipt>
                     </Grid>
-                    <Grid item xs={11}>
+                    <Grid item xs={10} md={11}>
                       <Field
                         name="vatnb"
                         placeholder="VAT number"
