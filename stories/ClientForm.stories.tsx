@@ -9,19 +9,19 @@ import { ClientFormContainer } from '../src/renderer/containers/ClientForm.conta
 import { client } from '../src/renderer/graphql/client';
 import { theme } from '../src/renderer/theme/theme';
 
-const Wrapper = (props: { children: React.ReactElement }) => (
+export const Wrapper = (props: { children: React.ReactElement }) => (
   <>
     <CssBaseline />
-    <MaterialUIProvider theme={theme}>
-      <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
-    </MaterialUIProvider>
+    <ApolloProvider client={client}>
+      <MaterialUIProvider theme={theme}>
+        <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
+      </MaterialUIProvider>
+    </ApolloProvider>
   </>
 );
 
 storiesOf('Components/ClientForm', module).add('ClientForm', () => (
   <Wrapper>
-    <ApolloProvider client={client}>
-      <ClientFormContainer></ClientFormContainer>
-    </ApolloProvider>
+    <ClientFormContainer></ClientFormContainer>
   </Wrapper>
 ));

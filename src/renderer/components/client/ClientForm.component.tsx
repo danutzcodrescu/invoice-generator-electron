@@ -19,18 +19,16 @@ interface Props {
 
 export function ClientForm(props: Props) {
   const { createClient } = props;
-  console.log(createClient);
   const submit = React.useCallback(
     function onSubmit(values: MutationAddClientArgs) {
       createClient({ variables: values });
     },
     [createClient],
   );
-  console.log(submit);
   return (
     <Form
       onSubmit={submit}
-      render={({ handleSubmit, submitting, pristine, values }) => (
+      render={({ handleSubmit, submitting, pristine }) => (
         <form onSubmit={handleSubmit}>
           <PaddingGrid container>
             <Grid item xs={6}>
