@@ -24,11 +24,11 @@ export class VatRule extends BaseEntity {
   percentage: number;
 
   @Field()
-  @Column({ type: 'text', default: new Date().toUTCString() })
+  @Column({ type: 'text' })
   updatedAt: string;
 
   @Field()
-  @Column({ type: 'text', default: new Date().toUTCString() })
+  @Column({ type: 'text' })
   createdAt: string;
 
   @BeforeUpdate()
@@ -41,5 +41,7 @@ export class VatRule extends BaseEntity {
     if (!this.name) {
       this.name = this.percentage + '%';
     }
+    this.updatedAt = new Date().toUTCString();
+    this.createdAt = new Date().toUTCString();
   }
 }

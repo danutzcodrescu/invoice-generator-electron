@@ -34,3 +34,30 @@ export const CREATE_VAT_RULE = gql`
     }
   }
 `;
+
+export const CREATE_PROFILE = gql`
+  mutation AddProfile(
+    $firstName: String
+    $lastName: String
+    $email: String
+    $company: String
+    $address: String
+    $vat: String
+  ) {
+    addProfile(
+      firstName: $firstName
+      lastName: $lastName
+      email: $email
+      company: $company
+      address: $address
+      vat: $vat
+    ) {
+      id
+      firstName
+      lastName
+      company
+      address
+      vat
+    }
+  }
+`;
