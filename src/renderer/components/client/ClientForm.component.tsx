@@ -86,7 +86,6 @@ export function ClientForm(props: Props) {
                       <Field name="firstName">
                         {({ input }) => (
                           <TextField
-                            name="firstName"
                             placeholder="First Name"
                             label="First name"
                             fullWidth
@@ -99,7 +98,6 @@ export function ClientForm(props: Props) {
                       <Field name="lastName">
                         {({ input }) => (
                           <TextField
-                            name="lastName"
                             placeholder="Last Name"
                             label="Last Name"
                             fullWidth

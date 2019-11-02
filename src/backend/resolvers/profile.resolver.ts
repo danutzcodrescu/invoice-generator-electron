@@ -11,7 +11,7 @@ export class ProfileResolver {
 
   @Query(returns => [Profile])
   profiles(): Promise<Profile[]> {
-    return this.entityManager.find(Profile);
+    return this.entityManager.find(Profile, { relations: ['invoices'] });
   }
 
   @Mutation(returns => Profile)

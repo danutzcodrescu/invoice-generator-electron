@@ -5,8 +5,10 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Invoice } from './Invoice.entity';
 
 @Entity()
 @ObjectType()
@@ -46,6 +48,10 @@ export class Client extends BaseEntity {
   @Field()
   @Column({ type: 'text' })
   createdAt: string;
+
+  @Field(type => [Invoice])
+  @OneToMany(type => Invoice, invoice => invoice.client, { lazy: true })
+  invoices: Promise<Invoice[]>;
 
   @BeforeUpdate()
   updateDate() {
