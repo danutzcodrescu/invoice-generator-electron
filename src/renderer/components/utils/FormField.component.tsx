@@ -13,15 +13,20 @@ interface Props {
   margin?: 'normal';
   helperText?: string;
   children?: any;
-  require?: boolean;
+  required?: boolean;
 }
 
 export function FormField(props: Props) {
   const { name, children, ...rest } = props;
   return (
     <Field name={name}>
-      {({ input }) => (
-        <TextField {...rest} {...input}>
+      {({ input, meta }) => (
+        <TextField
+          {...rest}
+          {...input}
+          error={meta.dirty && meta.invalid}
+          helperText={meta.error}
+        >
           {children ? children : null}
         </TextField>
       )}

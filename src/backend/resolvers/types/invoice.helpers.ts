@@ -2,8 +2,8 @@ import { Field, Float, ID, InputType } from 'type-graphql';
 
 @InputType()
 export class ClientInput {
-  @Field(type => ID)
-  clientId: string;
+  @Field(type => ID, { nullable: true })
+  clientId?: string;
 
   @Field()
   clientData: string;

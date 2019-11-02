@@ -10,6 +10,7 @@ interface Props {
   itemToString: (item: any) => string;
   data: any[];
   searchKeys: string[];
+  placeholder: string;
 }
 
 export const Autocomplete = (props: Props) => {
@@ -18,9 +19,6 @@ export const Autocomplete = (props: Props) => {
     <Downshift
       {...input}
       onSelect={onSelect}
-      onInputValueChange={inputValue => {
-        input.onChange(inputValue);
-      }}
       itemToString={itemToString}
       selectedItem={input.value}
     >
@@ -46,7 +44,7 @@ export const Autocomplete = (props: Props) => {
               InputProps={{
                 ...getInputProps({
                   name: input.name,
-                  placeholder: 'Profile',
+                  placeholder: props.placeholder,
                 }),
               }}
             />
@@ -60,11 +58,10 @@ export const Autocomplete = (props: Props) => {
                       index,
                       item,
                       style: {
-                        backgroundColor:
-                          highlightedIndex === index ? 'lightgray' : 'white',
                         fontWeight: selectedItem === item ? 'bold' : 'normal',
                       },
                     })}
+                    selected={highlightedIndex === index}
                   >
                     {itemToString(item)}
                   </MenuItem>

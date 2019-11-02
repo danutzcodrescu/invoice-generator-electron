@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Button, Grid, MenuItem, Paper, Typography } from '@material-ui/core';
 import {
   AccountBoxOutlined,
@@ -7,11 +7,13 @@ import {
   ShoppingCartOutlined,
 } from '@material-ui/icons';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import { ARRAY_ERROR } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 import { Client, Profile, Query } from '../../generated/graphql';
+import { CREATE_INVOICE } from '../../graphql/mutations';
 import { GET_CLIENTS, GET_PROFILE, GET_VAT_RULES } from '../../graphql/queries';
 import { setBulkValue } from '../../utils/react-final-form';
 import { Autocomplete } from '../utils/Autocomplete.component';
@@ -35,7 +37,40 @@ export function InvoiceForm() {
   const { data: clientData } = useQuery<Query>(GET_CLIENTS);
   const selectedClient = React.useRef<string>();
   const selectedProfile = React.useRef<string>();
+  const [createInvoice] = useMutation(CREATE_INVOICE);
   function submitForm(values: any) {
+    const errors = { [ARRAY_ERROR]: [] as string[] };
+    if (!values.invoiceDate) {
+      errors[ARRAY_ERROR].push('Invoice date is required');
+    }
+    if (!values.vat) {
+      errors[ARRAY_ERROR].push('Vat value is required');
+    }
+
+    if (
+      (!values.clientLastName || !values.clientFirstName) &&
+      !values.clientCompany
+    ) {
+      errors[ARRAY_ERROR].push(
+        'Please provide a fullname or a company name for the client',
+      );
+    }
+    if (
+      (!values.profileLastName || !values.profileFirstName) &&
+      !values.profileCompany
+    ) {
+      errors[ARRAY_ERROR].push(
+        'Please provide a fullname or a company name for your profile',
+      );
+    }
+    if (!values.profileVat) {
+      errors[ARRAY_ERROR].push('Please a VAT number for your profile');
+    }
+
+    if (errors[ARRAY_ERROR].length) {
+      return errors;
+    }
+
     const invoiceData = {
       invoiceDate: values.invoiceDate,
       items: JSON.stringify(values.items),
@@ -66,7 +101,9 @@ export function InvoiceForm() {
         vat: values.profileVat,
       }),
     };
-    console.log({ ...profile, ...client, invoiceData });
+    createInvoice({
+      variables: { profileData: profile, clientData: client, invoiceData },
+    });
   }
   return (
     <Paper>
@@ -83,15 +120,28 @@ export function InvoiceForm() {
           ...arrayMutators,
           setBulkValue,
         }}
+        validate={(values: any) => {
+          const errors: any = {};
+          if (!values.invoiceDate) {
+            errors.invoiceDate = 'Required';
+          }
+          if (!values.profileVat) {
+            errors.profileVat = 'Required';
+          }
+          if (!values.vat) {
+            errors.vat = 'Required';
+          }
+          return errors;
+        }}
         render={({
           handleSubmit,
           submitting,
           pristine,
           values,
+          submitErrors,
           form: {
             mutators: { push, remove, setBulkValue: set },
           },
-          form,
         }) => (
           <form onSubmit={handleSubmit}>
             <Field name="invoiceDate">
@@ -103,6 +153,7 @@ export function InvoiceForm() {
                   margin="normal"
                   id="invoiceDate"
                   label="Invoice date"
+                  required
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
@@ -119,16 +170,19 @@ export function InvoiceForm() {
                   input={input}
                   itemToString={itemToString}
                   data={profileData ? profileData.profiles : []}
+                  placeholder="Profile"
                   searchKeys={['firstName', 'lastName', 'company']}
                   onSelect={(selected: Profile) => {
-                    set(
-                      ['profileFirstName', selected.firstName],
-                      ['profileLastName', selected.lastName],
-                      ['profileCompany', selected.company],
-                      ['profileAddress', selected.address],
-                      ['profileVat', selected.vat],
-                    );
-                    selectedProfile.current = selected.id;
+                    if (selected) {
+                      set(
+                        ['profileFirstName', selected.firstName],
+                        ['profileLastName', selected.lastName],
+                        ['profileCompany', selected.company],
+                        ['profileAddress', selected.address],
+                        ['profileVat', selected.vat],
+                      );
+                      selectedProfile.current = selected.id;
+                    }
                   }}
                 />
               )}
@@ -173,6 +227,7 @@ export function InvoiceForm() {
                   placeholder="Profile VAT number"
                   fullWidth
                   label="Profile VAT number"
+                  required
                 />
               </Grid>
             </Grid>
@@ -187,15 +242,18 @@ export function InvoiceForm() {
                   itemToString={itemToString}
                   data={clientData ? clientData.clients : []}
                   searchKeys={['firstName', 'lastName', 'company']}
+                  placeholder="Client"
                   onSelect={(selected: Client) => {
-                    set(
-                      ['clientFirstName', selected.firstName],
-                      ['clientLastName', selected.lastName],
-                      ['clientCompany', selected.company],
-                      ['clientAddress', selected.address],
-                      ['clientVat', selected.vat],
-                    );
-                    selectedClient.current = selected.id;
+                    if (selected) {
+                      set(
+                        ['clientFirstName', selected.firstName],
+                        ['clientLastName', selected.lastName],
+                        ['clientCompany', selected.company],
+                        ['clientAddress', selected.address],
+                        ['clientVat', selected.vat],
+                      );
+                      selectedClient.current = selected.id;
+                    }
                   }}
                 />
               )}
@@ -303,6 +361,7 @@ export function InvoiceForm() {
               select
               margin="normal"
               helperText="VAT percentage"
+              required
             >
               {data ? (
                 data.vatRules.map(option => (
@@ -355,7 +414,28 @@ export function InvoiceForm() {
                   : 0}
               </Grid>
             </Grid>
-            <Button color="primary" type="submit">
+            {submitErrors ? (
+              <>
+                <Typography color="error">
+                  <b>Errors</b>
+                </Typography>
+                <ul>
+                  {submitErrors[ARRAY_ERROR].map(
+                    (val: string, index: number) => (
+                      <Typography color="error" key={index} component="li">
+                        {val}
+                      </Typography>
+                    ),
+                  )}
+                </ul>
+              </>
+            ) : null}
+
+            <Button
+              color="primary"
+              type="submit"
+              disabled={pristine || submitting}
+            >
               Create invoice
             </Button>
           </form>

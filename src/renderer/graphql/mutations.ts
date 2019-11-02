@@ -61,3 +61,19 @@ export const CREATE_PROFILE = gql`
     }
   }
 `;
+
+export const CREATE_INVOICE = gql`
+  mutation createInvoice(
+    $clientData: ClientInput!
+    $profileData: ProfileInput!
+    $invoiceData: InvoiceInput!
+  ) {
+    createInvoice(
+      invoiceData: $invoiceData
+      profile: $profileData
+      client: $clientData
+    ) {
+      id
+    }
+  }
+`;
