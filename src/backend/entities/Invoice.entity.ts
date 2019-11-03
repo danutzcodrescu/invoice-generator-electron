@@ -19,8 +19,16 @@ export class Invoice extends BaseEntity {
   readonly id: string;
 
   @Field()
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: false })
   invoiceDate: string;
+
+  @Field()
+  @Column({ type: 'text', nullable: false })
+  invoiceNumber: string;
+
+  @Field({ nullable: true })
+  @Column({ type: 'text', nullable: true })
+  bankAccount: string;
 
   @Field()
   @Column({ type: 'text' })
@@ -40,10 +48,10 @@ export class Invoice extends BaseEntity {
   @Column('text')
   profileData: string;
 
-  @Field(type => Client)
+  @Field(type => Client, { nullable: true })
   @ManyToOne(type => Client, { lazy: true })
   client: Promise<Client>;
-  @Column()
+  @Column({ nullable: true })
   clientId: string;
 
   @Field()

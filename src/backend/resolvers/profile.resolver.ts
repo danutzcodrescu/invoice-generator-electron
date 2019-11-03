@@ -22,6 +22,8 @@ export class ProfileResolver {
     @Arg('email', { nullable: true }) email?: string,
     @Arg('address', { nullable: true }) address?: string,
     @Arg('vat', { nullable: true }) vat?: string,
+    @Arg('bankAccount', { nullable: true }) bankAccount?: string,
+    @Arg('phone', { nullable: true }) phone?: string,
   ): Promise<Profile> {
     let profile: Profile;
     const obj = nonNullObjectProperties({
@@ -31,6 +33,8 @@ export class ProfileResolver {
       email,
       company,
       vat,
+      bankAccount,
+      phone,
     });
     await this.entityManager.transaction(async transactionManager => {
       profile = await insertTransaction(

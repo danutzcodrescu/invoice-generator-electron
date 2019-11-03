@@ -31,4 +31,7 @@ export class InvoiceInput {
 
   @Field(type => Float)
   amount: number;
+
+  @Field()
+  invoiceNumber: string;
 }

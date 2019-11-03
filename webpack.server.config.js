@@ -18,19 +18,7 @@ module.exports = merge.smart(baseConfig, {
       {
         test: /\.ts?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-          cacheDirectory: true,
-          babelrc: false,
-          presets: [
-            ['@babel/preset-env', { targets: 'maintained node versions' }],
-            '@babel/preset-typescript',
-          ],
-          plugins: [
-            ['@babel/plugin-proposal-decorators', { legacy: true }],
-            ['@babel/plugin-proposal-class-properties', { loose: true }],
-          ],
-        },
+        loader: 'ts-loader',
       },
     ],
   },
