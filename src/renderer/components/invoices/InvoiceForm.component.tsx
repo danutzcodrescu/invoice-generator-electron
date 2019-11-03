@@ -7,11 +7,13 @@ import {
   ShoppingCartOutlined,
 } from '@material-ui/icons';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import { ipcRenderer } from 'electron';
 import { ARRAY_ERROR } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
+import { CREATE_PDF_EVENT } from '../../../main/events';
 import { Client, Profile, Query } from '../../generated/graphql';
 import { CREATE_INVOICE } from '../../graphql/mutations';
 import { GET_CLIENTS, GET_PROFILE, GET_VAT_RULES } from '../../graphql/queries';
@@ -31,13 +33,19 @@ function itemToString(item: Profile | Client) {
   return item;
 }
 
+function createPDF(data: any) {
+  ipcRenderer.send(CREATE_PDF_EVENT, data.createInvoice);
+}
+
 export function InvoiceForm() {
   const { data } = useQuery<Query>(GET_VAT_RULES);
   const { data: profileData } = useQuery<Query>(GET_PROFILE);
   const { data: clientData } = useQuery<Query>(GET_CLIENTS);
   const selectedClient = React.useRef<string>();
   const selectedProfile = React.useRef<string>();
-  const [createInvoice] = useMutation(CREATE_INVOICE);
+  const [createInvoice] = useMutation(CREATE_INVOICE, {
+    onCompleted: createPDF,
+  });
   function submitForm(values: any) {
     const errors = { [ARRAY_ERROR]: [] as string[] };
     if (!values.invoiceDate) {
@@ -64,7 +72,11 @@ export function InvoiceForm() {
       );
     }
     if (!values.profileVat) {
-      errors[ARRAY_ERROR].push('Please a VAT number for your profile');
+      errors[ARRAY_ERROR].push('Please add a VAT number for your profile');
+    }
+
+    if (!values.invoiceNumber) {
+      errors[ARRAY_ERROR].push('Please add an invoice number');
     }
 
     if (errors[ARRAY_ERROR].length) {
@@ -74,12 +86,15 @@ export function InvoiceForm() {
     const invoiceData = {
       invoiceDate: values.invoiceDate,
       items: JSON.stringify(values.items),
-      vat: calculateVat(
-        values.items,
-        data!.vatRules.find(rule => rule.id === (values as any).vat)!
-          .percentage,
+      vat: parseFloat(
+        calculateVat(
+          values.items,
+          data!.vatRules.find(rule => rule.id === (values as any).vat)!
+            .percentage,
+        ).toString(),
       ),
-      amount: calculateNet(values.items),
+      amount: parseFloat(calculateNet(values.items).toString()),
+      invoiceNumber: values.invoiceNumber,
     };
     const client = {
       clientId: selectedClient.current,
@@ -99,6 +114,9 @@ export function InvoiceForm() {
         company: values.profileCompany,
         address: values.profileAddress,
         vat: values.profileVat,
+        phone: values.profilePhone,
+        email: values.profileEmail,
+        bankAccount: values.profileBankAccount,
       }),
     };
     createInvoice({
@@ -125,6 +143,9 @@ export function InvoiceForm() {
           if (!values.invoiceDate) {
             errors.invoiceDate = 'Required';
           }
+          if (!values.invoiceNumber) {
+            errors.invoiceNumber = 'Required';
+          }
           if (!values.profileVat) {
             errors.profileVat = 'Required';
           }
@@ -144,23 +165,36 @@ export function InvoiceForm() {
           },
         }) => (
           <form onSubmit={handleSubmit}>
-            <Field name="invoiceDate">
-              {({ input }) => (
-                <KeyboardDatePicker
-                  disableToolbar={true}
-                  variant="inline"
-                  format="dd/MM/yyyy"
-                  margin="normal"
-                  id="invoiceDate"
-                  label="Invoice date"
+            <Grid container spacing={2}>
+              <Grid xs={3} item>
+                <Field name="invoiceDate">
+                  {({ input }) => (
+                    <KeyboardDatePicker
+                      disableToolbar={true}
+                      variant="inline"
+                      format="dd/MM/yyyy"
+                      margin="normal"
+                      id="invoiceDate"
+                      label="Invoice date"
+                      required
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                      {...input}
+                    />
+                  )}
+                </Field>
+              </Grid>
+              <Grid item xs={3} style={{ position: 'relative', top: '15px' }}>
+                <FormField
+                  name="invoiceNumber"
                   required
-                  KeyboardButtonProps={{
-                    'aria-label': 'change date',
-                  }}
-                  {...input}
+                  placeholder="Invoice number"
+                  label="Invoice number"
+                  fullWidth
                 />
-              )}
-            </Field>
+              </Grid>
+            </Grid>
             <Typography>
               Profile <AccountBoxOutlined />
             </Typography>
@@ -180,6 +214,9 @@ export function InvoiceForm() {
                         ['profileCompany', selected.company],
                         ['profileAddress', selected.address],
                         ['profileVat', selected.vat],
+                        ['profileBankAccount', selected.bankAccount],
+                        ['profileEmail', selected.email],
+                        ['profilePhone', selected.phone],
                       );
                       selectedProfile.current = selected.id;
                     }
@@ -215,6 +252,22 @@ export function InvoiceForm() {
               </Grid>
               <Grid item xs={4} md={3}>
                 <FormField
+                  name="profileEmail"
+                  placeholder="Profile email"
+                  fullWidth
+                  label="Profile email"
+                />
+              </Grid>
+              <Grid item xs={4} md={3}>
+                <FormField
+                  name="profilePhone"
+                  placeholder="Profile phone"
+                  fullWidth
+                  label="Profile phone"
+                />
+              </Grid>
+              <Grid item xs={4} md={3}>
+                <FormField
                   name="profileAddress"
                   placeholder="Profile address"
                   fullWidth
@@ -227,6 +280,15 @@ export function InvoiceForm() {
                   placeholder="Profile VAT number"
                   fullWidth
                   label="Profile VAT number"
+                  required
+                />
+              </Grid>
+              <Grid item xs={4} md={3}>
+                <FormField
+                  name="profileBankAccount"
+                  placeholder="Profile bank account"
+                  fullWidth
+                  label="Profile bank account"
                   required
                 />
               </Grid>
@@ -362,6 +424,7 @@ export function InvoiceForm() {
               margin="normal"
               helperText="VAT percentage"
               required
+              fullWidth
             >
               {data ? (
                 data.vatRules.map(option => (

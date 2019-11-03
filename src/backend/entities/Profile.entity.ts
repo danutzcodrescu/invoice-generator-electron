@@ -41,6 +41,10 @@ export class Profile extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   vat?: string;
 
+  @Field({ nullable: true })
+  @Column({ type: 'text', nullable: true })
+  phone?: string;
+
   @Field()
   @Column({ type: 'text' })
   updatedAt: string;
@@ -48,6 +52,10 @@ export class Profile extends BaseEntity {
   @Field()
   @Column({ type: 'text' })
   createdAt: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  bankAccount: string;
 
   @Field(type => [Invoice])
   @OneToMany(type => Invoice, invoice => invoice.client, { lazy: true })

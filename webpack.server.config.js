@@ -11,12 +11,12 @@ module.exports = merge.smart(baseConfig, {
   entry: {
     server: path.resolve(__dirname, './src/backend/server.ts'),
   },
-  mode: 'production',
+  mode: 'development',
   externals: [nodeExternals()],
   module: {
     rules: [
       {
-        test: /\.ts?$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
@@ -27,6 +27,7 @@ module.exports = merge.smart(baseConfig, {
             '@babel/preset-typescript',
           ],
           plugins: [
+            'babel-plugin-transform-typescript-metadata',
             ['@babel/plugin-proposal-decorators', { legacy: true }],
             ['@babel/plugin-proposal-class-properties', { loose: true }],
           ],

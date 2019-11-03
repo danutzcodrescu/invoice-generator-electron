@@ -1,8 +1,11 @@
 import { ChildProcess, fork } from 'child_process';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
 import * as path from 'path';
 import * as url from 'url';
+import { Invoice } from '../renderer/generated/graphql';
+import { CREATE_PDF_EVENT } from './events';
+import { createInvoice } from './invoices';
 
 let win: BrowserWindow | null;
 let serverProcess: ChildProcess;
@@ -80,6 +83,10 @@ const createWindow = async () => {
 app.on('ready', () => {
   createWindow();
   startBEforFE();
+
+  ipcMain.on(CREATE_PDF_EVENT, (_, invoice: Invoice) => {
+    createInvoice(invoice);
+  });
 });
 
 app.on('window-all-closed', () => {

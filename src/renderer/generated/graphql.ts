@@ -19,6 +19,12 @@ export interface Client {
   vat?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
+  invoices: Array<Invoice>;
+}
+
+export interface ClientInput {
+  clientId?: Maybe<Scalars['ID']>;
+  clientData: Scalars['String'];
 }
 
 export interface Event {
@@ -29,9 +35,35 @@ export interface Event {
   createdAt: Scalars['String'];
 }
 
+export interface Invoice {
+  __typename?: 'Invoice';
+  id: Scalars['ID'];
+  invoiceDate: Scalars['String'];
+  invoiceNumber: Scalars['String'];
+  bankAccount?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['String'];
+  createdAt: Scalars['String'];
+  profile: Profile;
+  profileData: Scalars['String'];
+  client: Client;
+  clientData: Scalars['String'];
+  items: Scalars['String'];
+  vat: Scalars['Float'];
+  amount: Scalars['Float'];
+}
+
+export interface InvoiceInput {
+  invoiceDate: Scalars['String'];
+  items: Scalars['String'];
+  vat: Scalars['Float'];
+  amount: Scalars['Float'];
+  invoiceNumber: Scalars['String'];
+}
+
 export interface Mutation {
   __typename?: 'Mutation';
   addClient: Client;
+  createInvoice: Invoice;
   addProfile: Profile;
   addVatRule: VatRule;
 }
@@ -45,7 +77,14 @@ export interface MutationAddClientArgs {
   firstName?: Maybe<Scalars['String']>;
 }
 
+export interface MutationCreateInvoiceArgs {
+  invoiceData: InvoiceInput;
+  profile: ProfileInput;
+  client: ClientInput;
+}
+
 export interface MutationAddProfileArgs {
+  bankAccount?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['String']>;
   address?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -68,14 +107,23 @@ export interface Profile {
   email?: Maybe<Scalars['String']>;
   address?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
+  bankAccount?: Maybe<Scalars['String']>;
+  invoices: Array<Invoice>;
+}
+
+export interface ProfileInput {
+  profileId: Scalars['ID'];
+  profileData: Scalars['String'];
 }
 
 export interface Query {
   __typename?: 'Query';
   clients: Array<Client>;
   events: Array<Event>;
+  invoices: Array<Invoice>;
   profiles: Array<Profile>;
   vatRules: Array<VatRule>;
 }

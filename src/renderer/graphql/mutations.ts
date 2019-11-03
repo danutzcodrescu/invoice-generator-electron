@@ -74,6 +74,13 @@ export const CREATE_INVOICE = gql`
       client: $clientData
     ) {
       id
+      invoiceDate
+      clientData
+      profileData
+      vat
+      amount
+      items
+      invoiceNumber
     }
   }
 `;

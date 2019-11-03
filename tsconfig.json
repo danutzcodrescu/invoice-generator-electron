@@ -4,6 +4,7 @@
     "target": "es2017",
     "module": "esnext",
     "moduleResolution": "node",
+    "lib": ["esnext", "esnext.asynciterable", "dom"],
     "jsx": "react" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
     // "declaration": true,                   /* Generates corresponding '.d.ts' file. */
     "sourceMap": true /* Generates corresponding '.map' file. */,

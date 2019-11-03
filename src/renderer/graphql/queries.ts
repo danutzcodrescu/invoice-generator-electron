@@ -20,6 +20,8 @@ export const GET_PROFILE = gql`
       email
       address
       vat
+      bankAccount
+      phone
     }
   }
 `;

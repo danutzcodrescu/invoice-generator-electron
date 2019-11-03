@@ -44,6 +44,7 @@ export class InvoiceResolver {
       profileData: profile.profileData,
       client: clientDB,
       clientData: client.clientData,
+      invoiceNumber: invoiceData.invoiceNumber,
     });
     const inv = await this.entityManager.save(invoice);
     return inv;
