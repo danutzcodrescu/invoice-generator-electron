@@ -11,7 +11,7 @@ module.exports = merge.smart(baseConfig, {
   entry: {
     server: path.resolve(__dirname, './src/backend/server.ts'),
   },
-  mode: 'development',
+  mode: 'production',
   externals: [nodeExternals()],
   module: {
     rules: [
