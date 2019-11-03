@@ -14,11 +14,13 @@ export function InvoiceContainer() {
     invoiceNumber: '',
   });
   React.useEffect(() => {
-    ipcRenderer.on(LOAD_PDF_DATA, (_, data) => {
+    ipcRenderer.on(LOAD_PDF_DATA, (_, data: any) => {
       setInvoice(data);
     });
   }, []);
-  return !invoice.profile ? null : (
+  return !invoice.profile ? (
+    <p>No data loaded</p>
+  ) : (
     <Invoice
       invoiceDate={invoice.invoiceDate}
       items={invoice.items}

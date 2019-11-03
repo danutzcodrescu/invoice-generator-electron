@@ -1,33 +1,49 @@
-import { ipcRenderer } from 'electron';
-import { createBrowserHistory } from 'history';
+import { ApolloProvider } from '@apollo/react-hooks';
+import DateFnsUtils from '@date-io/date-fns';
+import { NoSsr } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider as MaterialUIThemeProvider } from '@material-ui/core/styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import * as React from 'react';
 import { hot } from 'react-hot-loader/root';
-import { Route, Router, Switch } from 'react-router-dom';
-import { INVOICE_ROUTE } from '../../main/events';
+import { HashRouter, Link, Route, Switch } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import 'typeface-roboto';
 import { InvoiceContainer } from '../containers/Invoice.container';
+import { client } from '../graphql/client';
+import { theme } from '../theme/theme';
 import { InvoiceForm } from './invoices/InvoiceForm.component';
 
-const history = createBrowserHistory();
-
 export const Application = () => {
-  React.useEffect(() => {
-    // for production use case when the page is loaded as html
-    ipcRenderer.on(INVOICE_ROUTE, () => {
-      history.push('/invoice');
-    }),
-      [];
-  });
   return (
-    <Router history={history}>
-      <Switch>
-        <Route exact path="/">
-          <InvoiceForm />
-        </Route>
-        <Route exact path="/invoice">
-          <InvoiceContainer />
-        </Route>
-      </Switch>
-    </Router>
+    <>
+      <CssBaseline />
+      <NoSsr>
+        <ApolloProvider client={client}>
+          <ThemeProvider theme={theme}>
+            <MaterialUIThemeProvider theme={theme}>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <HashRouter>
+                  <Switch>
+                    <Route exact path="/invoiceForm">
+                      <InvoiceForm />
+                    </Route>
+                    <Route exact path="/invoice">
+                      <InvoiceContainer />
+                    </Route>
+                    <Route>
+                      <button>
+                        <Link to="/invoiceForm">New invoice</Link>
+                      </button>
+                    </Route>
+                  </Switch>
+                </HashRouter>
+              </MuiPickersUtilsProvider>
+            </MaterialUIThemeProvider>
+          </ThemeProvider>
+        </ApolloProvider>
+      </NoSsr>
+    </>
   );
 };
 
