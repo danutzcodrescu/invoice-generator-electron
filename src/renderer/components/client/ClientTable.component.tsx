@@ -43,8 +43,9 @@ export const ClientTable = withRouter((props: Props) => {
           {
             // eslint-disable-next-line react/display-name
             icon: () => <Visibility />,
-            tooltip: 'View Clientt',
-            onClick: (_, rowData) => history.push((rowData as Client).id),
+            tooltip: 'View Client',
+            onClick: (_, rowData) =>
+              history.push(`/clients/${(rowData as Client).id}`),
           },
         ]}
         data={clients}

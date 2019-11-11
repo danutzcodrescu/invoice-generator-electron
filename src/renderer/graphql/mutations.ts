@@ -84,3 +84,11 @@ export const CREATE_INVOICE = gql`
     }
   }
 `;
+
+export const UPDATE_CLIENT = gql`
+  mutation UpdateClient($clientId: ID!, $clientData: UpdateClientInput!) {
+    updateClient(clientData: $clientData, id: $clientId) {
+      id
+    }
+  }
+`;

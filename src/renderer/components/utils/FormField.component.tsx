@@ -14,12 +14,13 @@ interface Props {
   helperText?: string;
   children?: any;
   required?: boolean;
+  parse?: (value: string) => string;
 }
 
 export function FormField(props: Props) {
-  const { name, children, ...rest } = props;
+  const { name, children, parse, ...rest } = props;
   return (
-    <Field name={name}>
+    <Field name={name} parse={parse}>
       {({ input, meta }) => (
         <TextField
           {...rest}
