@@ -4,6 +4,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Invoice } from '../src/renderer/components/invoices/Invoice.component';
 import { InvoiceForm } from '../src/renderer/components/invoices/InvoiceForm.component';
+import { InvoiceTableContainer } from '../src/renderer/containers/InvoiceTable.container';
 import { Wrapper } from './ClientForm.stories';
 
 const invoice = {
@@ -18,7 +19,7 @@ const invoice = {
   amount: 11111,
 };
 
-storiesOf('Components/InvoiceForm', module)
+storiesOf('Components/invoices', module)
   .add('InvoiceForm', () => (
     <Wrapper>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -37,5 +38,10 @@ storiesOf('Components/InvoiceForm', module)
         profile={JSON.parse(invoice.profileData)}
         invoiceNumber={'12356'}
       />
+    </Wrapper>
+  ))
+  .add('InvoiceTable', () => (
+    <Wrapper>
+      <InvoiceTableContainer></InvoiceTableContainer>
     </Wrapper>
   ));
