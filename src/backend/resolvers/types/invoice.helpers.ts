@@ -35,3 +35,24 @@ export class InvoiceInput {
   @Field()
   invoiceNumber: string;
 }
+
+@InputType()
+export class UpdateClientInput {
+  @Field({ nullable: true })
+  firstName?: string;
+
+  @Field({ nullable: true })
+  lastName?: string;
+
+  @Field({ nullable: true })
+  company?: string;
+
+  @Field({ nullable: true })
+  email?: string;
+
+  @Field({ nullable: true })
+  address?: string;
+
+  @Field({ nullable: true })
+  vat?: string;
+}

@@ -45,7 +45,7 @@ export interface Invoice {
   createdAt: Scalars['String'];
   profile: Profile;
   profileData: Scalars['String'];
-  client: Client;
+  client?: Maybe<Client>;
   clientData: Scalars['String'];
   items: Scalars['String'];
   vat: Scalars['Float'];
@@ -62,10 +62,16 @@ export interface InvoiceInput {
 
 export interface Mutation {
   __typename?: 'Mutation';
+  updateClient: Client;
   addClient: Client;
   createInvoice: Invoice;
   addProfile: Profile;
   addVatRule: VatRule;
+}
+
+export interface MutationUpdateClientArgs {
+  clientData: UpdateClientInput;
+  id: Scalars['ID'];
 }
 
 export interface MutationAddClientArgs {
@@ -84,6 +90,7 @@ export interface MutationCreateInvoiceArgs {
 }
 
 export interface MutationAddProfileArgs {
+  phone?: Maybe<Scalars['String']>;
   bankAccount?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['String']>;
   address?: Maybe<Scalars['String']>;
@@ -122,10 +129,24 @@ export interface ProfileInput {
 export interface Query {
   __typename?: 'Query';
   clients: Array<Client>;
+  client: Client;
   events: Array<Event>;
   invoices: Array<Invoice>;
   profiles: Array<Profile>;
   vatRules: Array<VatRule>;
+}
+
+export interface QueryClientArgs {
+  clientId: Scalars['ID'];
+}
+
+export interface UpdateClientInput {
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  vat?: Maybe<Scalars['String']>;
 }
 
 export interface VatRule {
