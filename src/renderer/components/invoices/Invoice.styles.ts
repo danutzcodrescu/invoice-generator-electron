@@ -1,5 +1,5 @@
+import { Paper } from '@material-ui/core';
 import styled from 'styled-components';
-
 export const Container = styled.div`
   padding: ${props => props.theme.spacing(5)}px;
 `;
@@ -12,7 +12,7 @@ export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr minmax(150px, 20%);
   grid-template-rows: 53px 1fr;
-  > * {
+  & > * {
     box-sizing: border-box;
   }
   > *:nth-of-type(2n + 1) {
@@ -22,6 +22,14 @@ export const GridContainer = styled.div`
     padding: ${props => props.theme.spacing(2)}px;
   }
   min-height: 400px;
+`;
+
+export const PaperForTable = styled(Paper)`
+  color: green;
+  & .ReactVirtualized__Table__headerRow {
+    flip: false;
+    padding-right: none;
+  }
 `;
 
 export const Heading = styled.div`

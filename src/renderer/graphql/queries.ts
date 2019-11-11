@@ -39,3 +39,22 @@ export const GET_CLIENTS = gql`
     }
   }
 `;
+
+export const GET_INVOICES = gql`
+  query GetInvoices {
+    invoices {
+      id
+      client {
+        id
+        firstName
+        lastName
+        company
+      }
+      clientData
+      vat
+      amount
+      invoiceDate
+      invoiceNumber
+    }
+  }
+`;
