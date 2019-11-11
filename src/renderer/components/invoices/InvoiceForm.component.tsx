@@ -7,7 +7,7 @@ import {
   ShoppingCartOutlined,
 } from '@material-ui/icons';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-// import { ipcRenderer } from 'electron';
+import { ipcRenderer } from 'electron';
 import { ARRAY_ERROR } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import * as React from 'react';
@@ -33,7 +33,7 @@ function itemToString(item: Profile | Client) {
 }
 
 function createPDF(data: any) {
-  // ipcRenderer.send(CREATE_PDF_EVENT, data.createInvoice);
+  ipcRenderer.send(CREATE_PDF_EVENT, data.createInvoice);
 }
 
 export function InvoiceForm() {
