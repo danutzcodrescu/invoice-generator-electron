@@ -5,18 +5,26 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import { Create, EmailOutlined, Receipt, Room } from '@material-ui/icons';
+import {
+  AccountBalance,
+  Create,
+  EmailOutlined,
+  Phone,
+  Receipt,
+  Room,
+} from '@material-ui/icons';
 import * as React from 'react';
-import { Client } from '../../generated/graphql';
+import { Client, Profile } from '../../generated/graphql';
 import { clientName } from '../utils/client';
 import { NoPaddingGrid, PaddingCard, PaddingGrid } from './ClientForm.styles';
 
 interface ReadOnlyProps {
-  client: Client;
+  client: Client | Profile;
   setEditable: () => void;
+  type: 'client' | 'profile';
 }
 export function ReadOnly(props: ReadOnlyProps) {
-  const { client, setEditable } = props;
+  const { client, setEditable, type } = props;
   return (
     <PaddingGrid container>
       <Grid item xs={10}>
@@ -75,6 +83,26 @@ export function ReadOnly(props: ReadOnlyProps) {
                 <Typography>{client.address}</Typography>
               </Grid>
             </Grid>
+            {type === 'profile' ? (
+              <>
+                <Grid container>
+                  <Grid item xs={2} md={1} container>
+                    <Phone fontSize="default"></Phone>
+                  </Grid>
+                  <Grid item xs={10} md={11}>
+                    <Typography>{(client as Profile).phone}</Typography>
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item xs={2} md={1} container>
+                    <AccountBalance fontSize="default"></AccountBalance>
+                  </Grid>
+                  <Grid item xs={10} md={11}>
+                    <Typography>{(client as Profile).bankAccount}</Typography>
+                  </Grid>
+                </Grid>
+              </>
+            ) : null}
             <Grid container>
               <Grid item xs={2} md={1} container>
                 <Receipt fontSize="default"></Receipt>
@@ -89,3 +117,7 @@ export function ReadOnly(props: ReadOnlyProps) {
     </PaddingGrid>
   );
 }
+
+ReadOnly.defaultProps = {
+  type: 'client',
+};

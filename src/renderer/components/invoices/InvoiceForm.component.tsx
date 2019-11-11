@@ -16,7 +16,11 @@ import { FieldArray } from 'react-final-form-arrays';
 import { CREATE_PDF_EVENT } from '../../../main/events';
 import { Client, Profile, Query } from '../../generated/graphql';
 import { CREATE_INVOICE } from '../../graphql/mutations';
-import { GET_CLIENTS, GET_PROFILE, GET_VAT_RULES } from '../../graphql/queries';
+import {
+  GET_CLIENTS,
+  GET_PROFILES,
+  GET_VAT_RULES,
+} from '../../graphql/queries';
 import { setBulkValue } from '../../utils/react-final-form';
 import { Autocomplete } from '../utils/Autocomplete.component';
 import { FormField } from '../utils/FormField.component';
@@ -39,7 +43,7 @@ function createPDF(data: any) {
 
 export function InvoiceForm() {
   const { data } = useQuery<Query>(GET_VAT_RULES);
-  const { data: profileData } = useQuery<Query>(GET_PROFILE);
+  const { data: profileData } = useQuery<Query>(GET_PROFILES);
   const { data: clientData } = useQuery<Query>(GET_CLIENTS);
   const selectedClient = React.useRef<string>();
   const selectedProfile = React.useRef<string>();
