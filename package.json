@@ -58,6 +58,7 @@
     "prettier": "^1.18.2",
     "react-hot-loader": "^4.12.15",
     "source-map-loader": "^0.2.4",
+    "storybook-react-router": "^1.0.8",
     "style-loader": "^1.0.0",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.4.1",

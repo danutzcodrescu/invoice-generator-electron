@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Invoice } from '../src/renderer/components/invoices/Invoice.component';
 import { InvoiceForm } from '../src/renderer/components/invoices/InvoiceForm.component';
 import { InvoiceTableContainer } from '../src/renderer/containers/InvoiceTable.container';
-import { Wrapper } from './ClientForm.stories';
+import { Wrapper } from './Client.stories';
 
 const invoice = {
   id: 'f362c0c5-2ef9-444c-ba15-bfc266a8e5c5',
