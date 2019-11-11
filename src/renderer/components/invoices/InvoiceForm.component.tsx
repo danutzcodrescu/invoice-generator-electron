@@ -13,6 +13,7 @@ import arrayMutators from 'final-form-arrays';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
+import { CREATE_PDF_EVENT } from '../../../main/events';
 import { Client, Profile, Query } from '../../generated/graphql';
 import { CREATE_INVOICE } from '../../graphql/mutations';
 import { GET_CLIENTS, GET_PROFILE, GET_VAT_RULES } from '../../graphql/queries';
