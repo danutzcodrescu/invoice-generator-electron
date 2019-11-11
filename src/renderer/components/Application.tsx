@@ -13,6 +13,8 @@ import { ClientDataContainer } from '../containers/ClientData.container';
 import { ClientTableContainer } from '../containers/ClientTable.container';
 import { InvoiceContainer } from '../containers/Invoice.container';
 import { InvoiceTableContainer } from '../containers/InvoiceTable.container';
+import { ProfileDataContainer } from '../containers/ProfileData.container';
+import { ProfileTableContainer } from '../containers/ProfileTable.container';
 import { client } from '../graphql/client';
 import { theme } from '../theme/theme';
 import { InvoiceForm } from './invoices/InvoiceForm.component';
@@ -45,9 +47,22 @@ export const Application = () => {
                       path="/clients/:clientId"
                       component={ClientDataContainer}
                     ></Route>
+                    <Route
+                      exact
+                      path="/profiles/:profileId"
+                      component={ProfileDataContainer}
+                    ></Route>
+                    <Route
+                      exact
+                      path="/profiles"
+                      component={ProfileTableContainer}
+                    />
                     <Route>
                       <button>
                         <Link to="/invoiceForm">New invoice</Link>
+                      </button>
+                      <button>
+                        <Link to="/profiles">Profiles</Link>
                       </button>
                       <button>
                         <Link to="/clients">Clients</Link>

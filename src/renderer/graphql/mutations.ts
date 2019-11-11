@@ -92,3 +92,11 @@ export const UPDATE_CLIENT = gql`
     }
   }
 `;
+
+export const UPDATE_PROFILE = gql`
+  mutation UpdateProfile($profileId: ID!, $profileData: UpdateProfileInput!) {
+    updateProfile(profileData: $profileData, id: $profileId) {
+      id
+    }
+  }
+`;

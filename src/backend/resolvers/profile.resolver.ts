@@ -1,8 +1,9 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, ID, Mutation, Query, Resolver } from 'type-graphql';
 import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { Profile } from '../entities/Profile.entity';
 import { insertTransaction, nonNullObjectProperties } from '../utils/helpers';
+import { UpdateProfileInput } from './types/invoice.helpers';
 
 @Resolver(Profile)
 export class ProfileResolver {
@@ -12,6 +13,22 @@ export class ProfileResolver {
   @Query(returns => [Profile])
   profiles(): Promise<Profile[]> {
     return this.entityManager.find(Profile, { relations: ['invoices'] });
+  }
+
+  @Query(returns => Profile)
+  profile(
+    @Arg('profileId', type => ID) id: string,
+  ): Promise<Profile | undefined> {
+    return this.entityManager.findOne(Profile, id, { relations: ['invoices'] });
+  }
+
+  @Mutation(returns => Profile)
+  async updateProfile(
+    @Arg('id', type => ID) id: string,
+    @Arg('profileData') profileData: UpdateProfileInput,
+  ): Promise<any> {
+    await this.entityManager.update(Profile, id, profileData);
+    return this.entityManager.findOne(Profile, id, { relations: ['invoices'] });
   }
 
   @Mutation(returns => Profile)

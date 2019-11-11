@@ -6,44 +6,67 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import { EmailOutlined, Receipt, Room } from '@material-ui/icons';
+import {
+  AccountBalance,
+  EmailOutlined,
+  Phone,
+  Receipt,
+  Room,
+} from '@material-ui/icons';
 import * as React from 'react';
 import { Form } from 'react-final-form';
-import { Client, Mutation } from '../../generated/graphql';
-import { UPDATE_CLIENT } from '../../graphql/mutations';
-import { GET_CLIENT } from '../../graphql/queries';
+import { Client, Mutation, Profile } from '../../generated/graphql';
+import { UPDATE_CLIENT, UPDATE_PROFILE } from '../../graphql/mutations';
+import { GET_CLIENT, GET_PROFILE } from '../../graphql/queries';
 import { clientName } from '../utils/client';
 import { FormField } from '../utils/FormField.component';
 import { NoPaddingGrid, PaddingCard, PaddingGrid } from './ClientForm.styles';
 
 interface Props {
-  client: Client;
+  client: Client | Profile;
   setReadOnly: () => void;
-  // submitChanges: (values: Partial<Client>) => void;
+  type: 'client' | 'profile';
 }
 
 export function Editable(props: Props) {
-  const { client, setReadOnly } = props;
-  const [updateClient] = useMutation<Mutation>(UPDATE_CLIENT, {
-    onCompleted: () => setReadOnly(),
-    refetchQueries: [{ query: GET_CLIENT, variables: { clientId: client.id } }],
-  });
+  const { client, setReadOnly, type } = props;
+  const [updateClient] = useMutation<Mutation>(
+    type === 'client' ? UPDATE_CLIENT : UPDATE_PROFILE,
+    {
+      onCompleted: () => setReadOnly(),
+      refetchQueries: [
+        {
+          query: type === 'client' ? GET_CLIENT : GET_PROFILE,
+          variables: {
+            [type === 'client' ? 'clientId' : 'profileId']: client.id,
+          },
+        },
+      ],
+    },
+  );
   return (
     <Form
-      initialValues={{
-        firstName: client.firstName,
-        lastName: client.lastName,
-        company: client.company,
-        email: client.email,
-        vat: client.vat,
-        address: client.address,
-      }}
+      initialValues={Object.assign(
+        {
+          firstName: client.firstName,
+          lastName: client.lastName,
+          company: client.company,
+          email: client.email,
+          vat: client.vat,
+          address: client.address,
+        },
+        type === 'profile'
+          ? {
+              phone: (client as Profile).phone,
+              bankAccount: (client as Profile).bankAccount,
+            }
+          : {},
+      )}
       onSubmit={values => {
-        console.log(values);
         updateClient({
           variables: {
-            clientId: client.id,
-            clientData: values,
+            [type === 'client' ? 'clientId' : 'profileId']: client.id,
+            [type === 'client' ? 'clientData' : 'profileData']: values,
           },
         });
       }}
@@ -161,6 +184,38 @@ export function Editable(props: Props) {
                       />
                     </Grid>
                   </Grid>
+                  {type === 'profile' ? (
+                    <>
+                      <Grid container>
+                        <Grid item xs={2} md={1} container>
+                          <Phone fontSize="default"></Phone>
+                        </Grid>
+                        <Grid item xs={10} md={11}>
+                          <FormField
+                            name="phone"
+                            placeholder="Phone"
+                            label="Phone"
+                            fullWidth
+                            parse={value => value}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={2} md={1} container>
+                          <AccountBalance fontSize="default"></AccountBalance>
+                        </Grid>
+                        <Grid item xs={10} md={11}>
+                          <FormField
+                            name="bankAccount"
+                            placeholder="Bank account"
+                            label="Bank account"
+                            fullWidth
+                            parse={value => value}
+                          />
+                        </Grid>
+                      </Grid>
+                    </>
+                  ) : null}
                   <Grid container>
                     <Grid item xs={2} md={1} container>
                       <Receipt
@@ -187,3 +242,7 @@ export function Editable(props: Props) {
     ></Form>
   );
 }
+
+Editable.defaultProps = {
+  type: 'client',
+};

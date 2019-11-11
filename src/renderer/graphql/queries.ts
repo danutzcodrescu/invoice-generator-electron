@@ -10,7 +10,7 @@ export const GET_VAT_RULES = gql`
   }
 `;
 
-export const GET_PROFILE = gql`
+export const GET_PROFILES = gql`
   query GetProfiles {
     profiles {
       id
@@ -76,6 +76,22 @@ export const GET_CLIENT = gql`
       }
       vat
       email
+    }
+  }
+`;
+
+export const GET_PROFILE = gql`
+  query GetProfile($profileId: ID!) {
+    profile(profileId: $profileId) {
+      id
+      address
+      company
+      lastName
+      firstName
+      phone
+      vat
+      email
+      bankAccount
     }
   }
 `;
