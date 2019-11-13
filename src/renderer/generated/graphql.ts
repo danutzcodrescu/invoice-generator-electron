@@ -27,12 +27,36 @@ export interface ClientInput {
   clientData: Scalars['String'];
 }
 
+export interface CreateExpense {
+  invoiceDate: Scalars['String'];
+  invoiceNumber: Scalars['String'];
+  vat: Scalars['Float'];
+  amount: Scalars['Float'];
+  description?: Maybe<Scalars['String']>;
+  clientId?: Maybe<Scalars['String']>;
+  clientName: Scalars['String'];
+}
+
 export interface Event {
   __typename?: 'Event';
   id: Scalars['ID'];
   data: Scalars['String'];
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
+}
+
+export interface Expense {
+  __typename?: 'Expense';
+  id: Scalars['ID'];
+  invoiceDate: Scalars['String'];
+  invoiceNumber: Scalars['String'];
+  updatedAt: Scalars['String'];
+  createdAt: Scalars['String'];
+  client?: Maybe<Client>;
+  clientName: Scalars['String'];
+  vat: Scalars['Float'];
+  amount: Scalars['Float'];
+  description: Scalars['String'];
 }
 
 export interface Invoice {
@@ -64,6 +88,7 @@ export interface Mutation {
   __typename?: 'Mutation';
   updateClient: Client;
   addClient: Client;
+  createExpense: Expense;
   createInvoice: Invoice;
   updateProfile: Profile;
   addProfile: Profile;
@@ -82,6 +107,10 @@ export interface MutationAddClientArgs {
   company?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
+}
+
+export interface MutationCreateExpenseArgs {
+  expense: CreateExpense;
 }
 
 export interface MutationCreateInvoiceArgs {
@@ -137,6 +166,7 @@ export interface Query {
   clients: Array<Client>;
   client: Client;
   events: Array<Event>;
+  expenses: Array<Expense>;
   invoices: Array<Invoice>;
   profiles: Array<Profile>;
   profile: Profile;
@@ -152,23 +182,23 @@ export interface QueryProfileArgs {
 }
 
 export interface UpdateClientInput {
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  company: Scalars['String'];
-  email: Scalars['String'];
-  address: Scalars['String'];
-  vat: Scalars['String'];
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  vat?: Maybe<Scalars['String']>;
 }
 
 export interface UpdateProfileInput {
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  company: Scalars['String'];
-  email: Scalars['String'];
-  address: Scalars['String'];
-  vat: Scalars['String'];
-  phone: Scalars['String'];
-  bankAccount: Scalars['String'];
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  vat?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  bankAccount?: Maybe<Scalars['String']>;
 }
 
 export interface VatRule {

@@ -1,7 +1,10 @@
 import { useQuery } from '@apollo/react-hooks';
 import * as React from 'react';
-import { InvoiceTable } from '../components/invoices/InvoiceTable.component';
-import { Invoice, Query } from '../generated/graphql';
+import {
+  InvoiceParsed,
+  InvoiceTable,
+} from '../components/invoices/InvoiceTable.component';
+import { Query } from '../generated/graphql';
 import { GET_INVOICES } from '../graphql/queries';
 
 export function InvoiceTableContainer() {
@@ -9,7 +12,7 @@ export function InvoiceTableContainer() {
   if (loading || !data) {
     return <h1>loading</h1>;
   }
-  let invoices: Invoice[];
+  let invoices: InvoiceParsed[];
   if (data) {
     invoices = data.invoices.map(elem => {
       return {

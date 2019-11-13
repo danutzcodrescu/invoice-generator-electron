@@ -14,6 +14,7 @@ interface Props {
   helperText?: string;
   children?: any;
   required?: boolean;
+  multiline?: boolean;
   parse?: (value: string) => string;
 }
 

@@ -3,7 +3,7 @@ import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { Profile } from '../entities/Profile.entity';
 import { insertTransaction, nonNullObjectProperties } from '../utils/helpers';
-import { UpdateProfileInput } from './types/invoice.helpers';
+import { UpdateProfileInput } from './types/operations.helpers';
 
 @Resolver(Profile)
 export class ProfileResolver {
