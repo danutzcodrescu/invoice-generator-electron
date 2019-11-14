@@ -66,6 +66,7 @@ module.exports = merge.smart(baseConfig, {
       'process.env.NODE_ENV': JSON.stringify(
         process.env.NODE_ENV || 'development',
       ),
+      'process.env.STORYBOOK': false,
     }),
   ],
 });

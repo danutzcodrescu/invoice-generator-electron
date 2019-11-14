@@ -3,7 +3,7 @@ import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { Client } from '../entities/Client.entity';
 import { insertTransaction, nonNullObjectProperties } from '../utils/helpers';
-import { UpdateClientInput } from './types/invoice.helpers';
+import { UpdateClientInput } from './types/operations.helpers';
 
 @Resolver(Client)
 export class ClientResolver {

@@ -1,4 +1,8 @@
 import { Field, Float, ID, InputType } from 'type-graphql';
+import { Client } from '../../entities/Client.entity';
+import { Expense } from '../../entities/Expense.entity';
+import { Invoice } from '../../entities/Invoice.entity';
+import { Profile } from '../../entities/Profile.entity';
 
 @InputType()
 export class ClientInput {
@@ -19,7 +23,7 @@ export class ProfileInput {
 }
 
 @InputType()
-export class InvoiceInput {
+export class InvoiceInput implements Partial<Invoice> {
   @Field()
   invoiceDate: string;
 
@@ -37,7 +41,7 @@ export class InvoiceInput {
 }
 
 @InputType()
-export class UpdateClientInput {
+export class UpdateClientInput implements Partial<Client> {
   @Field({ nullable: true })
   firstName?: string;
 
@@ -58,7 +62,7 @@ export class UpdateClientInput {
 }
 
 @InputType()
-export class UpdateProfileInput {
+export class UpdateProfileInput implements Partial<Profile> {
   @Field({ nullable: true })
   firstName?: string;
 
@@ -82,4 +86,28 @@ export class UpdateProfileInput {
 
   @Field({ nullable: true })
   bankAccount?: string;
+}
+
+@InputType()
+export class CreateExpense implements Partial<Expense> {
+  @Field()
+  invoiceDate: string;
+
+  @Field()
+  invoiceNumber: string;
+
+  @Field()
+  vat: number;
+
+  @Field()
+  amount: number;
+
+  @Field({ nullable: true })
+  description?: string;
+
+  @Field({ nullable: true })
+  clientId?: string;
+
+  @Field()
+  clientName: string;
 }

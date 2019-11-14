@@ -14,6 +14,7 @@ interface Props {
   helperText?: string;
   children?: any;
   required?: boolean;
+  multiline?: boolean;
   parse?: (value: string) => string;
 }
 
@@ -23,8 +24,8 @@ export function FormField(props: Props) {
     <Field name={name} parse={parse}>
       {({ input, meta }) => (
         <TextField
-          {...rest}
           {...input}
+          {...rest}
           error={meta.dirty && meta.invalid}
           helperText={meta.error}
         >

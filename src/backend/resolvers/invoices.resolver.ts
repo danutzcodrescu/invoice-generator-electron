@@ -8,7 +8,7 @@ import {
   ClientInput,
   InvoiceInput,
   ProfileInput,
-} from './types/invoice.helpers';
+} from './types/operations.helpers';
 
 @Resolver(Invoice)
 export class InvoiceResolver {

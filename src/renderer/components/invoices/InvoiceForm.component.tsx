@@ -7,7 +7,6 @@ import {
   ShoppingCartOutlined,
 } from '@material-ui/icons';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import { ipcRenderer } from 'electron';
 import { ARRAY_ERROR } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import * as React from 'react';
@@ -38,7 +37,11 @@ function itemToString(item: Profile | Client) {
 }
 
 function createPDF(data: any) {
-  ipcRenderer.send(CREATE_PDF_EVENT, data.createInvoice);
+  if (!process.env.STORYBOOK) {
+    //eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { ipcRenderer } = require('electron');
+    ipcRenderer.send(CREATE_PDF_EVENT, data.createInvoice);
+  }
 }
 
 export function InvoiceForm() {
@@ -448,7 +451,7 @@ export function InvoiceForm() {
                 Total net:
               </Grid>
               <Grid item xs={2} style={{ textAlign: 'right' }}>
-                {calculateNet(values.items)}
+                {calculateNet((values as any).items)}
               </Grid>
             </Grid>
             <Grid container>
@@ -458,7 +461,7 @@ export function InvoiceForm() {
               <Grid item xs={2} style={{ textAlign: 'right' }}>
                 {data && (values as any).vat
                   ? calculateVat(
-                      values.items,
+                      (values as any).items,
                       data!.vatRules.find(
                         rule => rule.id === (values as any).vat,
                       )!.percentage,
@@ -473,7 +476,7 @@ export function InvoiceForm() {
               <Grid item xs={2} style={{ textAlign: 'right' }}>
                 {data && (values as any).vat
                   ? calculateTotal(
-                      values.items,
+                      (values as any).items,
                       data!.vatRules.find(
                         rule => rule.id === (values as any).vat,
                       )!.percentage,

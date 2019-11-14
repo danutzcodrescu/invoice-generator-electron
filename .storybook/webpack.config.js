@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
+
 module.exports = ({ config }) => {
   config.module.rules.push({
     test: /\.(ts|tsx)$/,
@@ -13,5 +15,10 @@ module.exports = ({ config }) => {
     ],
   });
   config.resolve.extensions.push('.ts', '.tsx');
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env.STORYBOOK': true,
+    }),
+  );
   return config;
 };

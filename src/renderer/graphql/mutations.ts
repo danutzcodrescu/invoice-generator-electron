@@ -100,3 +100,11 @@ export const UPDATE_PROFILE = gql`
     }
   }
 `;
+
+export const CREATE_EXPENSE = gql`
+  mutation CreateExpense($expense: CreateExpense!) {
+    createExpense(expense: $expense) {
+      id
+    }
+  }
+`;

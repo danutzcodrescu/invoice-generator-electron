@@ -8,6 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Expense } from './Expense.entity';
 import { Invoice } from './Invoice.entity';
 
 @Entity()
@@ -50,8 +51,20 @@ export class Client extends BaseEntity {
   createdAt: string;
 
   @Field(type => [Invoice])
-  @OneToMany(type => Invoice, invoice => invoice.client, { lazy: true })
+  @OneToMany(
+    type => Invoice,
+    invoice => invoice.client,
+    { lazy: true },
+  )
   invoices: Promise<Invoice[]>;
+
+  @Field(type => [Expense])
+  @OneToMany(
+    type => Expense,
+    expense => expense.client,
+    { lazy: true },
+  )
+  expenses: Promise<Expense[]>;
 
   @BeforeUpdate()
   updateDate() {

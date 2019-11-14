@@ -1,6 +1,7 @@
 import { Paper, Typography } from '@material-ui/core';
 import * as React from 'react';
 import { Client } from '../../generated/graphql';
+import { ExpenseTable } from '../expenses/ExpenseTable.component';
 import { InvoiceTable } from '../invoices/InvoiceTable.component';
 import { Editable } from './Editable.component';
 import { ReadOnly } from './ReadOnly.component';
@@ -28,6 +29,7 @@ export function ClientData(props: Props) {
 
       <Typography variant="h2">Invoices</Typography>
       <InvoiceTable data={invoices} />
+      <ExpenseTable expenses={client.expenses} clientTable />
     </Paper>
   );
 }
