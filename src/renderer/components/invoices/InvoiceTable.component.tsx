@@ -26,6 +26,11 @@ export const InvoiceTable = (props: Props) => {
     <MaterialTable
       title={title ? title : ''}
       icons={tableIcons}
+      localization={{
+        body: {
+          emptyDataSourceMessage: 'No invoices to display',
+        },
+      }}
       columns={[
         { title: 'Invoice number', field: 'invoiceNumber' },
         {

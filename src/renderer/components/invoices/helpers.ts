@@ -8,6 +8,7 @@ import {
   subYears,
 } from 'date-fns';
 import { Column } from 'material-table';
+import { Expense } from '../../generated/graphql';
 import { InvoiceParsed } from './InvoiceTable.component';
 
 interface Items {
@@ -49,7 +50,10 @@ export function filterClientName(
       );
 }
 
-export function filterInvoiceDate(filter: any, rowData: InvoiceParsed) {
+export function filterInvoiceDate(
+  filter: any,
+  rowData: InvoiceParsed | Expense,
+) {
   if (format(new Date(rowData.invoiceDate), 'yyyy-MM-dd').includes(filter)) {
     return true;
   }

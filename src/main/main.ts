@@ -27,6 +27,7 @@ function startBEforFE() {
       width: 800,
       height: 600,
       webPreferences: { nodeIntegration: true },
+      fullscreen: true,
     });
     serverWindow.loadURL('http://localhost:4000');
   } else {

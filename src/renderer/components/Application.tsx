@@ -11,6 +11,7 @@ import { ThemeProvider } from 'styled-components';
 import 'typeface-roboto';
 import { ClientDataContainer } from '../containers/ClientData.container';
 import { ClientTableContainer } from '../containers/ClientTable.container';
+import { ExpenseTableContainer } from '../containers/ExpenseTable.container';
 import { InvoiceContainer } from '../containers/Invoice.container';
 import { InvoiceTableContainer } from '../containers/InvoiceTable.container';
 import { ProfileDataContainer } from '../containers/ProfileData.container';
@@ -57,6 +58,11 @@ export const Application = () => {
                       path="/profiles"
                       component={ProfileTableContainer}
                     />
+                    <Route
+                      exact
+                      path="/expenses"
+                      component={ExpenseTableContainer}
+                    ></Route>
                     <Route>
                       <button>
                         <Link to="/invoiceForm">New invoice</Link>
@@ -69,6 +75,9 @@ export const Application = () => {
                       </button>
                       <button>
                         <Link to="/invoices">Invoices</Link>
+                      </button>
+                      <button>
+                        <Link to="/expenses">Expenses</Link>
                       </button>
                     </Route>
                   </Switch>

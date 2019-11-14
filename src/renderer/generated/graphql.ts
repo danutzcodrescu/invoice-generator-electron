@@ -20,6 +20,7 @@ export interface Client {
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
   invoices: Array<Invoice>;
+  expenses: Array<Expense>;
 }
 
 export interface ClientInput {

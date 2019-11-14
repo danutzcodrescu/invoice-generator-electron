@@ -74,6 +74,13 @@ export const GET_CLIENT = gql`
         amount
         vat
       }
+      expenses {
+        id
+        invoiceDate
+        invoiceNumber
+        amount
+        vat
+      }
       vat
       email
     }
@@ -92,6 +99,23 @@ export const GET_PROFILE = gql`
       vat
       email
       bankAccount
+    }
+  }
+`;
+
+export const GET_EXPENSES = gql`
+  query GetExpenses {
+    expenses {
+      id
+      clientName
+      client {
+        id
+      }
+      vat
+      amount
+      invoiceDate
+      invoiceNumber
+      description
     }
   }
 `;

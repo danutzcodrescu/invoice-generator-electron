@@ -16,9 +16,29 @@ interface Props {
 }
 
 export function ExpenseForm(props: Props) {
+  const { createExpense } = props;
   const { data } = useQuery<Query>(GET_CLIENTS);
+  const inputRef = React.useRef<Client | null>(null);
   function submitForm(values: any) {
-    console.log(values);
+    let clientId: string | null = null;
+    if (
+      inputRef.current &&
+      values.clientName === clientName(inputRef.current)
+    ) {
+      clientId = inputRef.current.id;
+    }
+    createExpense({
+      variables: {
+        expense: Object.assign(
+          {
+            ...values,
+            amount: parseFloat(values.amount),
+            vat: parseFloat(values.vat),
+          },
+          clientId ? { clientId } : {},
+        ),
+      },
+    });
   }
   return (
     <Paper>
@@ -72,7 +92,8 @@ export function ExpenseForm(props: Props) {
                       freeSolo
                       getOptionLabel={(option: Client) => clientName(option)}
                       options={data ? data.clients : []}
-                      onChange={(_, val) => console.log(val)}
+                      onChange={(_, val: Client) => (inputRef.current = val)}
+                      onInputChange={(_, val) => input.onChange(val)}
                       renderInput={params => (
                         <TextField
                           {...params}
