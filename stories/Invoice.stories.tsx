@@ -44,4 +44,9 @@ storiesOf('Components/invoices', module)
     <Wrapper>
       <InvoiceTableContainer></InvoiceTableContainer>
     </Wrapper>
+  ))
+  .add('Virtualized', () => (
+    <Wrapper>
+      <InvoiceTableContainer />
+    </Wrapper>
   ));

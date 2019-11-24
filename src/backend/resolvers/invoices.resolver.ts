@@ -19,6 +19,7 @@ export class InvoiceResolver {
   invoices(): Promise<Invoice[]> {
     return this.entityManager.find(Invoice, {
       relations: ['client', 'profile'],
+      order: { invoiceDate: 'DESC' },
     });
   }
 

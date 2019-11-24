@@ -1,9 +1,7 @@
 import { useQuery } from '@apollo/react-hooks';
 import * as React from 'react';
-import {
-  InvoiceParsed,
-  InvoiceTable,
-} from '../components/invoices/InvoiceTable.component';
+import { InvoiceParsed } from '../components/invoices/InvoiceTable.component';
+import { InvoiceVirtualized } from '../components/invoices/InvoiceVirtualized.component';
 import { Query } from '../generated/graphql';
 import { GET_INVOICES } from '../graphql/queries';
 
@@ -21,5 +19,5 @@ export function InvoiceTableContainer() {
       };
     });
   }
-  return <InvoiceTable data={invoices!} />;
+  return <InvoiceVirtualized invoices={invoices!} />;
 }

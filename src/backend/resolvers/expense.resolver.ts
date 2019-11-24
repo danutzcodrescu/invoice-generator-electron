@@ -11,7 +11,10 @@ export class ExpenseResolver {
 
   @Query(returns => [Expense])
   expenses(): Promise<Expense[]> {
-    return this.entityManager.find(Expense, { relations: ['client'] });
+    return this.entityManager.find(Expense, {
+      relations: ['client'],
+      order: { invoiceDate: 'DESC' },
+    });
   }
 
   @Mutation(returns => Expense)
