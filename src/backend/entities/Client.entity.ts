@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
@@ -68,12 +69,12 @@ export class Client extends BaseEntity {
 
   @BeforeUpdate()
   updateDate() {
-    this.updatedAt = new Date().toUTCString();
+    this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 
   @BeforeInsert()
   createDate() {
-    this.createdAt = new Date().toUTCString();
-    this.updatedAt = new Date().toUTCString();
+    this.createdAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
+    this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 }

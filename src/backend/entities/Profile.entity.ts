@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
@@ -58,17 +59,21 @@ export class Profile extends BaseEntity {
   bankAccount: string;
 
   @Field(type => [Invoice])
-  @OneToMany(type => Invoice, invoice => invoice.client, { lazy: true })
+  @OneToMany(
+    type => Invoice,
+    invoice => invoice.client,
+    { lazy: true },
+  )
   invoices: Promise<Invoice[]>;
 
   @BeforeUpdate()
   updateDate() {
-    this.updatedAt = new Date().toUTCString();
+    this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 
   @BeforeInsert()
   createDate() {
-    this.createdAt = new Date().toUTCString();
-    this.updatedAt = new Date().toUTCString();
+    this.createdAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
+    this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 }

@@ -1,5 +1,5 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
-import { EntityManager } from 'typeorm';
+import { EntityManager, Raw } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { Client } from '../entities/Client.entity';
 import { Invoice } from '../entities/Invoice.entity';
@@ -16,10 +16,25 @@ export class InvoiceResolver {
   private entityManager: EntityManager;
 
   @Query(returns => [Invoice])
-  invoices(): Promise<Invoice[]> {
-    return this.entityManager.find(Invoice, {
-      relations: ['client', 'profile'],
-    });
+  invoices(
+    @Arg('startDate', { nullable: true }) startDate: string,
+  ): Promise<Invoice[]> {
+    return this.entityManager.find(
+      Invoice,
+      Object.assign(
+        {
+          relations: ['client', 'profile'],
+          order: { invoiceDate: 'DESC' },
+        },
+        startDate
+          ? {
+              where: {
+                invoiceDate: Raw(alias => `${alias} >= date("${startDate}")`),
+              },
+            }
+          : {},
+      ),
+    );
   }
 
   @Mutation(returns => Invoice)

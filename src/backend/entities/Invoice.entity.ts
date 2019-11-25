@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
@@ -72,16 +73,21 @@ export class Invoice extends BaseEntity {
 
   @BeforeUpdate()
   updateDate() {
-    this.updatedAt = new Date().toUTCString();
+    this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 
   @BeforeInsert()
   createDate() {
-    this.createdAt = new Date().toUTCString();
-    this.updatedAt = new Date().toUTCString();
+    this.createdAt = format(new Date(), 'yyyy-MM:dd HH:mm:SS');
+    this.updatedAt = format(new Date(), 'yyyy-MM-dd HH:mm:SS');
     if (!this.invoiceDate) {
       // TODO format it
-      this.invoiceDate = new Date().toUTCString();
+      this.invoiceDate = format(new Date(), 'yyyy-MM-dd HH:mm:SS');
+    } else {
+      this.invoiceDate = format(
+        new Date(this.invoiceDate),
+        'yyyy-MM-dd HH:mm:SS',
+      );
     }
   }
 }

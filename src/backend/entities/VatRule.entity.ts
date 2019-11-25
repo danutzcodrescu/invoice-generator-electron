@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
@@ -33,7 +34,7 @@ export class VatRule extends BaseEntity {
 
   @BeforeUpdate()
   updateDate() {
-    this.updatedAt = new Date().toUTCString();
+    this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 
   @BeforeInsert()
@@ -41,7 +42,7 @@ export class VatRule extends BaseEntity {
     if (!this.name) {
       this.name = this.percentage + '%';
     }
-    this.updatedAt = new Date().toUTCString();
-    this.createdAt = new Date().toUTCString();
+    this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
+    this.createdAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 }

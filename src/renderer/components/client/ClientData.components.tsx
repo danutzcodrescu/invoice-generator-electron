@@ -8,10 +8,11 @@ import { ReadOnly } from './ReadOnly.component';
 
 interface Props {
   client: Client;
+  isLoading: boolean;
 }
 
 export function ClientData(props: Props) {
-  const { client } = props;
+  const { client, isLoading } = props;
   const [isReadOnly, setReadOnly] = React.useState<boolean>(true);
   const invoices = client.invoices.map(invoice => {
     return { ...invoice, clientData: JSON.parse(invoice.clientData) };
@@ -28,7 +29,7 @@ export function ClientData(props: Props) {
       )}
 
       <Typography variant="h2">Invoices</Typography>
-      <InvoiceTable data={invoices} />
+      <InvoiceTable data={invoices} isLoading={isLoading} />
       <ExpenseTable expenses={client.expenses} clientTable />
     </Paper>
   );

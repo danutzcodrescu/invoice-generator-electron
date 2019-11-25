@@ -2,6 +2,7 @@
 import { format } from 'date-fns/esm';
 import MaterialTable from 'material-table';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { Invoice } from '../../generated/graphql';
 import { filterClientName, filterInvoiceDate } from './helpers';
 import { tableIcons } from './icons';
@@ -18,12 +19,24 @@ export interface InvoiceParsed extends Invoice {
 interface Props {
   data: InvoiceParsed[];
   title?: string;
+  isLoading: boolean;
+}
+
+function renderClientName(rowData: InvoiceParsed) {
+  const name = rowData.clientData.company
+    ? rowData.clientData.company
+    : `${rowData.clientData.firstName} ${rowData.clientData.lastName}`;
+  if (rowData.client) {
+    return <Link to={`/clients/${rowData.client.id}`}>{name}</Link>;
+  }
+  return name;
 }
 
 export const InvoiceTable = (props: Props) => {
-  const { data, title } = props;
+  const { data, title, isLoading } = props;
   return (
     <MaterialTable
+      isLoading={isLoading}
       title={title ? title : ''}
       icons={tableIcons}
       localization={{
@@ -36,10 +49,7 @@ export const InvoiceTable = (props: Props) => {
         {
           title: 'Customer',
           field: 'clientData',
-          render: rowData =>
-            rowData.clientData.company
-              ? rowData.clientData.company
-              : `${rowData.clientData.firstName} ${rowData.clientData.lastName}`,
+          render: renderClientName,
           customFilterAndSearch: filterClientName,
         },
         {

@@ -41,8 +41,8 @@ export const GET_CLIENTS = gql`
 `;
 
 export const GET_INVOICES = gql`
-  query GetInvoices {
-    invoices {
+  query GetInvoices($startDate: String!) {
+    invoices(startDate: $startDate) {
       id
       client {
         id
@@ -60,8 +60,8 @@ export const GET_INVOICES = gql`
 `;
 
 export const GET_CLIENT = gql`
-  query GetClient($clientId: ID!) {
-    client(clientId: $clientId) {
+  query GetClient($clientId: ID!, $startDate: String) {
+    client(clientId: $clientId, startDate: $startDate) {
       id
       address
       company
@@ -73,6 +73,7 @@ export const GET_CLIENT = gql`
         invoiceNumber
         amount
         vat
+        clientData
       }
       expenses {
         id
