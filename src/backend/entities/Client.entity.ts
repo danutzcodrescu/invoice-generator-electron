@@ -78,3 +78,21 @@ export class Client extends BaseEntity {
     this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 }
+
+@ObjectType()
+export class ClientData {
+  @Field({ nullable: true })
+  firstName?: string;
+
+  @Field({ nullable: true })
+  lastName?: string;
+
+  @Field({ nullable: true })
+  company?: string;
+
+  @Field()
+  address: string;
+
+  @Field({ nullable: true })
+  vat?: string;
+}

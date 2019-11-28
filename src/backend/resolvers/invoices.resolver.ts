@@ -1,9 +1,16 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import {
+  Arg,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql';
 import { EntityManager, Raw } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
-import { Client } from '../entities/Client.entity';
-import { Invoice } from '../entities/Invoice.entity';
-import { Profile } from '../entities/Profile.entity';
+import { Client, ClientData } from '../entities/Client.entity';
+import { Invoice, Item } from '../entities/Invoice.entity';
+import { Profile, ProfileData } from '../entities/Profile.entity';
 import {
   ClientInput,
   InvoiceInput,
@@ -63,5 +70,20 @@ export class InvoiceResolver {
     });
     const inv = await this.entityManager.save(invoice);
     return inv;
+  }
+
+  @FieldResolver()
+  clientData(@Root() invoice: Invoice): ClientData {
+    return JSON.parse(invoice.clientData);
+  }
+
+  @FieldResolver()
+  profileData(@Root() invoice: Invoice): ProfileData {
+    return JSON.parse(invoice.profileData);
+  }
+
+  @FieldResolver()
+  items(@Root() invoice: Invoice): Item[] {
+    return JSON.parse(invoice.items);
   }
 }

@@ -7,22 +7,14 @@ import { Invoice } from '../../generated/graphql';
 import { filterClientName, filterInvoiceDate } from './helpers';
 import { tableIcons } from './icons';
 
-//@ts-ignore
-export interface InvoiceParsed extends Invoice {
-  clientData: {
-    company?: string;
-    firstName?: string;
-    lastName?: string;
-  };
-}
-
 interface Props {
-  data: InvoiceParsed[];
+  data: Invoice[];
   title?: string;
   isLoading: boolean;
+  clientTable: boolean;
 }
 
-function renderClientName(rowData: InvoiceParsed) {
+function renderClientName(rowData: Invoice) {
   const name = rowData.clientData.company
     ? rowData.clientData.company
     : `${rowData.clientData.firstName} ${rowData.clientData.lastName}`;
@@ -33,7 +25,7 @@ function renderClientName(rowData: InvoiceParsed) {
 }
 
 export const InvoiceTable = (props: Props) => {
-  const { data, title, isLoading } = props;
+  const { data, title, isLoading, clientTable } = props;
   return (
     <MaterialTable
       isLoading={isLoading}
@@ -78,6 +70,11 @@ export const InvoiceTable = (props: Props) => {
         },
       ]}
       data={data}
+      options={{ toolbar: !clientTable }}
     ></MaterialTable>
   );
+};
+
+InvoiceTable.defaultProps = {
+  clientTable: false,
 };

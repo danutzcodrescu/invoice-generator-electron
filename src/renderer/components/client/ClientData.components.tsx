@@ -1,22 +1,25 @@
 import { Paper, Typography } from '@material-ui/core';
+import { ApolloQueryResult } from 'apollo-client';
 import * as React from 'react';
-import { Client } from '../../generated/graphql';
+import { Client, Query } from '../../generated/graphql';
 import { ExpenseTable } from '../expenses/ExpenseTable.component';
 import { InvoiceTable } from '../invoices/InvoiceTable.component';
+import { SelectDates } from '../toolbox/SelectDates.component';
+import { defaultDate } from '../utils/client';
 import { Editable } from './Editable.component';
 import { ReadOnly } from './ReadOnly.component';
 
 interface Props {
   client: Client;
   isLoading: boolean;
+  refetch: (
+    variables?: Record<string, any> | undefined,
+  ) => Promise<ApolloQueryResult<Query>>;
 }
 
 export function ClientData(props: Props) {
-  const { client, isLoading } = props;
+  const { client, isLoading, refetch } = props;
   const [isReadOnly, setReadOnly] = React.useState<boolean>(true);
-  const invoices = client.invoices.map(invoice => {
-    return { ...invoice, clientData: JSON.parse(invoice.clientData) };
-  });
   return (
     <Paper>
       {isReadOnly ? (
@@ -27,9 +30,16 @@ export function ClientData(props: Props) {
       ) : (
         <Editable client={client} setReadOnly={() => setReadOnly(true)} />
       )}
+      <div>
+        <SelectDates
+          defaultValue={defaultDate}
+          onChange={e => refetch({ startDate: e.target.value })}
+        />
+      </div>
 
       <Typography variant="h2">Invoices</Typography>
-      <InvoiceTable data={invoices} isLoading={isLoading} />
+      <InvoiceTable data={client.invoices} isLoading={isLoading} clientTable />
+      <Typography variant="h2">Expenses</Typography>
       <ExpenseTable expenses={client.expenses} clientTable />
     </Paper>
   );

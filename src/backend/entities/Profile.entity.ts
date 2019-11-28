@@ -77,3 +77,30 @@ export class Profile extends BaseEntity {
     this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 }
+
+@ObjectType()
+export class ProfileData {
+  @Field({ nullable: true })
+  firstName?: string;
+
+  @Field({ nullable: true })
+  lastName?: string;
+
+  @Field({ nullable: true })
+  company?: string;
+
+  @Field()
+  address: string;
+
+  @Field({ nullable: true })
+  vat?: string;
+
+  @Field({ nullable: true })
+  phone?: string;
+
+  @Field({ nullable: true })
+  bankAccount?: string;
+
+  @Field({ nullable: true })
+  email?: string;
+}

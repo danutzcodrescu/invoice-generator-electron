@@ -23,6 +23,23 @@ export interface Client {
   expenses: Array<Expense>;
 }
 
+export interface ClientInvoicesArgs {
+  startDate?: Maybe<Scalars['String']>;
+}
+
+export interface ClientExpensesArgs {
+  startDate?: Maybe<Scalars['String']>;
+}
+
+export interface ClientData {
+  __typename?: 'ClientData';
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
+  address: Scalars['String'];
+  vat?: Maybe<Scalars['String']>;
+}
+
 export interface ClientInput {
   clientId?: Maybe<Scalars['ID']>;
   clientData: Scalars['String'];
@@ -69,10 +86,10 @@ export interface Invoice {
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
   profile: Profile;
-  profileData: Scalars['String'];
+  profileData: ProfileData;
   client?: Maybe<Client>;
-  clientData: Scalars['String'];
-  items: Scalars['String'];
+  clientData: ClientData;
+  items: Array<Item>;
   vat: Scalars['Float'];
   amount: Scalars['Float'];
 }
@@ -83,6 +100,12 @@ export interface InvoiceInput {
   vat: Scalars['Float'];
   amount: Scalars['Float'];
   invoiceNumber: Scalars['String'];
+}
+
+export interface Item {
+  __typename?: 'Item';
+  name: Scalars['String'];
+  value: Scalars['String'];
 }
 
 export interface Mutation {
@@ -157,6 +180,18 @@ export interface Profile {
   invoices: Array<Invoice>;
 }
 
+export interface ProfileData {
+  __typename?: 'ProfileData';
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
+  address: Scalars['String'];
+  vat?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  bankAccount?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+}
+
 export interface ProfileInput {
   profileId: Scalars['ID'];
   profileData: Scalars['String'];
@@ -176,6 +211,14 @@ export interface Query {
 
 export interface QueryClientArgs {
   clientId: Scalars['ID'];
+}
+
+export interface QueryExpensesArgs {
+  startDate?: Maybe<Scalars['String']>;
+}
+
+export interface QueryInvoicesArgs {
+  startDate?: Maybe<Scalars['String']>;
 }
 
 export interface QueryProfileArgs {

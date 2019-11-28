@@ -9,7 +9,7 @@ import { GET_CLIENT } from '../graphql/queries';
 interface Props extends RouteComponentProps<{ clientId: string }> {}
 
 export function ClientDataContainer(props: Props) {
-  const { data, loading } = useQuery<Query>(GET_CLIENT, {
+  const { data, loading, refetch } = useQuery<Query>(GET_CLIENT, {
     variables: {
       clientId: props.match.params.clientId,
       startDate: defaultDate,
@@ -18,5 +18,11 @@ export function ClientDataContainer(props: Props) {
   if (!data) {
     return <h1>Loading</h1>;
   }
-  return <ClientData client={data!.client} isLoading={loading || !data} />;
+  return (
+    <ClientData
+      client={data!.client}
+      isLoading={loading || !data}
+      refetch={refetch}
+    ></ClientData>
+  );
 }

@@ -9,8 +9,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Client } from './Client.entity';
-import { Profile } from './Profile.entity';
+import { Client, ClientData } from './Client.entity';
+import { Profile, ProfileData } from './Profile.entity';
 
 @Entity()
 @ObjectType()
@@ -45,7 +45,7 @@ export class Invoice extends BaseEntity {
   @Column()
   profileId: string;
 
-  @Field()
+  @Field(type => ProfileData)
   @Column('text')
   profileData: string;
 
@@ -55,11 +55,12 @@ export class Invoice extends BaseEntity {
   @Column({ nullable: true })
   clientId: string;
 
-  @Field()
+  @Field(type => ClientData)
   @Column('text')
   clientData: string;
 
-  @Field()
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  @Field(type => [Item])
   @Column('text')
   items: string;
 
@@ -90,4 +91,13 @@ export class Invoice extends BaseEntity {
       );
     }
   }
+}
+
+@ObjectType()
+export class Item {
+  @Field()
+  name: string;
+
+  @Field()
+  value: string;
 }
