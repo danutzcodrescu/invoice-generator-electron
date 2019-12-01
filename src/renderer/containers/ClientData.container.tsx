@@ -3,6 +3,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { ClientData } from '../components/client/ClientData.components';
 import { defaultDate } from '../components/utils/client';
+import { Loading } from '../components/utils/Loading.component';
 import { Query } from '../generated/graphql';
 import { GET_CLIENT } from '../graphql/queries';
 
@@ -16,7 +17,7 @@ export function ClientDataContainer(props: Props) {
     },
   });
   if (!data) {
-    return <h1>Loading</h1>;
+    return <Loading />;
   }
   return (
     <ClientData

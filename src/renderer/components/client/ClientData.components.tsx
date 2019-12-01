@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { ApolloQueryResult } from 'apollo-client';
 import * as React from 'react';
 import { Client, Query } from '../../generated/graphql';
@@ -21,7 +21,7 @@ export function ClientData(props: Props) {
   const { client, isLoading, refetch } = props;
   const [isReadOnly, setReadOnly] = React.useState<boolean>(true);
   return (
-    <Paper>
+    <>
       {isReadOnly ? (
         <ReadOnly
           client={client}
@@ -41,6 +41,6 @@ export function ClientData(props: Props) {
       <InvoiceTable data={client.invoices} isLoading={isLoading} clientTable />
       <Typography variant="h2">Expenses</Typography>
       <ExpenseTable expenses={client.expenses} clientTable />
-    </Paper>
+    </>
   );
 }

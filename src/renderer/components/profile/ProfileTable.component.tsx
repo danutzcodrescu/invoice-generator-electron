@@ -1,4 +1,3 @@
-import { Paper } from '@material-ui/core';
 import { Visibility } from '@material-ui/icons';
 import MaterialTable from 'material-table';
 import * as React from 'react';
@@ -14,38 +13,36 @@ interface Props extends RouteComponentProps {
 export const ProfileTable = withRouter((props: Props) => {
   const { profiles, history } = props;
   return (
-    <Paper>
-      <MaterialTable
-        title="Profiles"
-        icons={tableIcons}
-        columns={[
-          {
-            title: 'Profile name',
-            render: rowData => clientName(rowData),
-            customFilterAndSearch: (filter, rowData) =>
-              clientName(rowData).includes(filter),
-          },
-          { title: 'Address', field: 'address' },
-          { title: 'Email', field: 'email' },
-          {
-            title: 'Vat number',
-            field: 'vat',
-          },
-        ]}
-        options={{
-          actionsColumnIndex: 4,
-        }}
-        actions={[
-          {
-            // eslint-disable-next-line react/display-name
-            icon: () => <Visibility />,
-            tooltip: 'ViewProfile',
-            onClick: (_, rowData) =>
-              history.push(`/profiles/${(rowData as Profile).id}`),
-          },
-        ]}
-        data={profiles}
-      ></MaterialTable>
-    </Paper>
+    <MaterialTable
+      title="Profiles"
+      icons={tableIcons}
+      columns={[
+        {
+          title: 'Profile name',
+          render: rowData => clientName(rowData),
+          customFilterAndSearch: (filter, rowData) =>
+            clientName(rowData).includes(filter),
+        },
+        { title: 'Address', field: 'address' },
+        { title: 'Email', field: 'email' },
+        {
+          title: 'Vat number',
+          field: 'vat',
+        },
+      ]}
+      options={{
+        actionsColumnIndex: 4,
+      }}
+      actions={[
+        {
+          // eslint-disable-next-line react/display-name
+          icon: () => <Visibility />,
+          tooltip: 'ViewProfile',
+          onClick: (_, rowData) =>
+            history.push(`/profiles/${(rowData as Profile).id}`),
+        },
+      ]}
+      data={profiles}
+    ></MaterialTable>
   );
 });
