@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
@@ -8,8 +9,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Client } from './Client.entity';
-import { Profile } from './Profile.entity';
+import { Client, ClientData } from './Client.entity';
+import { Profile, ProfileData } from './Profile.entity';
 
 @Entity()
 @ObjectType()
@@ -44,7 +45,7 @@ export class Invoice extends BaseEntity {
   @Column()
   profileId: string;
 
-  @Field()
+  @Field(type => ProfileData)
   @Column('text')
   profileData: string;
 
@@ -54,11 +55,12 @@ export class Invoice extends BaseEntity {
   @Column({ nullable: true })
   clientId: string;
 
-  @Field()
+  @Field(type => ClientData)
   @Column('text')
   clientData: string;
 
-  @Field()
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  @Field(type => [Item])
   @Column('text')
   items: string;
 
@@ -72,16 +74,30 @@ export class Invoice extends BaseEntity {
 
   @BeforeUpdate()
   updateDate() {
-    this.updatedAt = new Date().toUTCString();
+    this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
   }
 
   @BeforeInsert()
   createDate() {
-    this.createdAt = new Date().toUTCString();
-    this.updatedAt = new Date().toUTCString();
+    this.createdAt = format(new Date(), 'yyyy-MM:dd HH:mm:SS');
+    this.updatedAt = format(new Date(), 'yyyy-MM-dd HH:mm:SS');
     if (!this.invoiceDate) {
       // TODO format it
-      this.invoiceDate = new Date().toUTCString();
+      this.invoiceDate = format(new Date(), 'yyyy-MM-dd HH:mm:SS');
+    } else {
+      this.invoiceDate = format(
+        new Date(this.invoiceDate),
+        'yyyy-MM-dd HH:mm:SS',
+      );
     }
   }
+}
+
+@ObjectType()
+export class Item {
+  @Field()
+  name: string;
+
+  @Field()
+  value: string;
 }

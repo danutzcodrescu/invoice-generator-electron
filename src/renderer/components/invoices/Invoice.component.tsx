@@ -1,18 +1,13 @@
 import { Grid, Typography } from '@material-ui/core';
 import { format } from 'date-fns';
 import * as React from 'react';
-import { Client, Profile } from '../../generated/graphql';
+import { ClientData, Item, ProfileData } from '../../generated/graphql';
 import { Container, GridContainer, Heading, MarginTop } from './Invoice.styles';
-
-interface Item {
-  value: string;
-  name: string;
-}
 
 interface Props {
   items: Item[];
-  client: Client;
-  profile: Profile;
+  client: ClientData;
+  profile: ProfileData;
   vat: number;
   amount: number;
   invoiceDate: string;

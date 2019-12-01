@@ -1,9 +1,16 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
-import { EntityManager } from 'typeorm';
+import {
+  Arg,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql';
+import { EntityManager, Raw } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
-import { Client } from '../entities/Client.entity';
-import { Invoice } from '../entities/Invoice.entity';
-import { Profile } from '../entities/Profile.entity';
+import { Client, ClientData } from '../entities/Client.entity';
+import { Invoice, Item } from '../entities/Invoice.entity';
+import { Profile, ProfileData } from '../entities/Profile.entity';
 import {
   ClientInput,
   InvoiceInput,
@@ -16,10 +23,25 @@ export class InvoiceResolver {
   private entityManager: EntityManager;
 
   @Query(returns => [Invoice])
-  invoices(): Promise<Invoice[]> {
-    return this.entityManager.find(Invoice, {
-      relations: ['client', 'profile'],
-    });
+  invoices(
+    @Arg('startDate', { nullable: true }) startDate: string,
+  ): Promise<Invoice[]> {
+    return this.entityManager.find(
+      Invoice,
+      Object.assign(
+        {
+          relations: ['client', 'profile'],
+          order: { invoiceDate: 'DESC' },
+        },
+        startDate
+          ? {
+              where: {
+                invoiceDate: Raw(alias => `${alias} >= date("${startDate}")`),
+              },
+            }
+          : {},
+      ),
+    );
   }
 
   @Mutation(returns => Invoice)
@@ -48,5 +70,20 @@ export class InvoiceResolver {
     });
     const inv = await this.entityManager.save(invoice);
     return inv;
+  }
+
+  @FieldResolver()
+  clientData(@Root() invoice: Invoice): ClientData {
+    return JSON.parse(invoice.clientData);
+  }
+
+  @FieldResolver()
+  profileData(@Root() invoice: Invoice): ProfileData {
+    return JSON.parse(invoice.profileData);
+  }
+
+  @FieldResolver()
+  items(@Root() invoice: Invoice): Item[] {
+    return JSON.parse(invoice.items);
   }
 }

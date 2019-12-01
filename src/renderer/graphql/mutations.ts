@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { clientFragment, invoiceFragment, profileFragment } from './fragments';
 
 export const CREATE_CLIENT = gql`
   mutation AddClient(
@@ -17,14 +18,11 @@ export const CREATE_CLIENT = gql`
       address: $address
       vat: $vat
     ) {
-      id
-      firstName
-      lastName
-      company
-      address
-      vat
+      ...clientFragment
     }
   }
+
+  ${clientFragment}
 `;
 
 export const CREATE_VAT_RULE = gql`
@@ -52,14 +50,11 @@ export const CREATE_PROFILE = gql`
       address: $address
       vat: $vat
     ) {
-      id
-      firstName
-      lastName
-      company
-      address
-      vat
+      ...ProfileFragment
     }
   }
+
+  ${profileFragment}
 `;
 
 export const CREATE_INVOICE = gql`
@@ -73,16 +68,19 @@ export const CREATE_INVOICE = gql`
       profile: $profileData
       client: $clientData
     ) {
-      id
-      invoiceDate
-      clientData
+      ...InvoieFragment
+      clientData {
+        firstName
+        lastName
+        company
+        address
+        vat
+      }
       profileData
-      vat
-      amount
       items
-      invoiceNumber
     }
   }
+  ${invoiceFragment}
 `;
 
 export const UPDATE_CLIENT = gql`

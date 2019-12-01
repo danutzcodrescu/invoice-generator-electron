@@ -1,4 +1,10 @@
 import gql from 'graphql-tag';
+import {
+  clientFragment,
+  expenseFragment,
+  invoiceFragment,
+  profileFragment,
+} from './fragments';
 
 export const GET_VAT_RULES = gql`
   query GetVatRules {
@@ -13,78 +19,58 @@ export const GET_VAT_RULES = gql`
 export const GET_PROFILES = gql`
   query GetProfiles {
     profiles {
-      id
-      firstName
-      lastName
-      company
-      email
-      address
-      vat
-      bankAccount
-      phone
+      ...ProfileFragment
     }
   }
+
+  ${profileFragment}
 `;
 
 export const GET_CLIENTS = gql`
   query GetClients {
     clients {
-      id
-      firstName
-      lastName
-      company
-      email
-      address
-      vat
+      ...ClientFragment
     }
   }
+
+  ${clientFragment}
 `;
 
 export const GET_INVOICES = gql`
-  query GetInvoices {
-    invoices {
-      id
+  query GetInvoices($startDate: String!) {
+    invoices(startDate: $startDate) {
+      ...InvoiceFragment
       client {
         id
         firstName
         lastName
         company
       }
-      clientData
-      vat
-      amount
-      invoiceDate
-      invoiceNumber
+      clientData {
+        firstName
+        lastName
+        company
+      }
     }
   }
+  ${invoiceFragment}
 `;
 
 export const GET_CLIENT = gql`
-  query GetClient($clientId: ID!) {
+  query GetClient($clientId: ID!, $startDate: String) {
     client(clientId: $clientId) {
-      id
-      address
-      company
-      lastName
-      firstName
-      invoices {
-        id
-        invoiceDate
-        invoiceNumber
-        amount
-        vat
+      ...ClientFragment
+      invoices(startDate: $startDate) {
+        ...InvoiceFragment
       }
-      expenses {
-        id
-        invoiceDate
-        invoiceNumber
-        amount
-        vat
+      expenses(startDate: $startDate) {
+        ...ExpenseFragment
       }
-      vat
-      email
     }
   }
+  ${clientFragment}
+  ${invoiceFragment}
+  ${expenseFragment}
 `;
 
 export const GET_PROFILE = gql`
@@ -106,16 +92,14 @@ export const GET_PROFILE = gql`
 export const GET_EXPENSES = gql`
   query GetExpenses {
     expenses {
-      id
+      ...ExpenseFragment
       clientName
       client {
         id
       }
-      vat
-      amount
-      invoiceDate
-      invoiceNumber
       description
     }
   }
+
+  ${expenseFragment}
 `;

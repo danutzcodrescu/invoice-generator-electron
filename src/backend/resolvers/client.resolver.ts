@@ -1,7 +1,17 @@
-import { Arg, ID, Mutation, Query, Resolver } from 'type-graphql';
-import { EntityManager } from 'typeorm';
+import {
+  Arg,
+  FieldResolver,
+  ID,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql';
+import { EntityManager, Raw } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { Client } from '../entities/Client.entity';
+import { Expense } from '../entities/Expense.entity';
+import { Invoice } from '../entities/Invoice.entity';
 import { insertTransaction, nonNullObjectProperties } from '../utils/helpers';
 import { UpdateClientInput } from './types/operations.helpers';
 
@@ -13,17 +23,16 @@ export class ClientResolver {
   @Query(returns => [Client])
   clients(): Promise<Client[]> {
     // need to add data-loader
-    return this.entityManager.find(Client, { relations: ['invoices'] });
+    return this.entityManager.find(Client, {
+      relations: ['invoices', 'expenses'],
+    });
   }
 
   @Query(returns => Client)
   client(
     @Arg('clientId', type => ID) clientId: string,
   ): Promise<Client | undefined> {
-    // need to add data-loader
-    return this.entityManager.findOne(Client, clientId, {
-      relations: ['invoices'],
-    });
+    return this.entityManager.findOne(Client, clientId);
   }
 
   @Mutation(returns => Client)
@@ -57,5 +66,36 @@ export class ClientResolver {
       client = await insertTransaction(Client, transactionManager, obj as any);
     });
     return client!;
+  }
+
+  @FieldResolver()
+  async invoices(
+    @Root() client: Client,
+    @Arg('startDate', { nullable: true })
+    startDate?: string,
+  ): Promise<Invoice[] | undefined> {
+    return this.entityManager.find(Invoice, {
+      where: Object.assign(
+        { clientId: client.id },
+        startDate
+          ? { invoiceDate: Raw(alias => `${alias} >= date("${startDate}")`) }
+          : {},
+      ),
+    });
+  }
+
+  @FieldResolver()
+  async expenses(
+    @Root() client: Client,
+    @Arg('startDate', { nullable: true }) startDate?: string,
+  ): Promise<Expense[] | undefined> {
+    return this.entityManager.find(Expense, {
+      where: Object.assign(
+        { clientId: client.id },
+        startDate
+          ? { invoiceDate: Raw(alias => `${alias} >= date("${startDate}")`) }
+          : {},
+      ),
+    });
   }
 }

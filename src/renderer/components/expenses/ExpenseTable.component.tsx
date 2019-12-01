@@ -65,6 +65,9 @@ export function ExpenseTable(props: Props) {
         { title: 'Description', field: 'description' },
       ]}
       data={expenses}
+      options={{
+        toolbar: !clientTable,
+      }}
     ></MaterialTable>
   );
 }

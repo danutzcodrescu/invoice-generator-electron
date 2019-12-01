@@ -2,28 +2,33 @@
 import { format } from 'date-fns/esm';
 import MaterialTable from 'material-table';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { Invoice } from '../../generated/graphql';
 import { filterClientName, filterInvoiceDate } from './helpers';
 import { tableIcons } from './icons';
 
-//@ts-ignore
-export interface InvoiceParsed extends Invoice {
-  clientData: {
-    company?: string;
-    firstName?: string;
-    lastName?: string;
-  };
+interface Props {
+  data: Invoice[];
+  title?: string;
+  isLoading: boolean;
+  clientTable: boolean;
 }
 
-interface Props {
-  data: InvoiceParsed[];
-  title?: string;
+function renderClientName(rowData: Invoice) {
+  const name = rowData.clientData.company
+    ? rowData.clientData.company
+    : `${rowData.clientData.firstName} ${rowData.clientData.lastName}`;
+  if (rowData.client) {
+    return <Link to={`/clients/${rowData.client.id}`}>{name}</Link>;
+  }
+  return name;
 }
 
 export const InvoiceTable = (props: Props) => {
-  const { data, title } = props;
+  const { data, title, isLoading, clientTable } = props;
   return (
     <MaterialTable
+      isLoading={isLoading}
       title={title ? title : ''}
       icons={tableIcons}
       localization={{
@@ -36,10 +41,7 @@ export const InvoiceTable = (props: Props) => {
         {
           title: 'Customer',
           field: 'clientData',
-          render: rowData =>
-            rowData.clientData.company
-              ? rowData.clientData.company
-              : `${rowData.clientData.firstName} ${rowData.clientData.lastName}`,
+          render: renderClientName,
           customFilterAndSearch: filterClientName,
         },
         {
@@ -68,6 +70,11 @@ export const InvoiceTable = (props: Props) => {
         },
       ]}
       data={data}
+      options={{ toolbar: !clientTable }}
     ></MaterialTable>
   );
+};
+
+InvoiceTable.defaultProps = {
+  clientTable: false,
 };

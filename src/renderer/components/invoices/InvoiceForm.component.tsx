@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Button, Grid, MenuItem, Paper, Typography } from '@material-ui/core';
+import { Button, Grid, MenuItem, Typography } from '@material-ui/core';
 import {
   AccountBoxOutlined,
   DeleteForever,
@@ -131,7 +131,7 @@ export function InvoiceForm() {
     });
   }
   return (
-    <Paper>
+    <>
       <Typography gutterBottom variant="h1">
         New invoice
       </Typography>
@@ -511,6 +511,6 @@ export function InvoiceForm() {
           </form>
         )}
       />
-    </Paper>
+    </>
   );
 }

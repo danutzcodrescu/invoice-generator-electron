@@ -31,12 +31,12 @@ export function createInvoice(invoice: Invoice) {
   pdfWindow.webContents.once('did-finish-load', () => {
     pdfWindow!.webContents.send(LOAD_PDF_DATA, {
       invoiceDate: invoice.invoiceDate,
-      items: JSON.parse(invoice.items),
+      items: invoice.items,
       vat: invoice.vat,
       amount: invoice.amount,
       invoiceNumber: invoice.invoiceNumber,
-      client: JSON.parse(invoice.clientData),
-      profile: JSON.parse(invoice.profileData),
+      client: invoice.clientData,
+      profile: invoice.profileData,
     });
     pdfWindow!.webContents.printToPDF({ pageSize: 'A4' }).then(resp => {
       if (

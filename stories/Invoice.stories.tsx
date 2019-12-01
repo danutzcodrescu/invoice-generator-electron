@@ -10,11 +10,21 @@ import { Wrapper } from './Client.stories';
 const invoice = {
   id: 'f362c0c5-2ef9-444c-ba15-bfc266a8e5c5',
   invoiceDate: 'Sat, 02 Nov 2019 17:26:46 GMT',
-  clientData:
-    '{"firstName":"Danut","lastName":"Codrescu","company":"my comp","address":"test address","vat":"BE123456"}',
-  profileData:
-    '{"firstName":"Danut","lastName":"Codrescu","company":"saxzxz","address":"Rue Calvin 23, Box 1.1","vat":"212121"}',
-  items: '[{"name":"xxxx","value":"11111"}]',
+  clientData: {
+    firstName: 'Danut',
+    lastName: 'Codrescu',
+    company: 'my comp',
+    address: 'test address',
+    vat: 'BE123456',
+  },
+  profileData: {
+    firstName: 'Danut',
+    lastName: 'Codrescu',
+    company: 'saxzxz',
+    address: 'Rue Calvin 23, Box 1.1',
+    vat: '212121',
+  },
+  items: [{ name: 'xxxx', value: '11111' }],
   vat: 2333.31,
   amount: 11111,
 };
@@ -31,11 +41,11 @@ storiesOf('Components/invoices', module)
     <Wrapper>
       <Invoice
         invoiceDate={invoice.invoiceDate}
-        items={JSON.parse(invoice.items)}
+        items={invoice.items}
         vat={invoice.vat}
         amount={invoice.amount}
-        client={JSON.parse(invoice.clientData)}
-        profile={JSON.parse(invoice.profileData)}
+        client={invoice.clientData}
+        profile={invoice.profileData}
         invoiceNumber={'12356'}
       />
     </Wrapper>

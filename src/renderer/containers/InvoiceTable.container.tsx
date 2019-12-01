@@ -1,25 +1,26 @@
 import { useQuery } from '@apollo/react-hooks';
 import * as React from 'react';
-import {
-  InvoiceParsed,
-  InvoiceTable,
-} from '../components/invoices/InvoiceTable.component';
+import { InvoiceTable } from '../components/invoices/InvoiceTable.component';
+import { SelectDates } from '../components/toolbox/SelectDates.component';
+import { defaultDate } from '../components/utils/client';
+import { Loading } from '../components/utils/Loading.component';
 import { Query } from '../generated/graphql';
 import { GET_INVOICES } from '../graphql/queries';
 
 export function InvoiceTableContainer() {
-  const { data, loading, error } = useQuery<Query>(GET_INVOICES);
-  if (loading || !data) {
-    return <h1>loading</h1>;
+  const { data, loading, refetch } = useQuery<Query>(GET_INVOICES, {
+    variables: { startDate: defaultDate },
+  });
+  if (!data) {
+    return <Loading />;
   }
-  let invoices: InvoiceParsed[];
-  if (data) {
-    invoices = data.invoices.map(elem => {
-      return {
-        ...elem,
-        clientData: JSON.parse(elem.clientData),
-      };
-    });
-  }
-  return <InvoiceTable data={invoices!} />;
+  return (
+    <>
+      <SelectDates
+        onChange={e => refetch({ startDate: e.target.value })}
+        defaultValue={defaultDate}
+      />
+      <InvoiceTable data={data.invoices} isLoading={loading} />
+    </>
+  );
 }

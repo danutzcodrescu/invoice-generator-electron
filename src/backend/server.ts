@@ -28,7 +28,6 @@ async function bootstrap() {
       database: path.resolve(process.argv.slice(-1)[0], 'database.sqlite'),
       entities: [Event, Client, VatRule, Profile, Invoice, Expense],
     });
-    console.log(await Event.find());
     // build TypeGraphQL executable schema
     const schema = await buildSchema({
       resolvers: [
