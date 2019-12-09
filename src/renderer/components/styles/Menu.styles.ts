@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface Props {
   isOpen: boolean;
   theme: Theme;
+  wide: boolean;
 }
 
 const drawerWidth = 200;
@@ -45,20 +46,30 @@ export const useMenuStyles = makeStyles((theme: Theme) => ({
       width: theme.spacing(9) + 1,
     },
   },
+  layout: {
+    marginTop: '60px',
+    minHeight: `calc(100vh - ${theme.spacing(3) + 60}px)`,
+    marginBottom: theme.spacing(3),
+    marginLeft: theme.spacing(3),
+    width: `calc(100vw - ${theme.spacing(7) + theme.spacing(5)}px)`,
+    '&$isOpen': {
+      width: `calc(100vw - ${drawerWidth + theme.spacing(7)}px)`,
+      marginLeft: `${drawerWidth - 40}px`,
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100vw - ${theme.spacing(9) + +theme.spacing(5)}px)`,
+    },
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  isOpen: {},
 }));
-
-export const Layout = styled.div<Props>`
-  width: ${props =>
-    props.isOpen
-      ? `calc(100vw - ${drawerWidth})`
-      : `calc(100vw - ${props.theme.spacing(7) + 1}px)`};
-  padding-top: 48px;
-`;
 
 export const LayoutPaper = styled(Paper)`
   && {
     width: 100%;
-    min-height: calc(100vh - 50px);
   }
 `;
 

@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/react-hooks';
 import * as React from 'react';
 import { ClientTable } from '../components/client/ClientTable.component';
-import { Loading } from '../components/utils/Loading.component';
+import { Loading } from '../components/toolbox/Loading.component';
 import { Query } from '../generated/graphql';
 import { GET_CLIENTS } from '../graphql/queries';
 

@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/react-hooks';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { ProfileData } from '../components/profile/ProfileData.component';
-import { Loading } from '../components/utils/Loading.component';
+import { Loading } from '../components/toolbox/Loading.component';
 import { Query } from '../generated/graphql';
 import { GET_PROFILE } from '../graphql/queries';
 

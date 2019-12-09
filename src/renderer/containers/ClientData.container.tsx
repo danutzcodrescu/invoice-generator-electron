@@ -2,8 +2,8 @@ import { useQuery } from '@apollo/react-hooks';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { ClientData } from '../components/client/ClientData.components';
+import { Loading } from '../components/toolbox/Loading.component';
 import { defaultDate } from '../components/utils/client';
-import { Loading } from '../components/utils/Loading.component';
 import { Query } from '../generated/graphql';
 import { GET_CLIENT } from '../graphql/queries';
 

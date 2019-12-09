@@ -8,8 +8,8 @@ import { Field, Form } from 'react-final-form';
 import { Client, Query } from '../../generated/graphql';
 import { GET_CLIENTS } from '../../graphql/queries';
 import { DividerMargin } from '../invoices/InvoiceForm.styles';
+import { FormField } from '../toolbox/FormField.component';
 import { clientName } from '../utils/client';
-import { FormField } from '../utils/FormField.component';
 
 interface Props {
   createExpense: MutationFunction;
