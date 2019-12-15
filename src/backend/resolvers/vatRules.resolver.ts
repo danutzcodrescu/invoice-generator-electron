@@ -1,8 +1,9 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, ID, Mutation, Query, Resolver } from 'type-graphql';
 import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { VatRule } from '../entities/VatRule.entity';
 import { insertTransaction, nonNullObjectProperties } from '../utils/helpers';
+import { VatRuleUpdate } from './types/operations.helpers';
 
 @Resolver(VatRule)
 export class VatRuleResolver {
@@ -32,5 +33,14 @@ export class VatRuleResolver {
       );
     });
     return vatRule!;
+  }
+
+  @Mutation(returns => VatRule)
+  async updateVatRule(
+    @Arg('id', type => ID) id: string,
+    @Arg('data') data: VatRuleUpdate,
+  ): Promise<VatRule | undefined> {
+    await this.entityManager.update(VatRule, id, data);
+    return this.entityManager.findOne(VatRule, id);
   }
 }

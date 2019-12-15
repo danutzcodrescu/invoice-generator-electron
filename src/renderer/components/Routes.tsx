@@ -10,6 +10,7 @@ import { InvoiceTableContainer } from '../containers/InvoiceTable.container';
 import { ProfileDataContainer } from '../containers/ProfileData.container';
 import { ProfileFormContainer } from '../containers/ProfileForm.container';
 import { ProfileTableContainer } from '../containers/ProfileTable.container';
+import { VATFormContainer } from '../containers/VatRuleForm.container';
 import { InvoiceForm } from './invoices/InvoiceForm.component';
 
 export function Routes() {
@@ -48,6 +49,7 @@ export function Routes() {
       ></Route>
       <Route exact path="/profiles" component={ProfileTableContainer} />
       <Route exact path="/expenses" component={ExpenseTableContainer}></Route>
+      <Route exact path="/newVat" component={VATFormContainer}></Route>
     </Switch>
   );
 }

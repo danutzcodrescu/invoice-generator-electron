@@ -117,6 +117,7 @@ export interface Mutation {
   updateProfile: Profile;
   addProfile: Profile;
   addVatRule: VatRule;
+  updateVatRule: VatRule;
 }
 
 export interface MutationUpdateClientArgs {
@@ -162,6 +163,11 @@ export interface MutationAddProfileArgs {
 export interface MutationAddVatRuleArgs {
   name?: Maybe<Scalars['String']>;
   percentage: Scalars['Float'];
+}
+
+export interface MutationUpdateVatRuleArgs {
+  data: VatRuleUpdate;
+  id: Scalars['ID'];
 }
 
 export interface Profile {
@@ -252,4 +258,9 @@ export interface VatRule {
   percentage: Scalars['Float'];
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
+}
+
+export interface VatRuleUpdate {
+  name?: Maybe<Scalars['String']>;
+  percentage: Scalars['Float'];
 }
