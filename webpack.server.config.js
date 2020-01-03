@@ -23,13 +23,14 @@ module.exports = merge.smart(baseConfig, {
           cacheDirectory: true,
           babelrc: false,
           presets: [
-            ['@babel/preset-env', { targets: 'maintained node versions' }],
+            ['@babel/preset-env', { targets: { node: 'current' } }],
             '@babel/preset-typescript',
           ],
           plugins: [
             'babel-plugin-transform-typescript-metadata',
             ['@babel/plugin-proposal-decorators', { legacy: true }],
             ['@babel/plugin-proposal-class-properties', { loose: true }],
+            '@babel/plugin-proposal-optional-chaining',
           ],
         },
       },

@@ -41,6 +41,7 @@ const sidebarLinks = [
   { text: 'Invoices', icon: <Receipt /> },
   { text: 'Expenses', icon: <MoneyOff /> },
   { text: 'Clients', icon: <Contacts /> },
+  { text: 'VAT rules', icon: <MonetizationOn /> },
 ];
 
 const createItems = [
@@ -112,7 +113,7 @@ export function Menu(props: { children: React.ReactNode }) {
               disableGutters
               {...{
                 component: Link,
-                to: `/${item.text.toLowerCase()}`,
+                to: `/${item.text.toLowerCase().replace(' ', '')}`,
               }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>

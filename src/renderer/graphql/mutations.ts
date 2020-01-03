@@ -99,6 +99,14 @@ export const UPDATE_PROFILE = gql`
   }
 `;
 
+export const UPDATE_VAT = gql`
+  mutation UpdateVat($data: VatRuleUpdate!, $id: ID!) {
+    updateVatRule(data: $data, id: $id) {
+      id
+    }
+  }
+`;
+
 export const CREATE_EXPENSE = gql`
   mutation CreateExpense($expense: CreateExpense!) {
     createExpense(expense: $expense) {

@@ -1,4 +1,10 @@
-import { Button, Grid, TextField, Typography } from '@material-ui/core';
+import {
+  Button,
+  DialogActions,
+  Grid,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
 
@@ -6,10 +12,11 @@ interface Props {
   submit: (values: { name: string; vat: string }) => void;
   close: () => void;
   title: string;
+  values?: { name: string; vat: string };
 }
 
 export function VatRuleForm(props: Props) {
-  const { submit, close, title } = props;
+  const { submit, close, title, values } = props;
 
   function vatValue(value: number) {
     return isNaN(value) || (value >= 0 && value <= 100)
@@ -19,6 +26,7 @@ export function VatRuleForm(props: Props) {
   return (
     <Form
       onSubmit={submit}
+      initialValues={values}
       render={({ handleSubmit, submitting, pristine }) => (
         <form onSubmit={handleSubmit}>
           <Typography>{title}</Typography>
@@ -45,17 +53,18 @@ export function VatRuleForm(props: Props) {
               )}
             </Field>
           </Grid>
-
-          <Button onClick={close} color="secondary">
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            color="primary"
-            disabled={pristine || submitting}
-          >
-            Create VAT rule
-          </Button>
+          <DialogActions>
+            <Button onClick={close} color="secondary">
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              color="primary"
+              disabled={pristine || submitting}
+            >
+              {values ? 'Update VAT rule' : 'Create VAT rule'}
+            </Button>
+          </DialogActions>
         </form>
       )}
     />
