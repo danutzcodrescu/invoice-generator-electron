@@ -3,6 +3,7 @@ import { Client } from '../../entities/Client.entity';
 import { Expense } from '../../entities/Expense.entity';
 import { Invoice } from '../../entities/Invoice.entity';
 import { Profile } from '../../entities/Profile.entity';
+import { Service } from '../../entities/Service.entity';
 import { VatRule } from '../../entities/VatRule.entity';
 
 @InputType()
@@ -121,4 +122,16 @@ export class VatRuleUpdate implements VatInputType {
 
   @Field()
   percentage: number;
+}
+
+@InputType()
+export class ServiceUpdate implements Partial<Service> {
+  @Field({ nullable: true })
+  name?: string;
+
+  @Field({ nullable: true })
+  measurement?: string;
+
+  @Field({ nullable: true })
+  cost?: number;
 }

@@ -10,6 +10,8 @@ import { InvoiceTableContainer } from '../containers/InvoiceTable.container';
 import { ProfileDataContainer } from '../containers/ProfileData.container';
 import { ProfileFormContainer } from '../containers/ProfileForm.container';
 import { ProfileTableContainer } from '../containers/ProfileTable.container';
+import { ServiceFormContainer } from '../containers/ServiceForm.container';
+import { ServicesTableContainer } from '../containers/ServiceTable.container';
 import { VATFormContainer } from '../containers/VatRuleForm.container';
 import { VatTableContainer } from '../containers/VatTable.container';
 import { InvoiceForm } from './invoices/InvoiceForm.component';
@@ -52,6 +54,8 @@ export function Routes() {
       <Route exact path="/expenses" component={ExpenseTableContainer}></Route>
       <Route exact path="/vatrules" component={VatTableContainer}></Route>
       <Route exact path="/newVat" component={VATFormContainer}></Route>
+      <Route exact path="/newService" component={ServiceFormContainer}></Route>
+      <Route exact path="/services" component={ServicesTableContainer}></Route>
     </Switch>
   );
 }

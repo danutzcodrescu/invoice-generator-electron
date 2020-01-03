@@ -16,6 +16,17 @@ export const GET_VAT_RULES = gql`
   }
 `;
 
+export const GET_SERVICES = gql`
+  query GetServices {
+    services {
+      id
+      name
+      measurement
+      cost
+    }
+  }
+`;
+
 export const GET_PROFILES = gql`
   query GetProfiles {
     profiles {

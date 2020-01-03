@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core';
 import {
   AccountCircle,
+  AddShoppingCart,
   ArrowDropDown,
   Contacts,
   Menu as MenuIcon,
@@ -42,6 +43,7 @@ const sidebarLinks = [
   { text: 'Expenses', icon: <MoneyOff /> },
   { text: 'Clients', icon: <Contacts /> },
   { text: 'VAT rules', icon: <MonetizationOn /> },
+  { text: 'Services', icon: <AddShoppingCart /> },
 ];
 
 const createItems = [
@@ -50,6 +52,11 @@ const createItems = [
   { text: 'Create client', link: '/newClient', icon: <Contacts /> },
   { text: 'Create expense', link: '/newExpense', icon: <MoneyOff /> },
   { text: 'Create VAT rule', link: '/newVat', icon: <MonetizationOn /> },
+  {
+    text: 'Create service/item',
+    link: '/newService',
+    icon: <AddShoppingCart />,
+  },
 ];
 
 export function Menu(props: { children: React.ReactNode }) {
