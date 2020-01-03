@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core';
 import {
   AccountCircle,
+  AddShoppingCart,
   ArrowDropDown,
   Contacts,
   Menu as MenuIcon,
@@ -29,7 +30,6 @@ import clsx from 'clsx';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Layout,
   LayoutPaper,
   PaperSC,
   PopperSC,
@@ -42,6 +42,8 @@ const sidebarLinks = [
   { text: 'Invoices', icon: <Receipt /> },
   { text: 'Expenses', icon: <MoneyOff /> },
   { text: 'Clients', icon: <Contacts /> },
+  { text: 'VAT rules', icon: <MonetizationOn /> },
+  { text: 'Services', icon: <AddShoppingCart /> },
 ];
 
 const createItems = [
@@ -50,6 +52,11 @@ const createItems = [
   { text: 'Create client', link: '/newClient', icon: <Contacts /> },
   { text: 'Create expense', link: '/newExpense', icon: <MoneyOff /> },
   { text: 'Create VAT rule', link: '/newVat', icon: <MonetizationOn /> },
+  {
+    text: 'Create service/item',
+    link: '/newService',
+    icon: <AddShoppingCart />,
+  },
 ];
 
 export function Menu(props: { children: React.ReactNode }) {
@@ -113,7 +120,7 @@ export function Menu(props: { children: React.ReactNode }) {
               disableGutters
               {...{
                 component: Link,
-                to: `/${item.text.toLowerCase()}`,
+                to: `/${item.text.toLowerCase().replace(' ', '')}`,
               }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
@@ -123,9 +130,9 @@ export function Menu(props: { children: React.ReactNode }) {
         </List>
         <Divider />
       </Drawer>
-      <Layout isOpen={isOpen}>
+      <div className={clsx(classes.layout, { [classes.isOpen]: isOpen })}>
         <LayoutPaper>{props.children}</LayoutPaper>
-      </Layout>
+      </div>
 
       <PopperSC
         open={isPopoverOpen}

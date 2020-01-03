@@ -8,6 +8,13 @@ export interface Scalars {
   Float: number;
 }
 
+export interface Base {
+  __typename?: 'Base';
+  id: Scalars['ID'];
+  updatedAt: Scalars['String'];
+  createdAt: Scalars['String'];
+}
+
 export interface Client {
   __typename?: 'Client';
   id: Scalars['ID'];
@@ -116,7 +123,10 @@ export interface Mutation {
   createInvoice: Invoice;
   updateProfile: Profile;
   addProfile: Profile;
+  addService: Service;
+  updateService: Service;
   addVatRule: VatRule;
+  updateVatRule: VatRule;
 }
 
 export interface MutationUpdateClientArgs {
@@ -159,9 +169,25 @@ export interface MutationAddProfileArgs {
   firstName?: Maybe<Scalars['String']>;
 }
 
+export interface MutationAddServiceArgs {
+  cost?: Maybe<Scalars['Float']>;
+  measurement: Scalars['String'];
+  name: Scalars['String'];
+}
+
+export interface MutationUpdateServiceArgs {
+  data: ServiceUpdate;
+  id: Scalars['ID'];
+}
+
 export interface MutationAddVatRuleArgs {
   name?: Maybe<Scalars['String']>;
   percentage: Scalars['Float'];
+}
+
+export interface MutationUpdateVatRuleArgs {
+  data: VatRuleUpdate;
+  id: Scalars['ID'];
 }
 
 export interface Profile {
@@ -206,6 +232,7 @@ export interface Query {
   invoices: Array<Invoice>;
   profiles: Array<Profile>;
   profile: Profile;
+  services: Array<Service>;
   vatRules: Array<VatRule>;
 }
 
@@ -223,6 +250,22 @@ export interface QueryInvoicesArgs {
 
 export interface QueryProfileArgs {
   profileId: Scalars['ID'];
+}
+
+export interface Service {
+  __typename?: 'Service';
+  id: Scalars['ID'];
+  updatedAt: Scalars['String'];
+  createdAt: Scalars['String'];
+  name: Scalars['String'];
+  measurement: Scalars['String'];
+  cost?: Maybe<Scalars['Float']>;
+}
+
+export interface ServiceUpdate {
+  name?: Maybe<Scalars['String']>;
+  measurement?: Maybe<Scalars['String']>;
+  cost?: Maybe<Scalars['Float']>;
 }
 
 export interface UpdateClientInput {
@@ -252,4 +295,9 @@ export interface VatRule {
   percentage: Scalars['Float'];
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
+}
+
+export interface VatRuleUpdate {
+  name?: Maybe<Scalars['String']>;
+  percentage: Scalars['Float'];
 }

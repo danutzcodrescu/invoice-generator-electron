@@ -51,6 +51,7 @@ const createWindow = async () => {
       webSecurity: false,
       allowRunningInsecureContent: false,
     },
+    fullscreen: true,
   });
 
   if (isDev) {

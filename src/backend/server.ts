@@ -9,12 +9,14 @@ import { Event } from './entities/Event.entity';
 import { Expense } from './entities/Expense.entity';
 import { Invoice } from './entities/Invoice.entity';
 import { Profile } from './entities/Profile.entity';
+import { Service } from './entities/Service.entity';
 import { VatRule } from './entities/VatRule.entity';
 import { ClientResolver } from './resolvers/client.resolver';
 import { EventResolver } from './resolvers/event.resolver';
 import { ExpenseResolver } from './resolvers/expense.resolver';
 import { InvoiceResolver } from './resolvers/invoices.resolver';
 import { ProfileResolver } from './resolvers/profile.resolver';
+import { ServiceResolver } from './resolvers/service.resolver';
 import { VatRuleResolver } from './resolvers/vatRules.resolver';
 
 useContainer(Container);
@@ -26,7 +28,7 @@ async function bootstrap() {
       synchronize: true,
       logging: true,
       database: path.resolve(process.argv.slice(-1)[0], 'database.sqlite'),
-      entities: [Event, Client, VatRule, Profile, Invoice, Expense],
+      entities: [Event, Client, VatRule, Profile, Invoice, Expense, Service],
     });
     // build TypeGraphQL executable schema
     const schema = await buildSchema({
@@ -37,6 +39,7 @@ async function bootstrap() {
         ProfileResolver,
         InvoiceResolver,
         ExpenseResolver,
+        ServiceResolver,
       ],
       container: Container,
       // authChecker, // register auth checking function

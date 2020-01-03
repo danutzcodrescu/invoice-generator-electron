@@ -21,8 +21,8 @@ import {
   GET_VAT_RULES,
 } from '../../graphql/queries';
 import { setBulkValue } from '../../utils/react-final-form';
+import { FormField } from '../toolbox/FormField.component';
 import { Autocomplete } from '../utils/Autocomplete.component';
-import { FormField } from '../utils/FormField.component';
 import { calculateNet, calculateTotal, calculateVat } from './helpers';
 import { ButtonIcon, ButtonMargin, DividerMargin } from './InvoiceForm.styles';
 

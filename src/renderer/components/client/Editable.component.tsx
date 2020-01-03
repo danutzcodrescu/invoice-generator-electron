@@ -18,8 +18,8 @@ import { Form } from 'react-final-form';
 import { Client, Mutation, Profile } from '../../generated/graphql';
 import { UPDATE_CLIENT, UPDATE_PROFILE } from '../../graphql/mutations';
 import { GET_CLIENT, GET_PROFILE } from '../../graphql/queries';
+import { FormField } from '../toolbox/FormField.component';
 import { clientName } from '../utils/client';
-import { FormField } from '../utils/FormField.component';
 import { NoPaddingGrid, PaddingCard, PaddingGrid } from './ClientForm.styles';
 
 interface Props {

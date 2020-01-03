@@ -1,20 +1,29 @@
 import { useMutation } from '@apollo/react-hooks';
-import { Button } from '@material-ui/core';
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { VatRuleForm } from '../components/vatRules/VatRuleForm.component';
 import { CREATE_VAT_RULE } from '../graphql/mutations';
 
-export function VATFormContainer() {
+interface Props extends RouteComponentProps {}
+
+export function VATFormContainer(props: Props) {
   const [createVAT] = useMutation(CREATE_VAT_RULE);
-  const [isOpen, setStatus] = React.useState<boolean>(false);
+
+  function submit(values: { name: string; vat: string }) {
+    createVAT({
+      variables: {
+        ...values,
+        vat: parseFloat(values.vat),
+      },
+    }).then(() => {
+      props.history.goBack();
+    });
+  }
   return (
-    <>
-      <Button onClick={() => setStatus(true)}>New VAT Rule</Button>
-      <VatRuleForm
-        isOpen={isOpen}
-        handleClose={() => setStatus(false)}
-        createVatRule={createVAT}
-      />
-    </>
+    <VatRuleForm
+      submit={submit}
+      close={props.history.goBack}
+      title="Add new VAT rule"
+    />
   );
 }

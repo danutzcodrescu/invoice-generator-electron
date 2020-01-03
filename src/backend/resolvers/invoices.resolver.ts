@@ -55,7 +55,6 @@ export class InvoiceResolver {
       profile.profileId,
     );
     const clientDB = await this.entityManager.findOne(Client, client.clientId);
-    console.log(profile);
     // @ts-ignore
     const invoice = this.entityManager.create(Invoice, {
       createDate: invoiceData.invoiceDate,

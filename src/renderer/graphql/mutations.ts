@@ -76,8 +76,6 @@ export const CREATE_INVOICE = gql`
         address
         vat
       }
-      profileData
-      items
     }
   }
   ${invoiceFragment}
@@ -99,9 +97,33 @@ export const UPDATE_PROFILE = gql`
   }
 `;
 
+export const UPDATE_VAT = gql`
+  mutation UpdateVat($data: VatRuleUpdate!, $id: ID!) {
+    updateVatRule(data: $data, id: $id) {
+      id
+    }
+  }
+`;
+
 export const CREATE_EXPENSE = gql`
   mutation CreateExpense($expense: CreateExpense!) {
     createExpense(expense: $expense) {
+      id
+    }
+  }
+`;
+
+export const CREATE_SERVICE = gql`
+  mutation CreateService($measurement: String!, $name: String!, $cost: Float) {
+    addService(measurement: $measurement, name: $name, cost: $cost) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_SERVICE = gql`
+  mutation UPDATE_SERVICE($id: ID!, $data: ServiceUpdate!) {
+    updateService(id: $id, data: $data) {
       id
     }
   }
