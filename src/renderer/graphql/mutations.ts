@@ -68,7 +68,7 @@ export const CREATE_INVOICE = gql`
       profile: $profileData
       client: $clientData
     ) {
-      ...InvoieFragment
+      ...InvoiceFragment
       clientData {
         firstName
         lastName
