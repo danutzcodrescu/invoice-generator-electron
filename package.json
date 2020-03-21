@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "main": "./dist/main.js",
   "license": "MIT",
-  "homepage": "https://github.com/danutzcodrescu/yoga-typeorm-be",
+  "homepage": "https://github.com/danutzcodrescu/invoice-generator-electron",
   "author": {
-    "name": "Danut Codrescu",
-    "email": "danutzcodrescu@gmail.com"
+    "name": "Danut Codrescu"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
