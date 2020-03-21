@@ -33,10 +33,5 @@ module.exports = merge.smart(baseConfig, {
       reportFiles: ['src/main/**/*'],
     }),
     new CleanWebpackPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(
-        process.env.NODE_ENV || 'development',
-      ),
-    }),
   ],
 });

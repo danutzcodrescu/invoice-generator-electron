@@ -68,9 +68,6 @@ module.exports = merge.smart(baseConfig, {
       template: path.resolve(__dirname, './index.html'),
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(
-        process.env.NODE_ENV || 'development',
-      ),
       'process.env.STORYBOOK': false,
     }),
   ],
