@@ -9,7 +9,15 @@ const baseConfig = require('./webpack.base.config');
 module.exports = merge.smart(baseConfig, {
   target: 'electron-renderer',
   entry: {
-    app: path.resolve(__dirname, './src/renderer/index.tsx'),
+    app: [
+      'react-hot-loader/patch',
+      path.resolve(__dirname, './src/renderer/index.tsx'),
+    ],
+  },
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
   },
   module: {
     rules: [
@@ -63,7 +71,6 @@ module.exports = merge.smart(baseConfig, {
     new ForkTsCheckerWebpackPlugin({
       reportFiles: ['src/renderer/**/*'],
     }),
-    new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './index.html'),
     }),
