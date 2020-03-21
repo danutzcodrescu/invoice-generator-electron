@@ -23,12 +23,16 @@ module.exports = merge.smart(baseConfig, {
           presets: [
             [
               '@babel/preset-env',
-              { targets: { browsers: 'last 2 Chrome versions' } },
+              { targets: { browsers: 'last 1 Chrome version' } },
             ],
             '@babel/preset-typescript',
             '@babel/preset-react',
           ],
-          plugins: ['@babel/plugin-proposal-optional-chaining'],
+          plugins: [
+            '@babel/plugin-proposal-optional-chaining',
+            ['@babel/plugin-proposal-class-properties', { loose: true }],
+            'react-hot-loader/babel',
+          ],
         },
       },
       {
