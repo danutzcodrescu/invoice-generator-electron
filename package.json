@@ -113,7 +113,7 @@
     "build-server": "cross-env NODE_ENV=production webpack --config webpack.server.config.js",
     "build": "npm run build-main && npm run build-renderer && npm run build-server",
     "start-renderer-dev": "webpack-dev-server --config webpack.renderer.dev.config.js",
-    "start-main-dev": "webpack --config webpack.main.config.js && electron ./dist/main.js",
+    "start-main-dev": "webpack --config webpack.main.dev.config.js --watch",
     "start-server-dev": "webpack --config webpack.server.dev.config.js --mode=development --watch",
     "start-dev": "cross-env START_HOT=1 npm run start-renderer-dev",
     "prestart": "npm run build",
@@ -135,13 +135,11 @@
     }
   },
   "lint-staged": {
-    "{src,test,mocks}/**/*.{js,ts,tsx,json,css,scss,md}": [
-      "prettier --config ./.prettierrc --write",
-      "git add"
+    "**/*.{js,ts,tsx,json,css,scss,md}": [
+      "prettier --config ./.prettierrc --write"
     ],
-    "{src,test,mocks}/**/*.{js,ts,tsx}": [
-      "eslint --fix",
-      "git add"
+    "**/*.{js,ts,tsx}": [
+      "eslint --fix"
     ]
   },
   "build": {
