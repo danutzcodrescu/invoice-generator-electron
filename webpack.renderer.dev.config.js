@@ -1,14 +1,9 @@
 const merge = require('webpack-merge');
 const spawn = require('child_process').spawn;
-
+const webpack = require('webpack');
 const baseConfig = require('./webpack.renderer.config');
 
 module.exports = merge.smart(baseConfig, {
-  resolve: {
-    alias: {
-      'react-dom': '@hot-loader/react-dom',
-    },
-  },
   devServer: {
     port: 2003,
     compress: true,
@@ -31,7 +26,7 @@ module.exports = merge.smart(baseConfig, {
         })
           .on('close', code => process.exit(code))
           .on('error', spawnError => console.error(spawnError));
-         spawn('npm', ['run', 'start-server-dev'], {
+        spawn('npm', ['run', 'start-server-dev'], {
           shell: true,
           env: process.env,
           stdio: 'inherit',

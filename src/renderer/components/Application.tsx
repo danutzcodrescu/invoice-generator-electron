@@ -1,11 +1,10 @@
+import * as React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import DateFnsUtils from '@date-io/date-fns';
 import { NoSsr } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider as MaterialUIThemeProvider } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import * as React from 'react';
-import { hot } from 'react-hot-loader/root';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import 'typeface-roboto';
@@ -37,4 +36,4 @@ export const Application = () => {
   );
 };
 
-export default hot(Application);
+export default Application;

@@ -11,7 +11,6 @@ module.exports = merge.smart(baseConfig, {
   entry: {
     server: path.resolve(__dirname, './src/backend/server.ts'),
   },
-  mode: 'production',
   externals: [nodeExternals()],
   module: {
     rules: [
@@ -39,11 +38,6 @@ module.exports = merge.smart(baseConfig, {
   plugins: [
     new ForkTsCheckerWebpackPlugin({
       reportFiles: ['src/backend/**/*'],
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(
-        process.env.NODE_ENV || 'development',
-      ),
     }),
   ],
 });
