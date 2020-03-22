@@ -37,15 +37,11 @@ export function ServicesTableContainer() {
           close={() => setService(undefined)}
           title="Edit service/item"
           submit={submit}
-          values={
-            service
-              ? {
-                  name: service.name,
-                  measurement: service.measurement,
-                  cost: service!.cost!.toString(),
-                }
-              : undefined
-          }
+          values={{
+            name: service?.name,
+            measurement: service?.measurement,
+            cost: service?.cost?.toString(),
+          }}
         />
       </Dialog>
     </>

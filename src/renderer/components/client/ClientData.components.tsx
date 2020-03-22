@@ -33,7 +33,7 @@ export function ClientData(props: Props) {
       <div>
         <SelectDates
           defaultValue={defaultDate}
-          onChange={e => refetch({ startDate: e.target.value })}
+          onChange={(e) => refetch({ startDate: e.target.value })}
         />
       </div>
 

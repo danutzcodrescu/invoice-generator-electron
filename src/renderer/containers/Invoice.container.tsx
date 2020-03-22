@@ -12,6 +12,7 @@ export function InvoiceContainer() {
     client: null,
     profile: null,
     invoiceNumber: '',
+    vatRuleName: '',
   });
   React.useEffect(() => {
     ipcRenderer.on(LOAD_PDF_DATA, (_, data: any) => {
@@ -29,6 +30,7 @@ export function InvoiceContainer() {
       client={invoice.client!}
       profile={invoice.profile!}
       invoiceNumber={invoice.invoiceNumber}
+      vatRuleName={invoice.vatRuleName}
     />
   );
 }

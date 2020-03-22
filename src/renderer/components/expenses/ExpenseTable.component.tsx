@@ -27,7 +27,7 @@ export function ExpenseTable(props: Props) {
         {
           title: 'Invoice date',
           field: 'invoiceDate',
-          render: rowData =>
+          render: (rowData) =>
             format(new Date(rowData.invoiceDate), 'yyyy-MM-dd'),
           customFilterAndSearch: filterInvoiceDate,
         },
@@ -36,7 +36,7 @@ export function ExpenseTable(props: Props) {
               title: 'Client',
               field: 'clientName',
               // eslint-disable-next-line react/display-name
-              render: rowData =>
+              render: (rowData) =>
                 rowData.client ? (
                   <Link to={`/clients/${rowData.client.id}`}>
                     {rowData.clientName}
@@ -50,7 +50,7 @@ export function ExpenseTable(props: Props) {
           title: 'Amount',
           field: 'amount',
           type: 'numeric',
-          render: rowData =>
+          render: (rowData) =>
             rowData.amount.toLocaleString('nl-BE', {
               minimumFractionDigits: 2,
             }),
@@ -59,7 +59,7 @@ export function ExpenseTable(props: Props) {
           title: 'VAT',
           field: 'vat',
           type: 'numeric',
-          render: rowData =>
+          render: (rowData) =>
             rowData.vat.toLocaleString('nl-BE', { minimumFractionDigits: 2 }),
         },
         { title: 'Description', field: 'description' },
@@ -67,6 +67,7 @@ export function ExpenseTable(props: Props) {
       data={expenses}
       options={{
         toolbar: !clientTable,
+        pageSize: !clientTable ? 20 : 10,
       }}
     ></MaterialTable>
   );

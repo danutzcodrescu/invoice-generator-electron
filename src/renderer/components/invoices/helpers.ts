@@ -14,15 +14,26 @@ import { Expense, Invoice, Query } from '../../generated/graphql';
 interface Items {
   name: string;
   value: string;
+  measurement: string;
+  quantity: string;
 }
 export function calculateNet(items: Items[]) {
-  return items.reduce((acc, val) => acc + parseFloat(val.value), 0) || 0;
+  return (
+    items.reduce(
+      (acc, val) => acc + parseFloat(val.value) * parseInt(val.quantity),
+      0,
+    ) || 0
+  );
 }
 
 export function calculateVat(items: Items[], vat: number) {
   return (
     (
-      (items.reduce((acc, val) => acc + parseFloat(val.value), 0) * vat) /
+      (items.reduce(
+        (acc, val) => acc + parseFloat(val.value) * parseInt(val.quantity),
+        0,
+      ) *
+        vat) /
       100
     ).toFixed(2) || 0
   );
@@ -31,7 +42,10 @@ export function calculateVat(items: Items[], vat: number) {
 export function calculateTotal(items: Items[], vat: number) {
   return (
     (
-      (items.reduce((acc, val) => acc + parseFloat(val.value), 0) *
+      (items.reduce(
+        (acc, val) => acc + parseFloat(val.value) * parseInt(val.quantity),
+        0,
+      ) *
         (100 + vat)) /
       100
     ).toFixed(2) || 0
@@ -132,16 +146,12 @@ export function submitForm(
   if (errors[ARRAY_ERROR].length) {
     return errors;
   }
-
+  const vat = data.vatRules.find((rule) => rule.id === (values as any).vat);
   const invoiceData = {
     invoiceDate: values.invoiceDate,
     items: JSON.stringify(values.items),
-    vat: parseFloat(
-      calculateVat(
-        values.items,
-        data.vatRules.find(rule => rule.id === (values as any).vat)!.percentage,
-      ).toString(),
-    ),
+    vat: parseFloat(calculateVat(values.items, vat!.percentage).toString()),
+    vatRuleName: vat?.name ?? vat?.percentage,
     amount: parseFloat(calculateNet(values.items).toString()),
     invoiceNumber: values.invoiceNumber,
   };

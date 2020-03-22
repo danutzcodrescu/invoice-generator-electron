@@ -1,11 +1,11 @@
 import { Paper } from '@material-ui/core';
 import styled from 'styled-components';
 export const Container = styled.div`
-  padding: ${props => props.theme.spacing(5)}px;
+  padding: ${(props) => props.theme.spacing(5)}px;
 `;
 
 export const MarginTop = styled.div`
-  margin-top: ${props => props.theme.spacing(4)}px;
+  margin-top: ${(props) => props.theme.spacing(4)}px;
 `;
 
 export const GridContainer = styled.div`
@@ -19,7 +19,7 @@ export const GridContainer = styled.div`
     border-right: 1px solid black;
   }
   > *:not(:nth-of-type(1)):not(:nth-of-type(2)) {
-    padding: ${props => props.theme.spacing(2)}px;
+    padding: ${(props) => props.theme.spacing(2)}px;
   }
   min-height: 400px;
 `;
@@ -32,11 +32,32 @@ export const PaperForTable = styled(Paper)`
   }
 `;
 
-export const Heading = styled.div`
+export const Item = styled.div`
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  & > * {
+    min-width: 90px;
+    text-align: right;
+  }
+  & > *:first-child {
+    flex: 1;
+    margin-right: auto;
+    text-align: left;
+  }
+`;
+
+export const Heading = styled(Item)`
   font-weight: 600;
-  background-color: aquamarine;
+  background-color: lightgrey;
   text-align: center;
   text-transform: uppercase;
-  padding: ${props => props.theme.spacing(2)}px 0;
+  padding: ${(props) => props.theme.spacing(2)}px 0;
   border-bottom: 1px solid black;
+  & > * {
+    text-align: center;
+  }
+  & > *:first-child {
+    text-align: center;
+  }
 `;

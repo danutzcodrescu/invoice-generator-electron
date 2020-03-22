@@ -25,6 +25,7 @@ export function VatTable(props: Props) {
       ]}
       options={{
         actionsColumnIndex: 3,
+        pageSize: 20,
       }}
       actions={[
         {

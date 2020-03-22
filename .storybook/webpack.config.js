@@ -6,10 +6,23 @@ module.exports = ({ config }) => {
     test: /\.(ts|tsx)$/,
     use: [
       {
-        loader: require.resolve('ts-loader'),
+        loader: require.resolve('babel-loader'),
         options: {
-          configFile: path.resolve(__dirname, './tsconfig.json'),
-          reportFiles: ['src/renderer/**/*.{ts,tsx}'],
+          cacheDirectory: true,
+          babelrc: false,
+          presets: [
+            [
+              '@babel/preset-env',
+              { targets: { browsers: 'last 1 Chrome version' } },
+            ],
+            '@babel/preset-typescript',
+            '@babel/preset-react',
+          ],
+          plugins: [
+            '@babel/plugin-proposal-optional-chaining',
+            ['@babel/plugin-proposal-class-properties', { loose: true }],
+            '@babel/plugin-proposal-nullish-coalescing-operator',
+          ],
         },
       },
     ],

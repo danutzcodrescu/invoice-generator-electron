@@ -7,7 +7,7 @@ interface Props {
   submit: (values: { name: string; measurement: string; cost: number }) => void;
   close: () => void;
   title: string;
-  values?: { name: string; cost: string; measurement: string };
+  values?: { name?: string; cost?: string; measurement?: string | null };
 }
 
 export function ServiceForm(props: Props) {
@@ -37,7 +37,6 @@ export function ServiceForm(props: Props) {
             />
             <FormField
               name="measurement"
-              required
               placeholder="Measurement unit"
               label="Measurement unit"
               fullWidth

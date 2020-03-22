@@ -32,6 +32,7 @@ export const ProfileTable = withRouter((props: Props) => {
       ]}
       options={{
         actionsColumnIndex: 4,
+        pageSize: 20,
       }}
       actions={[
         {

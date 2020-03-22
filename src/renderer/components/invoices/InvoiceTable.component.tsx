@@ -38,25 +38,29 @@ export const InvoiceTable = (props: Props) => {
       }}
       columns={[
         { title: 'Invoice number', field: 'invoiceNumber' },
-        {
-          title: 'Customer',
-          field: 'clientData',
-          render: renderClientName,
-          customFilterAndSearch: filterClientName,
-        },
+        !clientTable
+          ? {
+              title: 'Customer',
+              field: 'clientData',
+              render: renderClientName,
+              customFilterAndSearch: filterClientName,
+            }
+          : {},
+
         {
           title: 'Invoice date',
           field: 'invoiceDate',
           type: 'date',
-          render: rowData =>
+          render: (rowData) =>
             format(new Date(rowData.invoiceDate), 'yyyy-MM-dd'),
           customFilterAndSearch: filterInvoiceDate,
         },
+
         {
           title: 'Amount',
           field: 'amount',
           type: 'numeric',
-          render: rowData =>
+          render: (rowData) =>
             rowData.amount.toLocaleString('nl-BE', {
               minimumFractionDigits: 2,
             }),
@@ -65,12 +69,12 @@ export const InvoiceTable = (props: Props) => {
           title: 'VAT',
           field: 'vat',
           type: 'numeric',
-          render: rowData =>
+          render: (rowData) =>
             rowData.vat.toLocaleString('nl-BE', { minimumFractionDigits: 2 }),
         },
       ]}
       data={data}
-      options={{ toolbar: !clientTable }}
+      options={{ toolbar: !clientTable, pageSize: !clientTable ? 20 : 10 }}
     ></MaterialTable>
   );
 };

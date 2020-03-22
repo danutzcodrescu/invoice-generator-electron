@@ -22,7 +22,7 @@ export class InvoiceResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query(returns => [Invoice])
+  @Query((returns) => [Invoice])
   invoices(
     @Arg('startDate', { nullable: true }) startDate: string,
   ): Promise<Invoice[]> {
@@ -36,7 +36,7 @@ export class InvoiceResolver {
         startDate
           ? {
               where: {
-                invoiceDate: Raw(alias => `${alias} >= date("${startDate}")`),
+                invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`),
               },
             }
           : {},
@@ -44,7 +44,7 @@ export class InvoiceResolver {
     );
   }
 
-  @Mutation(returns => Invoice)
+  @Mutation((returns) => Invoice)
   async createInvoice(
     @Arg('client') client: ClientInput,
     @Arg('profile') profile: ProfileInput,
@@ -65,24 +65,30 @@ export class InvoiceResolver {
       profileData: profile.profileData,
       client: clientDB,
       clientData: client.clientData,
+      vatRuleName: invoiceData.vatRuleName,
       invoiceNumber: invoiceData.invoiceNumber,
     });
     const inv = await this.entityManager.save(invoice);
     return inv;
   }
 
-  @FieldResolver()
-  clientData(@Root() invoice: Invoice): ClientData {
+  @FieldResolver((returns) => ClientData)
+  clientData(@Root() invoice: Invoice) {
     return JSON.parse(invoice.clientData);
   }
 
-  @FieldResolver()
-  profileData(@Root() invoice: Invoice): ProfileData {
+  @FieldResolver((returns) => ProfileData)
+  profileData(@Root() invoice: Invoice) {
     return JSON.parse(invoice.profileData);
   }
 
-  @FieldResolver()
-  items(@Root() invoice: Invoice): Item[] {
+  @FieldResolver((returns) => [Item])
+  items(@Root() invoice: Invoice) {
     return JSON.parse(invoice.items);
+  }
+
+  @FieldResolver((returns) => String)
+  invoiceDate(@Root() invoice: Invoice) {
+    return invoice.invoiceDate.split(' ')[0];
   }
 }

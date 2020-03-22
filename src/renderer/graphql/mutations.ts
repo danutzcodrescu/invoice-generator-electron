@@ -114,7 +114,7 @@ export const CREATE_EXPENSE = gql`
 `;
 
 export const CREATE_SERVICE = gql`
-  mutation CreateService($measurement: String!, $name: String!, $cost: Float) {
+  mutation CreateService($measurement: String, $name: String!, $cost: Float) {
     addService(measurement: $measurement, name: $name, cost: $cost) {
       id
     }

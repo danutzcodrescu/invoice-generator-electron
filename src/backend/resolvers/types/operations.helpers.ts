@@ -8,7 +8,7 @@ import { VatRule } from '../../entities/VatRule.entity';
 
 @InputType()
 export class ClientInput {
-  @Field(type => ID, { nullable: true })
+  @Field((type) => ID, { nullable: true })
   clientId?: string;
 
   @Field()
@@ -17,7 +17,7 @@ export class ClientInput {
 
 @InputType()
 export class ProfileInput {
-  @Field(type => ID)
+  @Field((type) => ID)
   profileId: string;
 
   @Field()
@@ -32,14 +32,17 @@ export class InvoiceInput implements Partial<Invoice> {
   @Field()
   items: string;
 
-  @Field(type => Float)
+  @Field((type) => Float)
   vat: number;
 
-  @Field(type => Float)
+  @Field((type) => Float)
   amount: number;
 
   @Field()
   invoiceNumber: string;
+
+  @Field()
+  vatRuleName: string;
 }
 
 @InputType()

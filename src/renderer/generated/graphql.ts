@@ -8,13 +8,6 @@ export interface Scalars {
   Float: number;
 }
 
-export interface Base {
-  __typename?: 'Base';
-  id: Scalars['ID'];
-  updatedAt: Scalars['String'];
-  createdAt: Scalars['String'];
-}
-
 export interface Client {
   __typename?: 'Client';
   id: Scalars['ID'];
@@ -89,16 +82,15 @@ export interface Invoice {
   id: Scalars['ID'];
   invoiceDate: Scalars['String'];
   invoiceNumber: Scalars['String'];
-  bankAccount?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
   profile: Profile;
-  profileData: ProfileData;
   client?: Maybe<Client>;
-  clientData: ClientData;
-  items: Array<Item>;
   vat: Scalars['Float'];
   amount: Scalars['Float'];
+  clientData: ClientData;
+  profileData: ProfileData;
+  items: Array<Item>;
 }
 
 export interface InvoiceInput {
@@ -112,7 +104,9 @@ export interface InvoiceInput {
 export interface Item {
   __typename?: 'Item';
   name: Scalars['String'];
-  value: Scalars['String'];
+  value: Scalars['Float'];
+  measurement?: Maybe<Scalars['String']>;
+  quantity: Scalars['Float'];
 }
 
 export interface Mutation {
@@ -171,7 +165,7 @@ export interface MutationAddProfileArgs {
 
 export interface MutationAddServiceArgs {
   cost?: Maybe<Scalars['Float']>;
-  measurement: Scalars['String'];
+  measurement?: Maybe<Scalars['String']>;
   name: Scalars['String'];
 }
 
@@ -258,7 +252,7 @@ export interface Service {
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
   name: Scalars['String'];
-  measurement: Scalars['String'];
+  measurement?: Maybe<Scalars['String']>;
   cost?: Maybe<Scalars['Float']>;
 }
 

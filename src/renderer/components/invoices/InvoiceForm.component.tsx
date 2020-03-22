@@ -7,11 +7,7 @@ import { Field, Form } from 'react-final-form';
 import { CREATE_PDF_EVENT } from '../../../main/events';
 import { Client, Profile, Query } from '../../generated/graphql';
 import { CREATE_INVOICE } from '../../graphql/mutations';
-import {
-  GET_CLIENTS,
-  GET_PROFILES,
-  GET_VAT_RULES,
-} from '../../graphql/queries';
+import { GET_VAT_RULES } from '../../graphql/queries';
 import { setBulkValue } from '../../utils/react-final-form';
 import { FormField } from '../toolbox/FormField.component';
 import { submitForm } from './helpers';
@@ -42,8 +38,6 @@ function createPDF(data: any) {
 
 export function InvoiceForm() {
   const { data } = useQuery<Query>(GET_VAT_RULES);
-  const { data: profileData } = useQuery<Query>(GET_PROFILES);
-  const { data: clientData } = useQuery<Query>(GET_CLIENTS);
   const selectedClient = React.useRef<string>();
   const selectedProfile = React.useRef<string>();
   const [createInvoice] = useMutation(CREATE_INVOICE, {
@@ -56,7 +50,7 @@ export function InvoiceForm() {
         New invoice
       </Typography>
       <Form
-        onSubmit={values =>
+        onSubmit={(values) =>
           submitForm(
             values,
             selectedClient,
@@ -67,7 +61,7 @@ export function InvoiceForm() {
         }
         initialValues={{
           invoiceDate: new Date(),
-          items: [{ name: '', value: '0' }],
+          items: [{ name: '', value: '0', quantity: '1', measurement: '' }],
         }}
         mutators={{
           ...arrayMutators,
@@ -96,7 +90,7 @@ export function InvoiceForm() {
           values,
           submitErrors,
           form: {
-            mutators: { push, remove, setBulkValue: set },
+            mutators: { push, setBulkValue: set },
           },
         }) => (
           <form onSubmit={handleSubmit}>
@@ -130,19 +124,11 @@ export function InvoiceForm() {
                 />
               </Grid>
             </Grid>
-            <InvoiceFormProfile
-              set={set}
-              selectedProfile={selectedProfile}
-              profileData={profileData}
-            />
+            <InvoiceFormProfile set={set} selectedProfile={selectedProfile} />
             <DividerMargin />
-            <InvoiceFormClient
-              set={set}
-              selectedClient={selectedClient}
-              clientData={clientData}
-            />
+            <InvoiceFormClient set={set} selectedClient={selectedClient} />
             <DividerMargin />
-            <InvoiceFormItems remove={remove} push={push} />
+            <InvoiceFormItems push={push} />
             <InvoiceFormVat values={values} data={data} />
             <InvoiceFormErrors submitErrors={submitErrors} />
 
