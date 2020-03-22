@@ -1,57 +1,58 @@
 import DateFnsUtils from '@date-io/date-fns';
+import { Paper } from '@material-ui/core';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import StoryRouter from 'storybook-react-router';
 import { Invoice } from '../src/renderer/components/invoices/Invoice.component';
 import { InvoiceForm } from '../src/renderer/components/invoices/InvoiceForm.component';
 import { InvoiceTableContainer } from '../src/renderer/containers/InvoiceTable.container';
 import { Wrapper } from './Client.stories';
-
-const invoice = {
-  id: 'f362c0c5-2ef9-444c-ba15-bfc266a8e5c5',
-  invoiceDate: 'Sat, 02 Nov 2019 17:26:46 GMT',
-  clientData: {
-    firstName: 'Danut',
-    lastName: 'Codrescu',
-    company: 'my comp',
-    address: 'test address',
-    vat: 'BE123456',
-  },
-  profileData: {
-    firstName: 'Danut',
-    lastName: 'Codrescu',
-    company: 'saxzxz',
-    address: 'Rue Calvin 23, Box 1.1',
-    vat: '212121',
-  },
-  items: [{ name: 'xxxx', value: '11111' }],
-  vat: 2333.31,
-  amount: 11111,
-};
+import { invoiceWithoutQuantity, invoiceWithQuantity } from './invoice.mocks';
 
 storiesOf('Components/invoices', module)
+  .addDecorator(StoryRouter())
   .add('InvoiceForm', () => (
     <Wrapper>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <InvoiceForm />
+        <Paper>
+          <InvoiceForm />
+        </Paper>
       </MuiPickersUtilsProvider>
     </Wrapper>
   ))
-  .add('Invoice', () => (
+  .add('Invoice with quantity', () => (
     <Wrapper>
       <Invoice
-        invoiceDate={invoice.invoiceDate}
-        items={invoice.items}
-        vat={invoice.vat}
-        amount={invoice.amount}
-        client={invoice.clientData}
-        profile={invoice.profileData}
-        invoiceNumber={'12356'}
+        invoiceDate={invoiceWithQuantity.invoiceDate}
+        items={invoiceWithQuantity.items}
+        vat={invoiceWithQuantity.vat}
+        amount={invoiceWithQuantity.amount}
+        client={invoiceWithQuantity.clientData}
+        profile={invoiceWithQuantity.profileData}
+        invoiceNumber={invoiceWithQuantity.invoiceNumber}
+        vatRuleName={invoiceWithQuantity.vatRuleName}
+      />
+    </Wrapper>
+  ))
+  .add('Invoice with no quantity', () => (
+    <Wrapper>
+      <Invoice
+        invoiceDate={invoiceWithoutQuantity.invoiceDate}
+        items={invoiceWithoutQuantity.items}
+        vat={invoiceWithoutQuantity.vat}
+        amount={invoiceWithoutQuantity.amount}
+        client={invoiceWithoutQuantity.clientData}
+        profile={invoiceWithoutQuantity.profileData}
+        invoiceNumber={invoiceWithoutQuantity.invoiceNumber}
+        vatRuleName={invoiceWithoutQuantity.vatRuleName}
       />
     </Wrapper>
   ))
   .add('InvoiceTable', () => (
     <Wrapper>
-      <InvoiceTableContainer></InvoiceTableContainer>
+      <Paper>
+        <InvoiceTableContainer />
+      </Paper>
     </Wrapper>
   ));

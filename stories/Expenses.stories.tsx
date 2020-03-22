@@ -8,6 +8,7 @@ import { ExpenseTableContainer } from '../src/renderer/containers/ExpenseTable.c
 import { Wrapper } from './Client.stories';
 
 storiesOf('Components/Expenses', module)
+  .addDecorator(StoryRouter())
   .add('ExpenseForm', () => (
     <Wrapper>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -15,7 +16,6 @@ storiesOf('Components/Expenses', module)
       </MuiPickersUtilsProvider>
     </Wrapper>
   ))
-  .addDecorator(StoryRouter())
   .add('Expense table', () => (
     <Wrapper>
       <ExpenseTableContainer />

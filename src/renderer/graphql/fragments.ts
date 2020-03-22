@@ -33,6 +33,12 @@ export const invoiceFragment = gql`
     amount
     invoiceDate
     invoiceNumber
+    vatRuleName
+    clientData {
+      firstName
+      lastName
+      company
+    }
   }
 `;
 

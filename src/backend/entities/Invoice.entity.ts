@@ -9,27 +9,22 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Client, ClientData } from './Client.entity';
-import { Profile, ProfileData } from './Profile.entity';
+import { Client } from './Client.entity';
+import { Profile } from './Profile.entity';
 
 @Entity()
 @ObjectType()
 export class Invoice extends BaseEntity {
-  @Field(type => ID)
+  @Field((type) => ID)
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Field()
   @Column({ type: 'text', nullable: false })
   invoiceDate: string;
 
   @Field()
   @Column({ type: 'text', nullable: false })
   invoiceNumber: string;
-
-  @Field({ nullable: true })
-  @Column({ type: 'text', nullable: true })
-  bankAccount: string;
 
   @Field()
   @Column({ type: 'text' })
@@ -39,34 +34,34 @@ export class Invoice extends BaseEntity {
   @Column({ type: 'text' })
   createdAt: string;
 
-  @Field(type => Profile)
-  @ManyToOne(type => Profile, { lazy: true })
+  @Field((type) => Profile)
+  @ManyToOne((type) => Profile, { lazy: true })
   profile: Promise<Profile>;
   @Column()
   profileId: string;
 
-  @Field(type => ProfileData)
   @Column('text')
   profileData: string;
 
-  @Field(type => Client, { nullable: true })
-  @ManyToOne(type => Client, { lazy: true })
+  @Field((type) => Client, { nullable: true })
+  @ManyToOne((type) => Client, { lazy: true })
   client: Promise<Client>;
   @Column({ nullable: true })
   clientId: string;
 
-  @Field(type => ClientData)
   @Column('text')
   clientData: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  @Field(type => [Item])
   @Column('text')
   items: string;
 
   @Field()
   @Column()
   vat: number;
+
+  @Field()
+  @Column({ nullable: true })
+  vatRuleName: string;
 
   @Field()
   @Column()
@@ -99,5 +94,11 @@ export class Item {
   name: string;
 
   @Field()
-  value: string;
+  value: number;
+
+  @Field({ nullable: true })
+  measurement: string;
+
+  @Field()
+  quantity: number;
 }

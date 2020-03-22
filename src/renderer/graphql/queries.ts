@@ -57,11 +57,6 @@ export const GET_INVOICES = gql`
         lastName
         company
       }
-      clientData {
-        firstName
-        lastName
-        company
-      }
     }
   }
   ${invoiceFragment}

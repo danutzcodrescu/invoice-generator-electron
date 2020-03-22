@@ -2,7 +2,13 @@ import { Grid, Typography } from '@material-ui/core';
 import { format } from 'date-fns';
 import * as React from 'react';
 import { ClientData, Item, ProfileData } from '../../generated/graphql';
-import { Container, GridContainer, Heading, MarginTop } from './Invoice.styles';
+import {
+  Container,
+  GridContainer,
+  Heading,
+  Item as ItemDiv,
+  MarginTop,
+} from './Invoice.styles';
 
 interface Props {
   items: Item[];
@@ -12,6 +18,7 @@ interface Props {
   amount: number;
   invoiceDate: string;
   invoiceNumber: string;
+  vatRuleName: string;
 }
 
 export function Invoice(props: Props) {
@@ -23,6 +30,7 @@ export function Invoice(props: Props) {
     amount,
     invoiceDate,
     invoiceNumber,
+    vatRuleName,
   } = props;
   return (
     <Container>
@@ -96,39 +104,55 @@ export function Invoice(props: Props) {
           boxSizing: 'border-box',
         }}
       >
-        <div
-          style={{
-            height: '100px',
-            borderBottom: '1px solid black',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="h3">Payment cash</Typography>
-        </div>
         <GridContainer>
-          <Heading>Description</Heading>
+          <Heading>
+            <span>Description</span>
+            {items.some((item) => item?.quantity > 1) ? (
+              <>
+                <span>Qt&eacute;</span>
+                <span>Prix</span>
+              </>
+            ) : null}
+          </Heading>
           <Heading>Montant</Heading>
           <div>
             {items.map((item, index) => (
-              <Typography gutterBottom key={index}>
-                {item.name}
-              </Typography>
+              <ItemDiv key={item.name}>
+                <Typography gutterBottom key={index}>
+                  {item.name}
+                </Typography>
+                {items.some((item) => item?.quantity > 1) ? (
+                  <>
+                    <span>{item.quantity}</span>
+                    <span>
+                      {item.value}€/{item.measurement}
+                    </span>
+                  </>
+                ) : null}
+              </ItemDiv>
             ))}
           </div>
           <div>
             {items.map((item, index) => (
               <Grid container justify="space-between" key={index}>
-                <Grid item>$</Grid>
-                <Grid item>{parseFloat(item.value)}</Grid>
+                <Grid item>
+                  <span>€</span>
+                </Grid>
+                <Grid item>
+                  <Typography gutterBottom>
+                    {item.value * item.quantity}
+                  </Typography>
+                </Grid>
               </Grid>
             ))}
           </div>
-          <div>TVA</div>
+          <Grid container justify="space-between">
+            <span>TVA</span>
+            <span>{vatRuleName}</span>
+          </Grid>
           <div>
             <Grid container justify="space-between">
-              <Grid item>$</Grid>
+              <Grid item>€</Grid>
               <Grid item>{vat}</Grid>
             </Grid>
           </div>
@@ -138,7 +162,7 @@ export function Invoice(props: Props) {
             style={{ borderTop: '1px solid black' }}
           >
             <Grid item>
-              {profile.email ? `E-mail:${profile.email};` : null}{' '}
+              {profile.email ? `E-mail:${profile.email}` : null}{' '}
               {profile.phone ? (
                 <span>
                   Mobile:<b>{profile.phone}</b>
@@ -154,7 +178,7 @@ export function Invoice(props: Props) {
             justify="space-between"
             style={{ borderTop: '1px solid black' }}
           >
-            <Grid item>$</Grid>
+            <Grid item>€</Grid>
             <Grid item>{vat + amount}</Grid>
           </Grid>
         </GridContainer>

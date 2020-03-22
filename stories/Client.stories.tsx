@@ -23,12 +23,12 @@ export const Wrapper = (props: { children: React.ReactElement }) => (
 );
 
 storiesOf('Components/Client', module)
+  .addDecorator(StoryRouter())
   .add('ClientForm', () => (
     <Wrapper>
       <ClientFormContainer></ClientFormContainer>
     </Wrapper>
   ))
-  .addDecorator(StoryRouter())
   .add('ClientTable', () => (
     <Wrapper>
       <ClientTableContainer />

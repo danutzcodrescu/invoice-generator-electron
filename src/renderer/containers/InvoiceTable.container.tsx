@@ -17,7 +17,7 @@ export function InvoiceTableContainer() {
   return (
     <>
       <SelectDates
-        onChange={e => refetch({ startDate: e.target.value })}
+        onChange={(e) => refetch({ startDate: e.target.value })}
         defaultValue={defaultDate}
       />
       <InvoiceTable data={data.invoices} isLoading={loading} />

@@ -10,15 +10,15 @@ export class ServiceResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query(returns => [Service])
+  @Query((returns) => [Service])
   services(): Promise<Service[]> {
     return this.entityManager.find(Service);
   }
 
-  @Mutation(returns => Service)
+  @Mutation((returns) => Service)
   async addService(
     @Arg('name') name: string,
-    @Arg('measurement') measurement: string,
+    @Arg('measurement', { nullable: true }) measurement: string,
     @Arg('cost', { nullable: true }) cost: number,
   ): Promise<Service> {
     const obj = nonNullObjectProperties({
@@ -27,15 +27,15 @@ export class ServiceResolver {
       cost,
     });
     let item: Service;
-    await this.entityManager.transaction(async transactionManager => {
+    await this.entityManager.transaction(async (transactionManager) => {
       item = await insertTransaction(Service, transactionManager, obj as any);
     });
     return item!;
   }
 
-  @Mutation(returns => Service)
+  @Mutation((returns) => Service)
   async updateService(
-    @Arg('id', type => ID) id: string,
+    @Arg('id', (type) => ID) id: string,
     @Arg('data') data: ServiceUpdate,
   ): Promise<Service | undefined> {
     await this.entityManager.update(Service, id, data);

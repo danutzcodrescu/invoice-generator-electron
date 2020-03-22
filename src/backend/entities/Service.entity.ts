@@ -9,8 +9,8 @@ export class Service extends Base {
   @Column()
   name: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   measurement: string;
 
   @Field({ nullable: true })

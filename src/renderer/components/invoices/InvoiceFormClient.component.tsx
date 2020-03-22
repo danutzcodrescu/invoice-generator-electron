@@ -1,21 +1,23 @@
+import { useQuery } from '@apollo/react-hooks';
 import { Grid, Typography } from '@material-ui/core';
 import { DescriptionOutlined } from '@material-ui/icons';
 import * as React from 'react';
 import { Field } from 'react-final-form';
 import { Client, Query } from '../../generated/graphql';
+import { GET_CLIENTS } from '../../graphql/queries';
 import { FormField } from '../toolbox/FormField.component';
 import { Autocomplete } from '../utils/Autocomplete.component';
 import { itemToString } from './InvoiceForm.component';
 import { DividerMargin } from './InvoiceForm.styles';
 
 interface Props {
-  clientData: Query | undefined;
   set: Function;
   selectedClient: React.MutableRefObject<string | undefined>;
 }
 
 export function InvoiceFormClient(props: Props) {
-  const { clientData, set, selectedClient } = props;
+  const { set, selectedClient } = props;
+  const { data: clientData } = useQuery<Query>(GET_CLIENTS);
   return (
     <>
       <Typography>
