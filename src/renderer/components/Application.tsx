@@ -15,6 +15,20 @@ import { Routes } from './Routes';
 import { Menu } from './toolbox/Menu.component';
 
 export const Application = () => {
+  if (window.location.hash.endsWith('invoice')) {
+    return (
+      <>
+        <CssBaseline />
+        <NoSsr>
+          <ThemeProvider theme={theme}>
+            <HashRouter>
+              <Routes />
+            </HashRouter>
+          </ThemeProvider>
+        </NoSsr>
+      </>
+    );
+  }
   return (
     <>
       <CssBaseline />

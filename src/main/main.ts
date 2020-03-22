@@ -17,7 +17,7 @@ const installExtensions = async () => {
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
   return Promise.all(
-    extensions.map(name => installer.default(installer[name], forceDownload)),
+    extensions.map((name) => installer.default(installer[name], forceDownload)),
   ).catch(console.log);
 };
 

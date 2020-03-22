@@ -38,36 +38,32 @@ export function createInvoice(invoice: Invoice) {
       client: invoice.clientData,
       profile: invoice.profileData,
     });
-    pdfWindow!.webContents.printToPDF({ pageSize: 'A4' }).then(resp => {
+    pdfWindow!.webContents.printToPDF({ pageSize: 'A4' }).then(async (resp) => {
       if (
         !fs.existsSync(
           path.resolve(app.getPath('documents'), 'invoices/invoices'),
         )
       ) {
-        fs.mkdirSync(
+        await fs.promises.mkdir(
           path.resolve(app.getPath('documents'), 'invoices/invoices'),
         );
       }
-
-      fs.writeFile(
-        path.resolve(
-          app.getPath('documents'),
-          `invoices/invoices/${invoice.invoiceNumber}-${format(
-            new Date(invoice.invoiceDate),
-            'yyyy-MM-dd',
-          )}-invoice.pdf`,
-        ),
-        resp,
-        err => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log('created');
-            pdfWindow!.close();
-            pdfWindow = null;
-          }
-        },
+      const documentPath = path.resolve(
+        app.getPath('documents'),
+        `invoices/invoices/${invoice.invoiceNumber}-${format(
+          new Date(invoice.invoiceDate),
+          'yyyy-MM-dd',
+        )}-invoice.pdf`,
       );
+      try {
+        await fs.promises.writeFile(documentPath, resp);
+      } catch (e) {
+        console.log(e);
+      }
+      pdfWindow!.close();
+      pdfWindow = null;
+      console.log(documentPath);
+      return documentPath;
     });
   });
 }
