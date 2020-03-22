@@ -67,12 +67,6 @@ export const useMenuStyles = makeStyles((theme: Theme) => ({
   isOpen: {},
 }));
 
-export const LayoutPaper = styled(Paper)`
-  && {
-    width: 100%;
-  }
-`;
-
 export const PopperSC = styled(Popper)`
   && {
     z-index: ${props => (props.theme as Theme).zIndex.drawer + 2};

@@ -67,6 +67,7 @@ export function ExpenseTable(props: Props) {
       data={expenses}
       options={{
         toolbar: !clientTable,
+        pageSize: 20,
       }}
     ></MaterialTable>
   );

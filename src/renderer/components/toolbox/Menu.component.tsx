@@ -30,7 +30,6 @@ import clsx from 'clsx';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  LayoutPaper,
   PaperSC,
   PopperSC,
   ToolbarContainer,
@@ -131,7 +130,7 @@ export function Menu(props: { children: React.ReactNode }) {
         <Divider />
       </Drawer>
       <div className={clsx(classes.layout, { [classes.isOpen]: isOpen })}>
-        <LayoutPaper>{props.children}</LayoutPaper>
+        {props.children}
       </div>
 
       <PopperSC

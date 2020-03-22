@@ -70,7 +70,7 @@ export const InvoiceTable = (props: Props) => {
         },
       ]}
       data={data}
-      options={{ toolbar: !clientTable }}
+      options={{ toolbar: !clientTable, pageSize: 20 }}
     ></MaterialTable>
   );
 };

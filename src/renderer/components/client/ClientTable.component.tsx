@@ -36,6 +36,7 @@ export const ClientTable = withRouter((props: Props) => {
       ]}
       options={{
         actionsColumnIndex: 4,
+        pageSize: 20,
       }}
       actions={[
         {

@@ -37,7 +37,6 @@ export function ServiceForm(props: Props) {
             />
             <FormField
               name="measurement"
-              required
               placeholder="Measurement unit"
               label="Measurement unit"
               fullWidth
