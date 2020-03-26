@@ -3,7 +3,7 @@ import { app, BrowserWindow } from 'electron';
 import isDev from 'electron-is-dev';
 import * as path from 'path';
 import * as url from 'url';
-import { createInvoice } from './invoices';
+import { createInvoice, openInvoice } from './invoices';
 
 let win: BrowserWindow | null;
 let serverProcess: ChildProcess;
@@ -85,6 +85,7 @@ const createWindow = async () => {
 app.on('ready', () => {
   createWindow();
   startBEforFE();
+  openInvoice();
 });
 
 app.on('window-all-closed', () => {
