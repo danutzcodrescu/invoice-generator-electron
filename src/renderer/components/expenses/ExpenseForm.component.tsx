@@ -92,9 +92,7 @@ export function ExpenseForm(props: Props) {
                       freeSolo
                       getOptionLabel={(option: Client) => clientName(option)}
                       options={data ? data.clients : []}
-                      onChange={(_: Event, val: any) =>
-                        (inputRef.current = val)
-                      }
+                      onChange={(_, val: Client) => (inputRef.current = val)}
                       onInputChange={(_, val) => input.onChange(val)}
                       renderInput={(params) => (
                         <TextField

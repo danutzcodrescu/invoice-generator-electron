@@ -22,7 +22,7 @@ export function ServiceForm(props: Props) {
   return (
     <Form
       onSubmit={formSubmit}
-      initialValues={values}
+      initialValues={values as any}
       render={({ handleSubmit, submitting, pristine }) => (
         <form onSubmit={handleSubmit}>
           <Typography>{title}</Typography>

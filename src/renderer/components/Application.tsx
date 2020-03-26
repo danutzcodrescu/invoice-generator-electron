@@ -9,12 +9,30 @@ import { hot } from 'react-hot-loader/root';
 import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import 'typeface-roboto';
+import { NotificationProvider } from '../context/notification.context';
 import { client } from '../graphql/client';
 import { theme } from '../theme/theme';
+import { Notification } from './notification/Notification.component';
 import { Routes } from './Routes';
 import { Menu } from './toolbox/Menu.component';
 
 export const Application = () => {
+  if (window.location.hash.endsWith('invoice')) {
+    return (
+      <>
+        <CssBaseline />
+        <NoSsr>
+          <ThemeProvider theme={theme}>
+            <MaterialUIThemeProvider theme={theme}>
+              <HashRouter>
+                <Routes />
+              </HashRouter>
+            </MaterialUIThemeProvider>
+          </ThemeProvider>
+        </NoSsr>
+      </>
+    );
+  }
   return (
     <>
       <CssBaseline />
@@ -23,11 +41,14 @@ export const Application = () => {
           <ThemeProvider theme={theme}>
             <MaterialUIThemeProvider theme={theme}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <HashRouter>
-                  <Menu>
-                    <Routes />
-                  </Menu>
-                </HashRouter>
+                <NotificationProvider>
+                  <Notification />
+                  <HashRouter>
+                    <Menu>
+                      <Routes />
+                    </Menu>
+                  </HashRouter>
+                </NotificationProvider>
               </MuiPickersUtilsProvider>
             </MaterialUIThemeProvider>
           </ThemeProvider>

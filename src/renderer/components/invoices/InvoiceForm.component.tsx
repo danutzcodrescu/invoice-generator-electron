@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Button, Grid, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
@@ -5,6 +6,7 @@ import arrayMutators from 'final-form-arrays';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
 import { CREATE_PDF_EVENT } from '../../../main/events';
+import { useNotification } from '../../context/notification.context';
 import { Client, Profile, Query } from '../../generated/graphql';
 import { CREATE_INVOICE } from '../../graphql/mutations';
 import { GET_VAT_RULES } from '../../graphql/queries';
@@ -17,6 +19,7 @@ import { InvoiceFormErrors } from './InvoiceFormErrors.component';
 import { InvoiceFormItems } from './InvoiceFormItems.component';
 import { InvoiceFormProfile } from './InvoiceFormProfile.component';
 import { InvoiceFormVat } from './InvoiceFormVat.component';
+import { LoadingModal } from './LoadingModal.component';
 
 export function itemToString(item: Profile | Client) {
   if (!item) {
@@ -28,21 +31,49 @@ export function itemToString(item: Profile | Client) {
   return item;
 }
 
-function createPDF(data: any) {
-  if (!process.env.STORYBOOK) {
-    //eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { ipcRenderer } = require('electron');
-    ipcRenderer.send(CREATE_PDF_EVENT, data.createInvoice);
-  }
-}
+// TODO Maybe lift some of the querries and mutation to a higher component
+// TODO Move the creating invoice modal to a higher component
+// TODO use state machines to show a completed checkmark
 
 export function InvoiceForm() {
   const { data } = useQuery<Query>(GET_VAT_RULES);
   const selectedClient = React.useRef<string>();
   const selectedProfile = React.useRef<string>();
   const [createInvoice] = useMutation(CREATE_INVOICE, {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     onCompleted: createPDF,
   });
+  const [isModalVisible, setModalVisibility] = React.useState<boolean>(false);
+  const { showNotificationFor } = useNotification();
+
+  const setModal = React.useCallback(
+    (_, path: string) => {
+      setModalVisibility((prev) => !prev);
+      showNotificationFor(5000, 'Invoice succesfully created', path);
+    },
+    [showNotificationFor],
+  );
+
+  function createPDF(data: any) {
+    if (!process.env.STORYBOOK) {
+      const { ipcRenderer } = require('electron');
+      ipcRenderer.send(CREATE_PDF_EVENT, data.createInvoice);
+      setModalVisibility(true);
+    }
+  }
+
+  React.useEffect(() => {
+    if (!process.env.STORYBOOK) {
+      const { ipcRenderer } = require('electron');
+      ipcRenderer.on(CREATE_PDF_EVENT, setModal);
+    }
+    return () => {
+      if (!process.env.STORYBOOK) {
+        const { ipcRenderer } = require('electron');
+        ipcRenderer.off(CREATE_PDF_EVENT, setModal);
+      }
+    };
+  }, [setModal]);
 
   return (
     <>
@@ -142,6 +173,7 @@ export function InvoiceForm() {
           </form>
         )}
       />
+      <LoadingModal isOpen={isModalVisible}></LoadingModal>
     </>
   );
 }

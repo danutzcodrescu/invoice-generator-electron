@@ -14,11 +14,26 @@ export function InvoiceContainer() {
     invoiceNumber: '',
     vatRuleName: '',
   });
+
+  function setData(_: Event, data: any) {
+    setInvoice(data);
+  }
+
   React.useEffect(() => {
-    ipcRenderer.on(LOAD_PDF_DATA, (_, data: any) => {
-      setInvoice(data);
-    });
+    ipcRenderer.on(LOAD_PDF_DATA, setData);
+    return () => {
+      ipcRenderer.off(LOAD_PDF_DATA, setData);
+    };
   }, []);
+
+  React.useEffect(() => {
+    if (invoice.invoiceDate) {
+      ipcRenderer.send(LOAD_PDF_DATA, {
+        invoiceDate: invoice.invoiceDate,
+        invoiceNumber: invoice.invoiceNumber,
+      });
+    }
+  }, [invoice]);
   return !invoice.profile ? (
     <p>No data loaded</p>
   ) : (

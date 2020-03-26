@@ -24,16 +24,17 @@ module.exports = merge.smart(baseConfig, {
           env: process.env,
           stdio: 'inherit',
         })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
+          .on('close', (code) => process.exit(code))
+          .on('error', (spawnError) => console.error(spawnError));
         spawn('npm', ['run', 'start-server-dev'], {
           shell: true,
           env: process.env,
           stdio: 'inherit',
         })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
+          .on('close', (code) => process.exit(code))
+          .on('error', (spawnError) => console.error(spawnError));
       }
     },
   },
+  plugins: [new webpack.HotModuleReplacementPlugin()],
 });

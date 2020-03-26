@@ -1,5 +1,10 @@
 import gql from 'graphql-tag';
-import { clientFragment, invoiceFragment, profileFragment } from './fragments';
+import {
+  clientFragment,
+  invoiceFragment,
+  invoicingDetailsFragment,
+  profileFragment,
+} from './fragments';
 
 export const CREATE_CLIENT = gql`
   mutation AddClient(
@@ -18,7 +23,7 @@ export const CREATE_CLIENT = gql`
       address: $address
       vat: $vat
     ) {
-      ...clientFragment
+      ...ClientFragment
     }
   }
 
@@ -69,16 +74,11 @@ export const CREATE_INVOICE = gql`
       client: $clientData
     ) {
       ...InvoiceFragment
-      clientData {
-        firstName
-        lastName
-        company
-        address
-        vat
-      }
+      ...InvoicingDetails
     }
   }
   ${invoiceFragment}
+  ${invoicingDetailsFragment}
 `;
 
 export const UPDATE_CLIENT = gql`
