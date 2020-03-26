@@ -1,8 +1,10 @@
 /* eslint-disable react/display-name */
+import { Visibility } from '@material-ui/icons';
 import { format } from 'date-fns/esm';
 import MaterialTable from 'material-table';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { CREATE_PDF_EVENT, OPEN_INVOICE } from '../../../main/events';
 import { Invoice } from '../../generated/graphql';
 import { filterClientName, filterInvoiceDate } from './helpers';
 import { tableIcons } from './icons';
@@ -24,8 +26,37 @@ function renderClientName(rowData: Invoice) {
   return name;
 }
 
+async function openInvoice(_, rowData: Invoice | Invoice[]) {
+  if (!process.env.STORYBOOK) {
+    const { ipcRenderer } = require('electron');
+    const resp = await ipcRenderer.invoke(OPEN_INVOICE, {
+      invoiceDate: (rowData as Invoice).invoiceDate,
+      invoiceNumber: (rowData as Invoice).invoiceNumber,
+    });
+    if (!resp) {
+      ipcRenderer.send(CREATE_PDF_EVENT, rowData);
+    }
+  }
+}
+
 export const InvoiceTable = (props: Props) => {
   const { data, title, isLoading, clientTable } = props;
+  function openItem(_, path: string) {
+    if (!process.env.STORYBOOK) {
+      const { shell } = require('electron');
+      shell.openItem(path);
+    }
+  }
+  React.useEffect(() => {
+    if (!process.env.STORYBOOK) {
+      const { ipcRenderer } = require('electron');
+      ipcRenderer.on(CREATE_PDF_EVENT, openItem);
+    }
+    return () => {
+      const { ipcRenderer } = require('electron');
+      ipcRenderer.off(CREATE_PDF_EVENT, openItem);
+    };
+  }, []);
   return (
     <MaterialTable
       isLoading={isLoading}
@@ -74,7 +105,19 @@ export const InvoiceTable = (props: Props) => {
         },
       ]}
       data={data}
-      options={{ toolbar: !clientTable, pageSize: !clientTable ? 20 : 10 }}
+      options={{
+        toolbar: !clientTable,
+        pageSize: !clientTable ? 20 : 10,
+        actionsColumnIndex: 5,
+      }}
+      actions={[
+        {
+          // eslint-disable-next-line react/display-name
+          icon: () => <Visibility />,
+          tooltip: 'View invoice',
+          onClick: openInvoice,
+        },
+      ]}
     ></MaterialTable>
   );
 };
