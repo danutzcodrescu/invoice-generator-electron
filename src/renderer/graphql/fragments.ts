@@ -38,6 +38,30 @@ export const invoiceFragment = gql`
       firstName
       lastName
       company
+      address
+      vat
+    }
+    vatRuleName
+  }
+`;
+
+export const invoicingDetailsFragment = gql`
+  fragment InvoicingDetails on Invoice {
+    profileData {
+      firstName
+      lastName
+      company
+      address
+      vat
+      bankAccount
+      email
+      phone
+    }
+    items {
+      measurement
+      quantity
+      value
+      name
     }
   }
 `;

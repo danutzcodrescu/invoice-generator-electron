@@ -6,7 +6,7 @@ const baseConfig = require('./webpack.main.config');
 module.exports = merge.smart(baseConfig, {
   plugins: [
     new NodemonPlugin({
-      exec: 'electron ./dist/main.js',
+      exec: 'electron',
     }),
   ],
 });

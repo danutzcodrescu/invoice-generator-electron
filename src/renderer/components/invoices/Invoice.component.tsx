@@ -36,14 +36,14 @@ export function Invoice(props: Props) {
     <Container>
       <Grid container justify="space-between">
         <Grid item xs={4}>
-          <Typography variant="h1">
+          <Typography variant="h1" style={{ fontSize: '1.3rem' }}>
             {profile.company
               ? profile.company
               : `${profile.firstName} ${profile.lastName}`}
           </Typography>
         </Grid>
         <Grid item xs={4}>
-          <Typography variant="h1" align="right">
+          <Typography variant="h1" align="right" style={{ fontSize: '1.3rem' }}>
             Facture
           </Typography>
         </Grid>
@@ -78,7 +78,11 @@ export function Invoice(props: Props) {
       <MarginTop>
         <Grid container justify="flex-end">
           <Grid item xs={4}>
-            <Typography variant="h4" align="right">
+            <Typography
+              variant="h4"
+              align="right"
+              style={{ fontSize: '1rem', fontWeight: 'bold' }}
+            >
               {client.company
                 ? client.company
                 : `${client.firstName} ${client.lastName}`}
@@ -125,7 +129,8 @@ export function Invoice(props: Props) {
                   <>
                     <span>{item.quantity}</span>
                     <span>
-                      {item.value}€/{item.measurement}
+                      {item.value}€
+                      {item.measurement ? `/${item.measurement}` : ''}
                     </span>
                   </>
                 ) : null}

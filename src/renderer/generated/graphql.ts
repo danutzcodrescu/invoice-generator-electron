@@ -80,17 +80,18 @@ export interface Expense {
 export interface Invoice {
   __typename?: 'Invoice';
   id: Scalars['ID'];
-  invoiceDate: Scalars['String'];
   invoiceNumber: Scalars['String'];
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
   profile: Profile;
   client?: Maybe<Client>;
   vat: Scalars['Float'];
+  vatRuleName: Scalars['String'];
   amount: Scalars['Float'];
   clientData: ClientData;
   profileData: ProfileData;
   items: Array<Item>;
+  invoiceDate: Scalars['String'];
 }
 
 export interface InvoiceInput {
@@ -99,6 +100,7 @@ export interface InvoiceInput {
   vat: Scalars['Float'];
   amount: Scalars['Float'];
   invoiceNumber: Scalars['String'];
+  vatRuleName: Scalars['String'];
 }
 
 export interface Item {
