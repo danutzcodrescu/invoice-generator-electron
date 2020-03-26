@@ -26,7 +26,7 @@ function renderClientName(rowData: Invoice) {
   return name;
 }
 
-async function openInvoice(_, rowData: Invoice | Invoice[]) {
+async function openInvoice(_: any, rowData: Invoice | Invoice[]) {
   if (!process.env.STORYBOOK) {
     const { ipcRenderer } = require('electron');
     const resp = await ipcRenderer.invoke(OPEN_INVOICE, {
@@ -41,7 +41,7 @@ async function openInvoice(_, rowData: Invoice | Invoice[]) {
 
 export const InvoiceTable = (props: Props) => {
   const { data, title, isLoading, clientTable } = props;
-  function openItem(_, path: string) {
+  function openItem(_: any, path: string) {
     if (!process.env.STORYBOOK) {
       const { shell } = require('electron');
       shell.openItem(path);
