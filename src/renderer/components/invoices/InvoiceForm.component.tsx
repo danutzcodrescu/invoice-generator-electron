@@ -1,25 +1,27 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Button, Grid, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import { addBusinessDays } from 'date-fns';
 import arrayMutators from 'final-form-arrays';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
-import { CREATE_PDF_EVENT } from '../../../main/events';
-import { useNotification } from '../../context/notification.context';
 import { Client, Profile, Query } from '../../generated/graphql';
-import { CREATE_INVOICE } from '../../graphql/mutations';
-import { GET_VAT_RULES } from '../../graphql/queries';
 import { setBulkValue } from '../../utils/react-final-form';
 import { FormField } from '../toolbox/FormField.component';
-import { submitForm } from './helpers';
 import { DividerMargin } from './InvoiceForm.styles';
 import { InvoiceFormClient } from './InvoiceFormClient.component';
 import { InvoiceFormErrors } from './InvoiceFormErrors.component';
 import { InvoiceFormItems } from './InvoiceFormItems.component';
 import { InvoiceFormProfile } from './InvoiceFormProfile.component';
 import { InvoiceFormVat } from './InvoiceFormVat.component';
-import { LoadingModal } from './LoadingModal.component';
+
+interface Props {
+  title: string;
+  vat: Query | undefined;
+  createInvoice: Function;
+  submitButtonText: string;
+  type: 'Invoice' | 'Offer';
+  submitForm: Function;
+}
 
 export function itemToString(item: Profile | Client) {
   if (!item) {
@@ -31,54 +33,22 @@ export function itemToString(item: Profile | Client) {
   return item;
 }
 
-// TODO Maybe lift some of the querries and mutation to a higher component
-// TODO Move the creating invoice modal to a higher component
 // TODO use state machines to show a completed checkmark
 
-export function InvoiceForm() {
-  const { data } = useQuery<Query>(GET_VAT_RULES);
+export function InvoiceForm({
+  vat: data,
+  createInvoice,
+  title,
+  type,
+  submitButtonText,
+  submitForm,
+}: Props) {
   const selectedClient = React.useRef<string>();
   const selectedProfile = React.useRef<string>();
-  const [createInvoice] = useMutation(CREATE_INVOICE, {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    onCompleted: createPDF,
-  });
-  const [isModalVisible, setModalVisibility] = React.useState<boolean>(false);
-  const { showNotificationFor } = useNotification();
-
-  const setModal = React.useCallback(
-    (_, path: string) => {
-      setModalVisibility((prev) => !prev);
-      showNotificationFor(5000, 'Invoice succesfully created', path);
-    },
-    [showNotificationFor],
-  );
-
-  function createPDF(data: any) {
-    if (!process.env.STORYBOOK) {
-      const { ipcRenderer } = require('electron');
-      ipcRenderer.send(CREATE_PDF_EVENT, data.createInvoice);
-      setModalVisibility(true);
-    }
-  }
-
-  React.useEffect(() => {
-    if (!process.env.STORYBOOK) {
-      const { ipcRenderer } = require('electron');
-      ipcRenderer.on(CREATE_PDF_EVENT, setModal);
-    }
-    return () => {
-      if (!process.env.STORYBOOK) {
-        const { ipcRenderer } = require('electron');
-        ipcRenderer.off(CREATE_PDF_EVENT, setModal);
-      }
-    };
-  }, [setModal]);
-
   return (
     <>
       <Typography gutterBottom variant="h1">
-        New invoice
+        {title}
       </Typography>
       <Form
         onSubmit={(values) =>
@@ -93,6 +63,9 @@ export function InvoiceForm() {
         initialValues={{
           invoiceDate: new Date(),
           items: [{ name: '', value: '0', quantity: '1', measurement: '' }],
+          ...(type === 'Offer'
+            ? { validUntil: addBusinessDays(new Date(), 30) }
+            : {}),
         }}
         mutators={{
           ...arrayMutators,
@@ -103,7 +76,7 @@ export function InvoiceForm() {
           if (!values.invoiceDate) {
             errors.invoiceDate = 'Required';
           }
-          if (!values.invoiceNumber) {
+          if (type === 'Invoice' && !values.invoiceNumber) {
             errors.invoiceNumber = 'Required';
           }
           if (!values.profileVat) {
@@ -111,6 +84,9 @@ export function InvoiceForm() {
           }
           if (!values.vat) {
             errors.vat = 'Required';
+          }
+          if (type === 'Offer' && !values.validUntil) {
+            errors.validUntil = 'Required';
           }
           return errors;
         }}
@@ -135,7 +111,7 @@ export function InvoiceForm() {
                       format="dd/MM/yyyy"
                       margin="normal"
                       id="invoiceDate"
-                      label="Invoice date"
+                      label={`${type} date`}
                       required
                       KeyboardButtonProps={{
                         'aria-label': 'change date',
@@ -145,15 +121,38 @@ export function InvoiceForm() {
                   )}
                 </Field>
               </Grid>
-              <Grid item xs={3} style={{ position: 'relative', top: '15px' }}>
-                <FormField
-                  name="invoiceNumber"
-                  required
-                  placeholder="Invoice number"
-                  label="Invoice number"
-                  fullWidth
-                />
-              </Grid>
+              {/* TODO Maybe extract in separate component */}
+              {type === 'Invoice' ? (
+                <Grid item xs={3} style={{ position: 'relative', top: '15px' }}>
+                  <FormField
+                    name="invoiceNumber"
+                    required
+                    placeholder="Invoice number"
+                    label="Invoice number"
+                    fullWidth
+                  />
+                </Grid>
+              ) : (
+                <Grid item xs={3}>
+                  <Field name="validUntil">
+                    {({ input }) => (
+                      <KeyboardDatePicker
+                        disableToolbar={true}
+                        variant="inline"
+                        format="dd/MM/yyyy"
+                        margin="normal"
+                        id="validUntil"
+                        label="Valid until"
+                        required
+                        KeyboardButtonProps={{
+                          'aria-label': 'offer validity',
+                        }}
+                        {...input}
+                      />
+                    )}
+                  </Field>
+                </Grid>
+              )}
             </Grid>
             <InvoiceFormProfile set={set} selectedProfile={selectedProfile} />
             <DividerMargin />
@@ -168,12 +167,11 @@ export function InvoiceForm() {
               type="submit"
               disabled={pristine || submitting}
             >
-              Create invoice
+              {submitButtonText}
             </Button>
           </form>
         )}
       />
-      <LoadingModal isOpen={isModalVisible}></LoadingModal>
     </>
   );
 }

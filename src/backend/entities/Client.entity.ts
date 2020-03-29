@@ -11,11 +11,12 @@ import {
 } from 'typeorm';
 import { Expense } from './Expense.entity';
 import { Invoice } from './Invoice.entity';
+import { Offer } from './Offer.entity';
 
 @Entity()
 @ObjectType()
 export class Client extends BaseEntity {
-  @Field(type => ID)
+  @Field((type) => ID)
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
@@ -51,21 +52,17 @@ export class Client extends BaseEntity {
   @Column({ type: 'text' })
   createdAt: string;
 
-  @Field(type => [Invoice])
-  @OneToMany(
-    type => Invoice,
-    invoice => invoice.client,
-    { lazy: true },
-  )
+  @Field((type) => [Invoice])
+  @OneToMany((type) => Invoice, (invoice) => invoice.client, { lazy: true })
   invoices: Promise<Invoice[]>;
 
-  @Field(type => [Expense])
-  @OneToMany(
-    type => Expense,
-    expense => expense.client,
-    { lazy: true },
-  )
+  @Field((type) => [Expense])
+  @OneToMany((type) => Expense, (expense) => expense.client, { lazy: true })
   expenses: Promise<Expense[]>;
+
+  @Field((type) => [Offer])
+  @OneToMany((type) => Offer, (offer) => offer.client, { lazy: true })
+  offers: Promise<Offer[]>;
 
   @BeforeUpdate()
   updateDate() {

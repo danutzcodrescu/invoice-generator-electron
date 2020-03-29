@@ -41,7 +41,6 @@ export const invoiceFragment = gql`
       address
       vat
     }
-    vatRuleName
   }
 `;
 
@@ -73,5 +72,39 @@ export const expenseFragment = gql`
     invoiceNumber
     amount
     vat
+  }
+`;
+
+export const offerFragment = gql`
+  fragment OfferFragment on Offer {
+    id
+    vat
+    amount
+    invoiceDate
+    vatRuleName
+    clientData {
+      firstName
+      lastName
+      company
+      address
+      vat
+    }
+    profileData {
+      firstName
+      lastName
+      company
+      address
+      vat
+      bankAccount
+      email
+      phone
+    }
+    items {
+      measurement
+      quantity
+      value
+      name
+    }
+    validUntil
   }
 `;

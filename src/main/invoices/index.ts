@@ -3,18 +3,36 @@ import isDev from 'electron-is-dev';
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
-import { Invoice } from '../../renderer/generated/graphql';
+import { Invoice, Offer } from '../../renderer/generated/graphql';
 import { CREATE_PDF_EVENT, LOAD_PDF_DATA, OPEN_INVOICE } from '../events';
 
 let pdfWindow: BrowserWindow | null;
+
+type ItemDetails =
+  | Pick<Invoice, 'invoiceDate' | 'invoiceNumber'>
+  | Pick<Offer, 'invoiceDate' | 'id'>;
 
 export const invoicesPath = path.resolve(
   app.getPath('documents'),
   'invoices/invoices',
 );
 
+export const offersPath = path.resolve(
+  app.getPath('documents'),
+  'invoices/offers',
+);
+
+function getPaths(data: ItemDetails) {
+  const dirPath = (data as Invoice).invoiceNumber ? invoicesPath : offersPath;
+  const title = (data as Invoice).invoiceNumber
+    ? `${(data as Invoice).invoiceNumber}-${data.invoiceDate}-invoice.pdf`
+    : `${data.invoiceDate}-${(data as Offer).id}-offer.pdf`;
+  const documentPath = path.resolve(`${dirPath}/${title}`);
+  return { dirPath, documentPath };
+}
+
 export function createInvoice(win: BrowserWindow) {
-  ipcMain.on(CREATE_PDF_EVENT, (_, invoice: Invoice) => {
+  ipcMain.on(CREATE_PDF_EVENT, (_, invoice: Invoice | Offer) => {
     pdfWindow = new BrowserWindow({
       width: 1000,
       height: 660,
@@ -42,50 +60,47 @@ export function createInvoice(win: BrowserWindow) {
         vat: invoice.vat,
         vatRuleName: invoice.vatRuleName,
         amount: invoice.amount,
-        invoiceNumber: invoice.invoiceNumber,
         client: invoice.clientData,
         profile: invoice.profileData,
+        ...((invoice as Invoice).invoiceNumber
+          ? {
+              invoiceNumber: (invoice as Invoice).invoiceNumber,
+              title: 'Facture',
+            }
+          : {
+              title: 'Devis',
+              validUntil: (invoice as Offer).validUntil,
+              id: invoice.id,
+            }),
       });
     });
   });
 
-  ipcMain.on(
-    LOAD_PDF_DATA,
-    (_, data: Pick<Invoice, 'invoiceDate' | 'invoiceNumber'>) => {
-      pdfWindow!.webContents
-        .printToPDF({ pageSize: 'A4' })
-        .then(async (resp) => {
-          if (!fs.existsSync(invoicesPath)) {
-            await fs.promises.mkdir(invoicesPath);
-          }
-          const documentPath = path.resolve(
-            `${invoicesPath}/${data.invoiceNumber}-${data.invoiceDate}-invoice.pdf`,
-          );
-          try {
-            await fs.promises.writeFile(documentPath, resp);
-          } catch (e) {
-            console.log(e);
-          }
-          pdfWindow!.close();
-          pdfWindow = null;
-          win.webContents.send(CREATE_PDF_EVENT, documentPath);
-        });
-    },
-  );
+  ipcMain.on(LOAD_PDF_DATA, (_, data: ItemDetails) => {
+    pdfWindow!.webContents.printToPDF({ pageSize: 'A4' }).then(async (resp) => {
+      const { dirPath, documentPath } = getPaths(data);
+      if (!fs.existsSync(dirPath)) {
+        await fs.promises.mkdir(dirPath);
+      }
+      try {
+        await fs.promises.writeFile(documentPath, resp);
+      } catch (e) {
+        console.log(e);
+      }
+      pdfWindow!.close();
+      pdfWindow = null;
+      win.webContents.send(CREATE_PDF_EVENT, documentPath);
+    });
+  });
 }
 
 export function openInvoice() {
-  ipcMain.handle(
-    OPEN_INVOICE,
-    async (_, data: Pick<Invoice, 'invoiceDate' | 'invoiceNumber'>) => {
-      const invoicePath = path.resolve(
-        `${invoicesPath}/${data.invoiceNumber}-${data.invoiceDate}-invoice.pdf`,
-      );
-      if (fs.existsSync(invoicePath)) {
-        shell.openItem(invoicePath);
-        return true;
-      }
-      return false;
-    },
-  );
+  ipcMain.handle(OPEN_INVOICE, async (_, data: ItemDetails) => {
+    const { documentPath } = getPaths(data);
+    if (fs.existsSync(documentPath)) {
+      shell.openItem(documentPath);
+      return true;
+    }
+    return false;
+  });
 }

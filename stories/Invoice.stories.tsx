@@ -5,7 +5,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import StoryRouter from 'storybook-react-router';
 import { Invoice } from '../src/renderer/components/invoices/Invoice.component';
-import { InvoiceForm } from '../src/renderer/components/invoices/InvoiceForm.component';
+import { InvoiceFormContainer } from '../src/renderer/containers/InvoiceForm.container';
 import { InvoiceTableContainer } from '../src/renderer/containers/InvoiceTable.container';
 import { Wrapper } from './Client.stories';
 import { invoiceWithoutQuantity, invoiceWithQuantity } from './invoice.mocks';
@@ -16,7 +16,7 @@ storiesOf('Components/invoices', module)
     <Wrapper>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Paper>
-          <InvoiceForm />
+          <InvoiceFormContainer />
         </Paper>
       </MuiPickersUtilsProvider>
     </Wrapper>
@@ -32,6 +32,7 @@ storiesOf('Components/invoices', module)
         profile={invoiceWithQuantity.profileData}
         invoiceNumber={invoiceWithQuantity.invoiceNumber}
         vatRuleName={invoiceWithQuantity.vatRuleName}
+        title="Facture"
       />
     </Wrapper>
   ))
@@ -46,6 +47,7 @@ storiesOf('Components/invoices', module)
         profile={invoiceWithoutQuantity.profileData}
         invoiceNumber={invoiceWithoutQuantity.invoiceNumber}
         vatRuleName={invoiceWithoutQuantity.vatRuleName}
+        title="Facture"
       />
     </Wrapper>
   ))

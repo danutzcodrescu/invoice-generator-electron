@@ -21,6 +21,7 @@ import {
   AddShoppingCart,
   ArrowDropDown,
   Contacts,
+  LocalOffer,
   Menu as MenuIcon,
   MonetizationOn,
   MoneyOff,
@@ -39,6 +40,7 @@ import {
 const sidebarLinks = [
   { text: 'Profiles', icon: <AccountCircle /> },
   { text: 'Invoices', icon: <Receipt /> },
+  { text: 'Offers', icon: <LocalOffer /> },
   { text: 'Expenses', icon: <MoneyOff /> },
   { text: 'Clients', icon: <Contacts /> },
   { text: 'VAT rules', icon: <MonetizationOn /> },
@@ -47,6 +49,7 @@ const sidebarLinks = [
 
 const createItems = [
   { text: 'Create invoice', link: '/invoiceForm', icon: <Receipt /> },
+  { text: 'Create offer', link: '/newOffer', icon: <LocalOffer /> },
   { text: 'Create profile', link: '/newProfile', icon: <AccountCircle /> },
   { text: 'Create client', link: '/newClient', icon: <Contacts /> },
   { text: 'Create expense', link: '/newExpense', icon: <MoneyOff /> },
@@ -71,7 +74,7 @@ export function Menu(props: { children: React.ReactNode }) {
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={() => setStatus(prev => !prev)}
+              onClick={() => setStatus((prev) => !prev)}
               edge="start"
               className={classes.menuButton}
             >
@@ -112,7 +115,7 @@ export function Menu(props: { children: React.ReactNode }) {
       >
         <div className={classes.toolbar} />
         <List>
-          {sidebarLinks.map(item => (
+          {sidebarLinks.map((item) => (
             <ListItem
               button
               key={item.text}
@@ -146,7 +149,7 @@ export function Menu(props: { children: React.ReactNode }) {
             <PaperSC>
               <ClickAwayListener onClickAway={() => setPopoverStatus(false)}>
                 <MenuList id="split-button-menu">
-                  {createItems.map(option => (
+                  {createItems.map((option) => (
                     <MenuItem
                       key={option.text}
                       onClick={() => setPopoverStatus(false)}

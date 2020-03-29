@@ -32,6 +32,18 @@ module.exports = ({ config }) => {
     new webpack.DefinePlugin({
       'process.env.STORYBOOK': true,
     }),
+    new webpack.NormalModuleReplacementPlugin(
+      /^electron$/,
+      path.resolve(__dirname, './electron.mock.js'),
+    ),
+    new webpack.NormalModuleReplacementPlugin(
+      /notification.context/,
+      path.resolve(__dirname, './Notification.mock.js'),
+    ),
+    new webpack.NormalModuleReplacementPlugin(
+      /LoadingModal.component/,
+      path.resolve(__dirname, './Loading.mock.js'),
+    ),
   );
   return config;
 };

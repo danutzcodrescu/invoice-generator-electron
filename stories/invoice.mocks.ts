@@ -85,3 +85,36 @@ export const invoiceWithoutQuantity = {
   },
   vatRuleName: '6%',
 };
+
+export const offer = {
+  id: 'd594ad39-cced-41b1-b44c-66931d9730f4',
+  validUntil: '2020-05-10',
+  clientData: {
+    address: 'Rue Calvin 23 Bruxelles 1040',
+    firstName: 'Danut',
+    lastName: 'Codrescu',
+    company: null,
+    vat: '',
+  },
+  profileData: {
+    vat: 'BE1234567',
+    address: 'Rue Calvin 23 Bruxelles 1000',
+    email: 'marian.temeian@icloud.com',
+    phone: '+40744150056',
+    company: null,
+    firstName: 'Marian',
+    lastName: 'Temeian',
+  },
+  amount: 484,
+  vat: 29.04,
+  vatRuleName: '6%',
+  invoiceDate: '2020-03-29',
+  items: [
+    {
+      name: 'Parchet',
+      value: 44,
+      quantity: 11,
+      measurement: 'm2',
+    },
+  ],
+};

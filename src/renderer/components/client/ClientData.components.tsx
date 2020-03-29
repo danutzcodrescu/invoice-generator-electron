@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Client, Query } from '../../generated/graphql';
 import { ExpenseTable } from '../expenses/ExpenseTable.component';
 import { InvoiceTable } from '../invoices/InvoiceTable.component';
+import { OffersTable } from '../offer/OfferTable.component';
 import { SelectDates } from '../toolbox/SelectDates.component';
 import { defaultDate } from '../utils/client';
 import { Editable } from './Editable.component';
@@ -41,6 +42,8 @@ export function ClientData(props: Props) {
       <InvoiceTable data={client.invoices} isLoading={isLoading} clientTable />
       <Typography variant="h2">Expenses</Typography>
       <ExpenseTable expenses={client.expenses} clientTable />
+      <Typography variant="h2">Offers</Typography>
+      <OffersTable data={client.offers} clientTable isLoading={isLoading} />
     </>
   );
 }
