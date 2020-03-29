@@ -9,7 +9,7 @@ import {
 } from 'date-fns';
 import { ARRAY_ERROR } from 'final-form';
 import { Column } from 'material-table';
-import { Expense, Invoice, Query } from '../../generated/graphql';
+import { Expense, Invoice, Offer, Query } from '../../generated/graphql';
 
 interface Items {
   name: string;
@@ -54,8 +54,8 @@ export function calculateTotal(items: Items[], vat: number) {
 
 export function filterClientName(
   filter: any,
-  rowData: Invoice,
-  columnDef: Column<Invoice>,
+  rowData: Invoice | Offer,
+  columnDef: Column<Invoice | Offer>,
 ): boolean {
   return rowData.clientData.company
     ? rowData.clientData.company.includes(filter)
@@ -64,7 +64,10 @@ export function filterClientName(
       );
 }
 
-export function filterInvoiceDate(filter: any, rowData: Invoice | Expense) {
+export function filterInvoiceDate(
+  filter: any,
+  rowData: Invoice | Expense | Offer,
+) {
   if (format(new Date(rowData.invoiceDate), 'yyyy-MM-dd').includes(filter)) {
     return true;
   }

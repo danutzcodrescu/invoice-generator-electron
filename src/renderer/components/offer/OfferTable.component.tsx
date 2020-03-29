@@ -5,20 +5,20 @@ import { ipcRenderer } from 'electron';
 import MaterialTable from 'material-table';
 import * as React from 'react';
 import { CREATE_PDF_EVENT } from '../../../main/events';
-import { Invoice } from '../../generated/graphql';
+import { Offer } from '../../generated/graphql';
+import { filterClientName, filterInvoiceDate } from '../invoices/helpers';
+import { tableIcons } from '../invoices/icons';
 import { renderClientName } from '../utils/client';
 import { openInvoice, openItem } from '../utils/invoices';
-import { filterClientName, filterInvoiceDate } from './helpers';
-import { tableIcons } from './icons';
 
 interface Props {
-  data: Invoice[];
+  data: Offer[];
   title?: string;
   isLoading: boolean;
   clientTable: boolean;
 }
 
-export const InvoiceTable = (props: Props) => {
+export function OffersTable(props: Props) {
   const { data, title, isLoading, clientTable } = props;
   React.useEffect(() => {
     ipcRenderer.on(CREATE_PDF_EVENT, openItem);
@@ -33,11 +33,18 @@ export const InvoiceTable = (props: Props) => {
       icons={tableIcons}
       localization={{
         body: {
-          emptyDataSourceMessage: 'No invoices to display',
+          emptyDataSourceMessage: 'No offers to display',
         },
       }}
       columns={[
-        { title: 'Invoice number', field: 'invoiceNumber' },
+        {
+          title: 'Invoice date',
+          field: 'invoiceDate',
+          type: 'date',
+          render: (rowData) =>
+            format(new Date(rowData.invoiceDate), 'yyyy-MM-dd'),
+          customFilterAndSearch: filterInvoiceDate,
+        },
         !clientTable
           ? ({
               title: 'Customer',
@@ -46,13 +53,12 @@ export const InvoiceTable = (props: Props) => {
               customFilterAndSearch: filterClientName,
             } as any)
           : {},
-
         {
-          title: 'Invoice date',
-          field: 'invoiceDate',
+          title: 'Validity',
+          field: 'validUntil',
           type: 'date',
           render: (rowData) =>
-            format(new Date(rowData.invoiceDate), 'yyyy-MM-dd'),
+            format(new Date(rowData.validUntil), 'yyyy-MM-dd'),
           customFilterAndSearch: filterInvoiceDate,
         },
 
@@ -83,14 +89,14 @@ export const InvoiceTable = (props: Props) => {
         {
           // eslint-disable-next-line react/display-name
           icon: () => <Visibility />,
-          tooltip: 'View invoice',
+          tooltip: 'View offer',
           onClick: openInvoice,
         },
       ]}
     ></MaterialTable>
   );
-};
+}
 
-InvoiceTable.defaultProps = {
+OffersTable.defaultProps = {
   clientTable: false,
 };

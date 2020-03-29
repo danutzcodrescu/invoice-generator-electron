@@ -3,6 +3,7 @@ import {
   clientFragment,
   expenseFragment,
   invoiceFragment,
+  offerFragment,
   profileFragment,
 } from './fragments';
 
@@ -72,11 +73,15 @@ export const GET_CLIENT = gql`
       expenses(startDate: $startDate) {
         ...ExpenseFragment
       }
+      offers(startDate: $startDate) {
+        ...OfferFragment
+      }
     }
   }
   ${clientFragment}
   ${invoiceFragment}
   ${expenseFragment}
+  ${offerFragment}
 `;
 
 export const GET_PROFILE = gql`
@@ -108,4 +113,19 @@ export const GET_EXPENSES = gql`
   }
 
   ${expenseFragment}
+`;
+
+export const GET_OFFERS = gql`
+  query GetOffers($startDate: String!) {
+    offers(startDate: $startDate) {
+      ...OfferFragment
+      client {
+        id
+        firstName
+        lastName
+        company
+      }
+    }
+  }
+  ${offerFragment}
 `;

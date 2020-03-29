@@ -6,7 +6,10 @@ import { ClientTableContainer } from '../containers/ClientTable.container';
 import { ExpenseFormContainer } from '../containers/ExpenseForm.container';
 import { ExpenseTableContainer } from '../containers/ExpenseTable.container';
 import { InvoiceContainer } from '../containers/Invoice.container';
+import { InvoiceFormContainer } from '../containers/InvoiceForm.container';
 import { InvoiceTableContainer } from '../containers/InvoiceTable.container';
+import { OfferFormContainer } from '../containers/OfferForm.container';
+import { OfferTableContainer } from '../containers/OfferTable.container';
 import { ProfileDataContainer } from '../containers/ProfileData.container';
 import { ProfileFormContainer } from '../containers/ProfileForm.container';
 import { ProfileTableContainer } from '../containers/ProfileTable.container';
@@ -14,13 +17,15 @@ import { ServiceFormContainer } from '../containers/ServiceForm.container';
 import { ServicesTableContainer } from '../containers/ServiceTable.container';
 import { VATFormContainer } from '../containers/VatRuleForm.container';
 import { VatTableContainer } from '../containers/VatTable.container';
-import { InvoiceForm } from './invoices/InvoiceForm.component';
 
 export function Routes() {
   return (
     <Switch>
       <Route exact path="/invoiceForm">
-        <InvoiceForm />
+        <InvoiceFormContainer />
+      </Route>
+      <Route exact path="/newOffer">
+        <OfferFormContainer />
       </Route>
       <Route exact path="/newExpense">
         <ExpenseFormContainer />
@@ -39,6 +44,9 @@ export function Routes() {
       </Route>
       <Route exact path="/clients">
         <ClientTableContainer />
+      </Route>
+      <Route exact path="/offers">
+        <OfferTableContainer />
       </Route>
       <Route
         exact

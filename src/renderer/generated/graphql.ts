@@ -8,6 +8,13 @@ export interface Scalars {
   Float: number;
 }
 
+export interface Base {
+  __typename?: 'Base';
+  id: Scalars['ID'];
+  updatedAt: Scalars['String'];
+  createdAt: Scalars['String'];
+}
+
 export interface Client {
   __typename?: 'Client';
   id: Scalars['ID'];
@@ -21,6 +28,7 @@ export interface Client {
   createdAt: Scalars['String'];
   invoices: Array<Invoice>;
   expenses: Array<Expense>;
+  offers: Array<Offer>;
 }
 
 export interface ClientInvoicesArgs {
@@ -28,6 +36,10 @@ export interface ClientInvoicesArgs {
 }
 
 export interface ClientExpensesArgs {
+  startDate?: Maybe<Scalars['String']>;
+}
+
+export interface ClientOffersArgs {
   startDate?: Maybe<Scalars['String']>;
 }
 
@@ -117,6 +129,7 @@ export interface Mutation {
   addClient: Client;
   createExpense: Expense;
   createInvoice: Invoice;
+  insertOffer: Offer;
   updateProfile: Profile;
   addProfile: Profile;
   addService: Service;
@@ -147,6 +160,10 @@ export interface MutationCreateInvoiceArgs {
   invoiceData: InvoiceInput;
   profile: ProfileInput;
   client: ClientInput;
+}
+
+export interface MutationInsertOfferArgs {
+  objet: OfferInsert;
 }
 
 export interface MutationUpdateProfileArgs {
@@ -184,6 +201,36 @@ export interface MutationAddVatRuleArgs {
 export interface MutationUpdateVatRuleArgs {
   data: VatRuleUpdate;
   id: Scalars['ID'];
+}
+
+export interface Offer {
+  __typename?: 'Offer';
+  id: Scalars['ID'];
+  updatedAt: Scalars['String'];
+  createdAt: Scalars['String'];
+  profile: Profile;
+  client?: Maybe<Client>;
+  vat: Scalars['Float'];
+  vatRuleName: Scalars['String'];
+  amount: Scalars['Float'];
+  clientData: ClientData;
+  profileData: ProfileData;
+  items: Array<Item>;
+  validUntil: Scalars['String'];
+  invoiceDate: Scalars['String'];
+}
+
+export interface OfferInsert {
+  invoiceDate: Scalars['String'];
+  clientId?: Maybe<Scalars['String']>;
+  clientData: Scalars['String'];
+  profileData: Scalars['String'];
+  profileId: Scalars['String'];
+  items: Scalars['String'];
+  amount: Scalars['Float'];
+  vat: Scalars['Float'];
+  vatRuleName: Scalars['String'];
+  validUntil: Scalars['String'];
 }
 
 export interface Profile {
@@ -226,6 +273,7 @@ export interface Query {
   events: Array<Event>;
   expenses: Array<Expense>;
   invoices: Array<Invoice>;
+  offers: Array<Offer>;
   profiles: Array<Profile>;
   profile: Profile;
   services: Array<Service>;
@@ -241,6 +289,10 @@ export interface QueryExpensesArgs {
 }
 
 export interface QueryInvoicesArgs {
+  startDate?: Maybe<Scalars['String']>;
+}
+
+export interface QueryOffersArgs {
   startDate?: Maybe<Scalars['String']>;
 }
 

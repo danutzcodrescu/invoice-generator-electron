@@ -7,9 +7,10 @@ import {
 
 interface Props {
   isOpen: boolean;
+  text: string;
 }
 
-export function LoadingModal({ isOpen }: Props) {
+export function LoadingModal({ isOpen, text }: Props) {
   return (
     <Modal
       aria-labelledby="simple-modal-title"
@@ -17,7 +18,7 @@ export function LoadingModal({ isOpen }: Props) {
       open={isOpen}
     >
       <LoadinggSpinnerContainer>
-        <LoadingSpinner /> Creating invoice
+        <LoadingSpinner /> {text}
       </LoadinggSpinnerContainer>
     </Modal>
   );

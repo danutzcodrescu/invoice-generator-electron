@@ -12,6 +12,7 @@ import { InjectManager } from 'typeorm-typedi-extensions';
 import { Client } from '../entities/Client.entity';
 import { Expense } from '../entities/Expense.entity';
 import { Invoice } from '../entities/Invoice.entity';
+import { Offer } from '../entities/Offer.entity';
 import { insertTransaction, nonNullObjectProperties } from '../utils/helpers';
 import { UpdateClientInput } from './types/operations.helpers';
 
@@ -20,31 +21,31 @@ export class ClientResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query(returns => [Client])
+  @Query((returns) => [Client])
   clients(): Promise<Client[]> {
     // need to add data-loader
     return this.entityManager.find(Client, {
-      relations: ['invoices', 'expenses'],
+      relations: ['invoices', 'expenses', 'offers'],
     });
   }
 
-  @Query(returns => Client)
+  @Query((returns) => Client)
   client(
-    @Arg('clientId', type => ID) clientId: string,
+    @Arg('clientId', (type) => ID) clientId: string,
   ): Promise<Client | undefined> {
     return this.entityManager.findOne(Client, clientId);
   }
 
-  @Mutation(returns => Client)
+  @Mutation((returns) => Client)
   async updateClient(
-    @Arg('id', type => ID) id: string,
+    @Arg('id', (type) => ID) id: string,
     @Arg('clientData') clientData: UpdateClientInput,
   ): Promise<any> {
     await this.entityManager.update(Client, id, clientData);
     return this.entityManager.findOne(Client, id, { relations: ['invoices'] });
   }
 
-  @Mutation(returns => Client)
+  @Mutation((returns) => Client)
   async addClient(
     @Arg('firstName', { nullable: true }) firstName?: string,
     @Arg('lastName', { nullable: true }) lastName?: string,
@@ -62,7 +63,7 @@ export class ClientResolver {
       company,
       vat,
     });
-    await this.entityManager.transaction(async transactionManager => {
+    await this.entityManager.transaction(async (transactionManager) => {
       client = await insertTransaction(Client, transactionManager, obj as any);
     });
     return client!;
@@ -78,7 +79,7 @@ export class ClientResolver {
       where: Object.assign(
         { clientId: client.id },
         startDate
-          ? { invoiceDate: Raw(alias => `${alias} >= date("${startDate}")`) }
+          ? { invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`) }
           : {},
       ),
     });
@@ -93,7 +94,22 @@ export class ClientResolver {
       where: Object.assign(
         { clientId: client.id },
         startDate
-          ? { invoiceDate: Raw(alias => `${alias} >= date("${startDate}")`) }
+          ? { invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`) }
+          : {},
+      ),
+    });
+  }
+
+  @FieldResolver()
+  async offers(
+    @Root() client: Client,
+    @Arg('startDate', { nullable: true }) startDate?: string,
+  ): Promise<Offer[] | undefined> {
+    return this.entityManager.find(Offer, {
+      where: Object.assign(
+        { clientId: client.id },
+        startDate
+          ? { invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`) }
           : {},
       ),
     });

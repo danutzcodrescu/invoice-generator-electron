@@ -3,6 +3,7 @@ import {
   clientFragment,
   invoiceFragment,
   invoicingDetailsFragment,
+  offerFragment,
   profileFragment,
 } from './fragments';
 
@@ -127,4 +128,13 @@ export const UPDATE_SERVICE = gql`
       id
     }
   }
+`;
+
+export const CREATE_OFFER = gql`
+  mutation CREATE_OFFER($object: OfferInsert!) {
+    insertOffer(objet: $object) {
+      ...OfferFragment
+    }
+  }
+  ${offerFragment}
 `;

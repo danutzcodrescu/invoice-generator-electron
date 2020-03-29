@@ -13,6 +13,9 @@ export function InvoiceContainer() {
     profile: null,
     invoiceNumber: '',
     vatRuleName: '',
+    title: null,
+    validUntil: null,
+    id: null,
   });
 
   function setData(_: Event, data: any) {
@@ -30,7 +33,11 @@ export function InvoiceContainer() {
     if (invoice.invoiceDate) {
       ipcRenderer.send(LOAD_PDF_DATA, {
         invoiceDate: invoice.invoiceDate,
-        invoiceNumber: invoice.invoiceNumber,
+        ...((invoice as any).invoiceNumber
+          ? { invoiceNumber: invoice.invoiceNumber }
+          : {
+              id: invoice.id,
+            }),
       });
     }
   }, [invoice]);
@@ -44,6 +51,8 @@ export function InvoiceContainer() {
       amount={invoice.amount}
       client={invoice.client!}
       profile={invoice.profile!}
+      title={invoice.title as any}
+      validUntil={invoice.validUntil as any}
       invoiceNumber={invoice.invoiceNumber}
       vatRuleName={invoice.vatRuleName}
     />
