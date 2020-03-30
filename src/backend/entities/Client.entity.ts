@@ -52,15 +52,12 @@ export class Client extends BaseEntity {
   @Column({ type: 'text' })
   createdAt: string;
 
-  @Field((type) => [Invoice])
   @OneToMany((type) => Invoice, (invoice) => invoice.client, { lazy: true })
   invoices: Promise<Invoice[]>;
 
-  @Field((type) => [Expense])
   @OneToMany((type) => Expense, (expense) => expense.client, { lazy: true })
   expenses: Promise<Expense[]>;
 
-  @Field((type) => [Offer])
   @OneToMany((type) => Offer, (offer) => offer.client, { lazy: true })
   offers: Promise<Offer[]>;
 

@@ -7,6 +7,7 @@ import {
   Theme,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import { shell } from 'electron';
 import * as React from 'react';
 import { useNotification } from '../../context/notification.context';
 
@@ -27,8 +28,6 @@ export function Notification() {
 
   function openInvoice() {
     if (path) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { shell } = require('electron');
       shell.openItem(path!);
     }
   }

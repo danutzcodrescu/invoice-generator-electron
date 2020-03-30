@@ -1,6 +1,8 @@
+import crypto from 'crypto';
 import {
   Arg,
   FieldResolver,
+  ID,
   Mutation,
   Query,
   Resolver,
@@ -9,7 +11,7 @@ import {
 import { EntityManager, Raw } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { Client, ClientData } from '../entities/Client.entity';
-import { Item } from '../entities/Invoice.entity';
+import { Invoice, Item } from '../entities/Invoice.entity';
 import { Offer } from '../entities/Offer.entity';
 import { Profile, ProfileData } from '../entities/Profile.entity';
 import { OfferInsert } from './types/arguments.helpers';
@@ -19,7 +21,7 @@ export class OfferResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query((returns) => [Offer])
+  @Query(() => [Offer])
   offers(
     @Arg('startDate', { nullable: true }) startDate: string,
   ): Promise<Offer[]> {
@@ -30,18 +32,23 @@ export class OfferResolver {
           relations: ['client', 'profile'],
           order: { invoiceDate: 'DESC' },
         },
-        startDate
-          ? {
-              where: {
-                invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`),
-              },
-            }
-          : {},
+        {
+          where: {
+            ...(startDate
+              ? {
+                  invoiceDate: Raw(
+                    (alias) => `${alias} >= date("${startDate}")`,
+                  ),
+                }
+              : {}),
+            invoiced: false,
+          },
+        },
       ),
     );
   }
 
-  @Mutation((returns) => Offer)
+  @Mutation(() => Offer)
   async insertOffer(@Arg('objet') obj: OfferInsert): Promise<Offer> {
     const currentProfile = await this.entityManager.findOne(
       Profile,
@@ -67,27 +74,58 @@ export class OfferResolver {
     return offerCreated;
   }
 
-  @FieldResolver((returns) => ClientData)
+  @Mutation(() => Invoice)
+  async invoiceOffer(@Arg('id', (type) => ID) id: string) {
+    await this.entityManager.update(Offer, id, {
+      invoiced: true,
+    });
+    const offer = await this.entityManager.findOne(Offer, id, {
+      relations: ['client', 'profile'],
+    });
+    // eslint-disable-next-line no-undef
+    const [profile, client] = await Promise.all([
+      offer?.profile,
+      offer?.client,
+    ]);
+    // @ts-ignore
+    const invoice = this.entityManager.create(Invoice, {
+      invoiceDate: offer?.invoiceDate,
+      amount: offer?.amount,
+      vat: offer?.vat,
+      items: offer?.items,
+      profile: profile,
+      profileId: profile!.id,
+      profileData: offer?.profileData,
+      client: client,
+      clientData: offer?.clientData,
+      vatRuleName: offer?.vatRuleName,
+      invoiceNumber: crypto.randomBytes(16).toString('hex'),
+    });
+    const invoiceCreated = await this.entityManager.save(invoice);
+    return invoiceCreated;
+  }
+
+  @FieldResolver(() => ClientData)
   clientData(@Root() offer: Offer) {
     return JSON.parse(offer.clientData);
   }
 
-  @FieldResolver((returns) => ProfileData)
+  @FieldResolver(() => ProfileData)
   profileData(@Root() offer: Offer) {
     return JSON.parse(offer.profileData);
   }
 
-  @FieldResolver((returns) => [Item])
+  @FieldResolver(() => [Item])
   items(@Root() offer: Offer) {
     return JSON.parse(offer.items);
   }
 
-  @FieldResolver((returns) => String)
+  @FieldResolver(() => String)
   validUntil(@Root() offer: Offer) {
     return offer.validUntil.split(' ')[0];
   }
 
-  @FieldResolver((returns) => String)
+  @FieldResolver(() => String)
   invoiceDate(@Root() offer: Offer) {
     return offer.invoiceDate.split(' ')[0];
   }

@@ -138,3 +138,14 @@ export const CREATE_OFFER = gql`
   }
   ${offerFragment}
 `;
+
+export const INVOICE_OFFER = gql`
+  mutation INVOICE_OFFER($id: ID!) {
+    invoiceOffer(id: $id) {
+      ...InvoiceFragment
+      ...InvoicingDetails
+    }
+  }
+  ${invoiceFragment}
+  ${invoicingDetailsFragment}
+`;

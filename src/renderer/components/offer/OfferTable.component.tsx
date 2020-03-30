@@ -1,31 +1,24 @@
 /* eslint-disable react/display-name */
-import { Visibility } from '@material-ui/icons';
+import { Receipt, Visibility } from '@material-ui/icons';
 import { format } from 'date-fns';
-import { ipcRenderer } from 'electron';
 import MaterialTable from 'material-table';
 import * as React from 'react';
-import { CREATE_PDF_EVENT } from '../../../main/events';
 import { Offer } from '../../generated/graphql';
 import { filterClientName, filterInvoiceDate } from '../invoices/helpers';
 import { tableIcons } from '../invoices/icons';
 import { renderClientName } from '../utils/client';
-import { openInvoice, openItem } from '../utils/invoices';
+import { openInvoice } from '../utils/invoices';
 
 interface Props {
   data: Offer[];
   title?: string;
   isLoading: boolean;
   clientTable: boolean;
+  invoiceOffer: (event: any, data: Offer | Offer[]) => void;
 }
 
 export function OffersTable(props: Props) {
-  const { data, title, isLoading, clientTable } = props;
-  React.useEffect(() => {
-    ipcRenderer.on(CREATE_PDF_EVENT, openItem);
-    return () => {
-      ipcRenderer.off(CREATE_PDF_EVENT, openItem);
-    };
-  }, []);
+  const { data, title, isLoading, clientTable, invoiceOffer } = props;
   return (
     <MaterialTable
       isLoading={isLoading}
@@ -38,7 +31,7 @@ export function OffersTable(props: Props) {
       }}
       columns={[
         {
-          title: 'Invoice date',
+          title: 'Offer date',
           field: 'invoiceDate',
           type: 'date',
           render: (rowData) =>
@@ -91,6 +84,11 @@ export function OffersTable(props: Props) {
           icon: () => <Visibility />,
           tooltip: 'View offer',
           onClick: openInvoice,
+        },
+        {
+          icon: () => <Receipt />,
+          tooltip: 'Turn into invoice',
+          onClick: invoiceOffer,
         },
       ]}
     ></MaterialTable>

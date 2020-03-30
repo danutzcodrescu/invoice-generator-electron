@@ -1,18 +1,41 @@
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import * as React from 'react';
+import { LoadingModal } from '../components/invoices/LoadingModal.component';
 import { OffersTable } from '../components/offer/OfferTable.component';
 import { Loading } from '../components/toolbox/Loading.component';
+import { useModalInvoice } from '../components/toolbox/pdf.hook';
 import { SelectDates } from '../components/toolbox/SelectDates.component';
 import { defaultDate } from '../components/utils/client';
-import { Query } from '../generated/graphql';
+import { Offer, Query } from '../generated/graphql';
+import { INVOICE_OFFER } from '../graphql/mutations';
 import { GET_OFFERS } from '../graphql/queries';
 
 export function OfferTableContainer() {
   const { data, loading, refetch } = useQuery<Query>(GET_OFFERS, {
     variables: { startDate: defaultDate },
   });
+  const { createPDF, isModalVisible } = useModalInvoice(
+    'Invoice succesfully created',
+  );
+  const [invoiceOffer] = useMutation(INVOICE_OFFER, { onCompleted: createPDF });
   if (!data) {
     return <Loading />;
+  }
+
+  function toInvoice(_, rowData: Offer | Offer[]) {
+    invoiceOffer({
+      variables: {
+        id: (rowData as Offer).id,
+      },
+      refetchQueries: [
+        {
+          query: GET_OFFERS,
+          variables: {
+            startDate: defaultDate,
+          },
+        },
+      ],
+    });
   }
   return (
     <>
@@ -20,7 +43,15 @@ export function OfferTableContainer() {
         onChange={(e) => refetch({ startDate: e.target.value })}
         defaultValue={defaultDate}
       />
-      <OffersTable data={data.offers} isLoading={loading} />
+      <OffersTable
+        data={data.offers}
+        isLoading={loading}
+        invoiceOffer={toInvoice}
+      />
+      <LoadingModal
+        isOpen={isModalVisible}
+        text="Creating invoice"
+      ></LoadingModal>
     </>
   );
 }

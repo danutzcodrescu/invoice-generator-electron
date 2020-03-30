@@ -3,6 +3,7 @@ import {
   clientFragment,
   expenseFragment,
   invoiceFragment,
+  invoicingDetailsFragment,
   offerFragment,
   profileFragment,
 } from './fragments';
@@ -52,6 +53,7 @@ export const GET_INVOICES = gql`
   query GetInvoices($startDate: String!) {
     invoices(startDate: $startDate) {
       ...InvoiceFragment
+      ...InvoicingDetails
       client {
         id
         firstName
@@ -61,6 +63,7 @@ export const GET_INVOICES = gql`
     }
   }
   ${invoiceFragment}
+  ${invoicingDetailsFragment}
 `;
 
 export const GET_CLIENT = gql`

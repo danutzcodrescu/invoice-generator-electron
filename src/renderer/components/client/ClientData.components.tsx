@@ -16,10 +16,11 @@ interface Props {
   refetch: (
     variables?: Record<string, any> | undefined,
   ) => Promise<ApolloQueryResult<Query>>;
+  invoiceOffer: Function;
 }
 
 export function ClientData(props: Props) {
-  const { client, isLoading, refetch } = props;
+  const { client, isLoading, refetch, invoiceOffer } = props;
   const [isReadOnly, setReadOnly] = React.useState<boolean>(true);
   return (
     <>
@@ -43,7 +44,12 @@ export function ClientData(props: Props) {
       <Typography variant="h2">Expenses</Typography>
       <ExpenseTable expenses={client.expenses} clientTable />
       <Typography variant="h2">Offers</Typography>
-      <OffersTable data={client.offers} clientTable isLoading={isLoading} />
+      <OffersTable
+        data={client.offers}
+        clientTable
+        isLoading={isLoading}
+        invoiceOffer={invoiceOffer}
+      />
     </>
   );
 }

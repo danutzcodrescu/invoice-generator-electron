@@ -1,13 +1,11 @@
 /* eslint-disable react/display-name */
 import { Visibility } from '@material-ui/icons';
 import { format } from 'date-fns';
-import { ipcRenderer } from 'electron';
 import MaterialTable from 'material-table';
 import * as React from 'react';
-import { CREATE_PDF_EVENT } from '../../../main/events';
 import { Invoice } from '../../generated/graphql';
 import { renderClientName } from '../utils/client';
-import { openInvoice, openItem } from '../utils/invoices';
+import { openInvoice } from '../utils/invoices';
 import { filterClientName, filterInvoiceDate } from './helpers';
 import { tableIcons } from './icons';
 
@@ -20,12 +18,6 @@ interface Props {
 
 export const InvoiceTable = (props: Props) => {
   const { data, title, isLoading, clientTable } = props;
-  React.useEffect(() => {
-    ipcRenderer.on(CREATE_PDF_EVENT, openItem);
-    return () => {
-      ipcRenderer.off(CREATE_PDF_EVENT, openItem);
-    };
-  }, []);
   return (
     <MaterialTable
       isLoading={isLoading}

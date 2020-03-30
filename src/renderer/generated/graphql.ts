@@ -130,6 +130,7 @@ export interface Mutation {
   createExpense: Expense;
   createInvoice: Invoice;
   insertOffer: Offer;
+  invoiceOffer: Invoice;
   updateProfile: Profile;
   addProfile: Profile;
   addService: Service;
@@ -164,6 +165,10 @@ export interface MutationCreateInvoiceArgs {
 
 export interface MutationInsertOfferArgs {
   objet: OfferInsert;
+}
+
+export interface MutationInvoiceOfferArgs {
+  id: Scalars['ID'];
 }
 
 export interface MutationUpdateProfileArgs {
