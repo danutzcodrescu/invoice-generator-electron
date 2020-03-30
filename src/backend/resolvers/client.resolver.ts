@@ -69,12 +69,12 @@ export class ClientResolver {
     return client!;
   }
 
-  @FieldResolver()
+  @FieldResolver(() => [Invoice])
   async invoices(
     @Root() client: Client,
     @Arg('startDate', { nullable: true })
     startDate?: string,
-  ): Promise<Invoice[] | undefined> {
+  ) {
     return this.entityManager.find(Invoice, {
       where: Object.assign(
         { clientId: client.id },
@@ -85,11 +85,11 @@ export class ClientResolver {
     });
   }
 
-  @FieldResolver()
+  @FieldResolver(() => [Expense])
   async expenses(
     @Root() client: Client,
     @Arg('startDate', { nullable: true }) startDate?: string,
-  ): Promise<Expense[] | undefined> {
+  ) {
     return this.entityManager.find(Expense, {
       where: Object.assign(
         { clientId: client.id },
@@ -100,14 +100,14 @@ export class ClientResolver {
     });
   }
 
-  @FieldResolver()
+  @FieldResolver(() => [Offer])
   async offers(
     @Root() client: Client,
     @Arg('startDate', { nullable: true }) startDate?: string,
-  ): Promise<Offer[] | undefined> {
+  ) {
     return this.entityManager.find(Offer, {
       where: Object.assign(
-        { clientId: client.id },
+        { clientId: client.id, invoiced: false },
         startDate
           ? { invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`) }
           : {},

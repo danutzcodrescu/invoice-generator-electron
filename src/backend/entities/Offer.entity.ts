@@ -47,6 +47,9 @@ export class Offer extends Base {
   @Column()
   validUntil: string;
 
+  @Column({ default: false })
+  invoiced: boolean;
+
   @BeforeInsert()
   createDate() {
     this.createdAt = format(new Date(), 'yyyy-MM:dd HH:mm:SS');
