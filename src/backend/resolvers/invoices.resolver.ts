@@ -6,11 +6,12 @@ import {
   Resolver,
   Root,
 } from 'type-graphql';
-import { EntityManager, Raw } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { Client, ClientData } from '../entities/Client.entity';
 import { Invoice, Item } from '../entities/Invoice.entity';
 import { Profile, ProfileData } from '../entities/Profile.entity';
+import { setParams } from '../utils/helpers';
 import {
   ClientInput,
   InvoiceInput,
@@ -25,21 +26,22 @@ export class InvoiceResolver {
   @Query((returns) => [Invoice])
   invoices(
     @Arg('startDate', { nullable: true }) startDate: string,
+    @Arg('endDate', { nullable: true }) endDate: string,
   ): Promise<Invoice[]> {
+    const params = setParams({
+      relations: ['client', 'profile'],
+      startDate,
+      endDate,
+    });
     return this.entityManager.find(
+      // @ts-ignore
       Invoice,
       Object.assign(
         {
           relations: ['client', 'profile'],
           order: { invoiceDate: 'DESC' },
         },
-        startDate
-          ? {
-              where: {
-                invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`),
-              },
-            }
-          : {},
+        params,
       ),
     );
   }

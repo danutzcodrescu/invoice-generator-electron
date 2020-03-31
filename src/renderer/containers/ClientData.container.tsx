@@ -23,7 +23,7 @@ export function ClientDataContainer(props: Props) {
     },
   });
   const [invoiceOffer] = useMutation(INVOICE_OFFER, { onCompleted: createPDF });
-  function toInvoice(_, rowData: Offer | Offer[]) {
+  function toInvoice(_: any, rowData: Offer | Offer[]) {
     invoiceOffer({
       variables: {
         id: (rowData as Offer).id,

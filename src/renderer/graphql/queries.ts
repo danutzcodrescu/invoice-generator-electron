@@ -50,8 +50,8 @@ export const GET_CLIENTS = gql`
 `;
 
 export const GET_INVOICES = gql`
-  query GetInvoices($startDate: String!) {
-    invoices(startDate: $startDate) {
+  query GetInvoices($startDate: String!, $endDate: String) {
+    invoices(startDate: $startDate, endDate: $endDate) {
       ...InvoiceFragment
       ...InvoicingDetails
       client {
@@ -104,8 +104,8 @@ export const GET_PROFILE = gql`
 `;
 
 export const GET_EXPENSES = gql`
-  query GetExpenses {
-    expenses {
+  query GetExpenses($startDate: String!, $endDate: String) {
+    expenses(startDate: $startDate, endDate: $endDate) {
       ...ExpenseFragment
       clientName
       client {
@@ -119,8 +119,8 @@ export const GET_EXPENSES = gql`
 `;
 
 export const GET_OFFERS = gql`
-  query GetOffers($startDate: String!) {
-    offers(startDate: $startDate) {
+  query GetOffers($startDate: String!, $endDate: String) {
+    offers(startDate: $startDate, endDate: $endDate) {
       ...OfferFragment
       client {
         id

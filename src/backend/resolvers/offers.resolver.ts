@@ -8,12 +8,13 @@ import {
   Resolver,
   Root,
 } from 'type-graphql';
-import { EntityManager, Raw } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { Client, ClientData } from '../entities/Client.entity';
 import { Invoice, Item } from '../entities/Invoice.entity';
 import { Offer } from '../entities/Offer.entity';
 import { Profile, ProfileData } from '../entities/Profile.entity';
+import { setParams } from '../utils/helpers';
 import { OfferInsert } from './types/arguments.helpers';
 
 @Resolver(Offer)
@@ -24,28 +25,15 @@ export class OfferResolver {
   @Query(() => [Offer])
   offers(
     @Arg('startDate', { nullable: true }) startDate: string,
+    @Arg('endDate', { nullable: true }) endDate: string,
   ): Promise<Offer[]> {
-    return this.entityManager.find(
-      Offer,
-      Object.assign(
-        {
-          relations: ['client', 'profile'],
-          order: { invoiceDate: 'DESC' },
-        },
-        {
-          where: {
-            ...(startDate
-              ? {
-                  invoiceDate: Raw(
-                    (alias) => `${alias} >= date("${startDate}")`,
-                  ),
-                }
-              : {}),
-            invoiced: false,
-          },
-        },
-      ),
-    );
+    const params = setParams({
+      relations: ['client', 'profile'],
+      startDate,
+      endDate,
+    });
+    // @ts-ignore
+    return this.entityManager.find(Offer, params);
   }
 
   @Mutation(() => Offer)
