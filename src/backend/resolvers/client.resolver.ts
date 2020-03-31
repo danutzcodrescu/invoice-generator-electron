@@ -7,13 +7,17 @@ import {
   Resolver,
   Root,
 } from 'type-graphql';
-import { EntityManager, Raw } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
 import { Client } from '../entities/Client.entity';
 import { Expense } from '../entities/Expense.entity';
 import { Invoice } from '../entities/Invoice.entity';
 import { Offer } from '../entities/Offer.entity';
-import { insertTransaction, nonNullObjectProperties } from '../utils/helpers';
+import {
+  insertTransaction,
+  nonNullObjectProperties,
+  setParamsClient,
+} from '../utils/helpers';
 import { UpdateClientInput } from './types/operations.helpers';
 
 @Resolver(Client)
@@ -74,44 +78,38 @@ export class ClientResolver {
     @Root() client: Client,
     @Arg('startDate', { nullable: true })
     startDate?: string,
+    @Arg('endDate', { nullable: true })
+    endDate?: string,
   ) {
-    return this.entityManager.find(Invoice, {
-      where: Object.assign(
-        { clientId: client.id },
-        startDate
-          ? { invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`) }
-          : {},
-      ),
+    const params = setParamsClient({
+      startDate,
+      endDate,
+      clientId: client.id,
     });
+    return this.entityManager.find(Invoice, params);
   }
 
   @FieldResolver(() => [Expense])
   async expenses(
     @Root() client: Client,
     @Arg('startDate', { nullable: true }) startDate?: string,
+    @Arg('endDate', { nullable: true }) endDate?: string,
   ) {
-    return this.entityManager.find(Expense, {
-      where: Object.assign(
-        { clientId: client.id },
-        startDate
-          ? { invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`) }
-          : {},
-      ),
-    });
+    const params = setParamsClient({ startDate, endDate, clientId: client.id });
+    return this.entityManager.find(Expense, params);
   }
 
   @FieldResolver(() => [Offer])
   async offers(
     @Root() client: Client,
     @Arg('startDate', { nullable: true }) startDate?: string,
+    @Arg('endDate', { nullable: true }) endDate?: string,
   ) {
-    return this.entityManager.find(Offer, {
-      where: Object.assign(
-        { clientId: client.id, invoiced: false },
-        startDate
-          ? { invoiceDate: Raw((alias) => `${alias} >= date("${startDate}")`) }
-          : {},
-      ),
+    const params = setParamsClient({
+      startDate,
+      endDate,
+      clientId: client.id,
     });
+    return this.entityManager.find(Offer, params);
   }
 }

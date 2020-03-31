@@ -6,7 +6,7 @@ import { SelectDates } from '../components/toolbox/SelectDates.component';
 import { defaultDate } from '../components/utils/client';
 import { Query } from '../generated/graphql';
 import { GET_EXPENSES } from '../graphql/queries';
-import { refetchData } from '../utils/refetchData';
+import { refetchCustom, refetchData } from '../utils/refetchData';
 
 interface Props {}
 
@@ -19,7 +19,11 @@ export function ExpenseTableContainer(props: Props) {
   }
   return (
     <>
-      <SelectDates onChange={refetchData(refetch)} defaultValue={defaultDate} />
+      <SelectDates
+        onChange={refetchData(refetch)}
+        defaultValue={defaultDate}
+        refetchCustom={refetchCustom(refetch)}
+      />
       <ExpenseTable expenses={data!.expenses} />
     </>
   );

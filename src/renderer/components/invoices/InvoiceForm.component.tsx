@@ -106,7 +106,8 @@ export function InvoiceForm({
                 <Field name="invoiceDate">
                   {({ input }) => (
                     <KeyboardDatePicker
-                      disableToolbar={true}
+                      autoOk
+                      disableToolbar
                       variant="inline"
                       format="dd/MM/yyyy"
                       margin="normal"
