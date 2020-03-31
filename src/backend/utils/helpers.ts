@@ -27,17 +27,7 @@ export async function insertTransaction<T>(
   return entityValue;
 }
 
-interface ParamsArg {
-  startDate: string;
-  endDate: string;
-  relations: string[];
-}
-
-export function setParams({ startDate, endDate, relations }: ParamsArg) {
-  const params = {
-    relations,
-    order: { invoiceDate: 'DESC' },
-  };
+function setDate(params: any, startDate?: string, endDate?: string) {
   if (startDate && !endDate) {
     set(
       params,
@@ -49,7 +39,7 @@ export function setParams({ startDate, endDate, relations }: ParamsArg) {
     set(
       params,
       'where.invoiceDate',
-      Raw((alias) => `${alias} < date("${endDate}")`),
+      Raw((alias) => `${alias} <= date("${endDate}")`),
     );
   }
   if (startDate && endDate) {
@@ -58,9 +48,42 @@ export function setParams({ startDate, endDate, relations }: ParamsArg) {
       'where.invoiceDate',
       Raw(
         (alias) =>
-          `${alias} >= date("${startDate}") and ${alias} < date("${endDate}")`,
+          `${alias} >= date("${startDate}") and ${alias} <= date("${endDate}")`,
       ),
     );
   }
   return params;
+}
+
+interface ParamsArg {
+  startDate: string;
+  endDate: string;
+  relations: string[];
+}
+
+export function setParams({ startDate, endDate, relations }: ParamsArg) {
+  const params = {
+    relations,
+    order: { invoiceDate: 'DESC' },
+  };
+
+  return setDate(params, startDate, endDate);
+}
+
+interface ParamsClientArg {
+  startDate?: string;
+  endDate?: string;
+  clientId: string;
+}
+
+export function setParamsClient({
+  startDate,
+  endDate,
+  clientId,
+}: ParamsClientArg) {
+  const params = {
+    where: { clientId },
+    order: { invoiceDate: 'DESC' },
+  };
+  return setDate(params, startDate, endDate);
 }

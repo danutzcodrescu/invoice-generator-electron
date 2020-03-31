@@ -1,8 +1,19 @@
-import { Select } from '@material-ui/core';
 import styled from 'styled-components';
 
-export const SelectInsideToolbar = styled(Select)`
-  top: 75px;
-  z-index: 9999;
-  left: 40px;
+export const StyledForm = styled.form`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+export const DatePickersContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  visibility: ${(props) => (props.hidden ? 'hidden' : 'visible')};
+  padding: 0 ${(props) => props.theme.spacing(2)}px;
+
+  && > * {
+    margin-right: ${(props) => props.theme.spacing(2)}px;
+  }
 `;

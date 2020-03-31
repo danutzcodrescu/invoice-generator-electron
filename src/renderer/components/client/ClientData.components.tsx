@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import { ApolloQueryResult } from 'apollo-client';
 import * as React from 'react';
 import { Client, Offer, Query } from '../../generated/graphql';
-import { refetchData } from '../../utils/refetchData';
+import { refetchCustom, refetchData } from '../../utils/refetchData';
 import { ExpenseTable } from '../expenses/ExpenseTable.component';
 import { InvoiceTable } from '../invoices/InvoiceTable.component';
 import { OffersTable } from '../offer/OfferTable.component';
@@ -37,6 +37,7 @@ export function ClientData(props: Props) {
         <SelectDates
           defaultValue={defaultDate}
           onChange={refetchData(refetch)}
+          refetchCustom={refetchCustom(refetch)}
         />
       </div>
 
