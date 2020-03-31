@@ -9,6 +9,7 @@ import { defaultDate } from '../components/utils/client';
 import { Offer, Query } from '../generated/graphql';
 import { INVOICE_OFFER } from '../graphql/mutations';
 import { GET_OFFERS } from '../graphql/queries';
+import { refetchData } from '../utils/refetchData';
 
 export function OfferTableContainer() {
   const { data, loading, refetch } = useQuery<Query>(GET_OFFERS, {
@@ -22,7 +23,7 @@ export function OfferTableContainer() {
     return <Loading />;
   }
 
-  function toInvoice(_, rowData: Offer | Offer[]) {
+  function toInvoice(_: any, rowData: Offer | Offer[]) {
     invoiceOffer({
       variables: {
         id: (rowData as Offer).id,
@@ -39,10 +40,7 @@ export function OfferTableContainer() {
   }
   return (
     <>
-      <SelectDates
-        onChange={(e) => refetch({ startDate: e.target.value })}
-        defaultValue={defaultDate}
-      />
+      <SelectDates onChange={refetchData(refetch)} defaultValue={defaultDate} />
       <OffersTable
         data={data.offers}
         isLoading={loading}
