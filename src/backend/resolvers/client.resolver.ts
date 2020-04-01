@@ -25,31 +25,29 @@ export class ClientResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query((returns) => [Client])
-  clients(): Promise<Client[]> {
+  @Query(() => [Client])
+  clients() {
     // need to add data-loader
     return this.entityManager.find(Client, {
       relations: ['invoices', 'expenses', 'offers'],
     });
   }
 
-  @Query((returns) => Client)
-  client(
-    @Arg('clientId', (type) => ID) clientId: string,
-  ): Promise<Client | undefined> {
+  @Query(() => Client)
+  client(@Arg('clientId', (type) => ID) clientId: string) {
     return this.entityManager.findOne(Client, clientId);
   }
 
-  @Mutation((returns) => Client)
+  @Mutation(() => Client)
   async updateClient(
     @Arg('id', (type) => ID) id: string,
     @Arg('clientData') clientData: UpdateClientInput,
-  ): Promise<any> {
+  ) {
     await this.entityManager.update(Client, id, clientData);
     return this.entityManager.findOne(Client, id, { relations: ['invoices'] });
   }
 
-  @Mutation((returns) => Client)
+  @Mutation(() => Client)
   async addClient(
     @Arg('firstName', { nullable: true }) firstName?: string,
     @Arg('lastName', { nullable: true }) lastName?: string,
@@ -57,7 +55,7 @@ export class ClientResolver {
     @Arg('email', { nullable: true }) email?: string,
     @Arg('address', { nullable: true }) address?: string,
     @Arg('vat', { nullable: true }) vat?: string,
-  ): Promise<Client> {
+  ) {
     let client: Client;
     const obj = nonNullObjectProperties({
       firstName,

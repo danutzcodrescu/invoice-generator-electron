@@ -32,14 +32,17 @@ export interface Client {
 }
 
 export interface ClientInvoicesArgs {
+  endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 
 export interface ClientExpensesArgs {
+  endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 
 export interface ClientOffersArgs {
+  endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 

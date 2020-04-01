@@ -6,7 +6,7 @@ import { SelectDates } from '../components/toolbox/SelectDates.component';
 import { defaultDate } from '../components/utils/client';
 import { Query } from '../generated/graphql';
 import { GET_INVOICES } from '../graphql/queries';
-import { refetchData } from '../utils/refetchData';
+import { refetchCustom, refetchData } from '../utils/refetchData';
 
 export function InvoiceTableContainer() {
   const { data, loading, refetch } = useQuery<Query>(GET_INVOICES, {
@@ -17,7 +17,11 @@ export function InvoiceTableContainer() {
   }
   return (
     <>
-      <SelectDates onChange={refetchData(refetch)} defaultValue={defaultDate} />
+      <SelectDates
+        onChange={refetchData(refetch)}
+        defaultValue={defaultDate}
+        refetchCustom={refetchCustom(refetch)}
+      />
       <InvoiceTable data={data.invoices} isLoading={loading} />
     </>
   );

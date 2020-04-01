@@ -43,7 +43,7 @@ export function setDates(
     set(
       params,
       'where.invoiceDate',
-      Raw((alias) => `${alias} < date("${endDate}")`),
+      Raw((alias) => `${alias} <= date("${endDate}")`),
     );
   }
   if (startDate && endDate) {
@@ -52,7 +52,7 @@ export function setDates(
       'where.invoiceDate',
       Raw(
         (alias) =>
-          `${alias} >= date("${startDate}") and ${alias} < date("${endDate}")`,
+          `${alias} >= date("${startDate}") and ${alias} <= date("${endDate}")`,
       ),
     );
   }
