@@ -7,6 +7,7 @@ import { Field, Form } from 'react-final-form';
 import { Client, Profile, Query } from '../../generated/graphql';
 import { setBulkValue } from '../../utils/react-final-form';
 import { FormField } from '../toolbox/FormField.component';
+import { defaultInvoiceNumber } from '../utils/invoices';
 import { DividerMargin } from './InvoiceForm.styles';
 import { InvoiceFormClient } from './InvoiceFormClient.component';
 import { InvoiceFormErrors } from './InvoiceFormErrors.component';
@@ -21,6 +22,7 @@ interface Props {
   submitButtonText: string;
   type: 'Invoice' | 'Offer';
   submitForm: Function;
+  lastInvoiceNumber?: string;
 }
 
 export function itemToString(item: Profile | Client) {
@@ -42,6 +44,7 @@ export function InvoiceForm({
   type,
   submitButtonText,
   submitForm,
+  lastInvoiceNumber,
 }: Props) {
   const selectedClient = React.useRef<string>();
   const selectedProfile = React.useRef<string>();
@@ -62,6 +65,7 @@ export function InvoiceForm({
         }
         initialValues={{
           invoiceDate: new Date(),
+          invoiceNumber: defaultInvoiceNumber(lastInvoiceNumber),
           items: [{ name: '', value: '0', quantity: '1', measurement: '' }],
           ...(type === 'Offer'
             ? { validUntil: addBusinessDays(new Date(), 30) }

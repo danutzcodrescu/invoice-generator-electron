@@ -32,14 +32,17 @@ export interface Client {
 }
 
 export interface ClientInvoicesArgs {
+  endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 
 export interface ClientExpensesArgs {
+  endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 
 export interface ClientOffersArgs {
+  endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 
@@ -277,6 +280,7 @@ export interface Query {
   client: Client;
   events: Array<Event>;
   expenses: Array<Expense>;
+  lastInvoiceNumber: Scalars['String'];
   invoices: Array<Invoice>;
   offers: Array<Offer>;
   profiles: Array<Profile>;
@@ -290,14 +294,17 @@ export interface QueryClientArgs {
 }
 
 export interface QueryExpensesArgs {
+  endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 
 export interface QueryInvoicesArgs {
+  endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 
 export interface QueryOffersArgs {
+  endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 
