@@ -8,10 +8,15 @@ import { useModalInvoice } from '../components/toolbox/pdf.hook';
 import { defaultDate } from '../components/utils/client';
 import { Query } from '../generated/graphql';
 import { CREATE_INVOICE } from '../graphql/mutations';
-import { GET_INVOICES, GET_VAT_RULES } from '../graphql/queries';
+import {
+  GET_INVOICES,
+  GET_LAST_INVOICE_NUMBER,
+  GET_VAT_RULES,
+} from '../graphql/queries';
 
 export function InvoiceFormContainer() {
   const { data } = useQuery<Query>(GET_VAT_RULES);
+  const { data: invoiceData } = useQuery<Query>(GET_LAST_INVOICE_NUMBER);
   const { isModalVisible, createPDF } = useModalInvoice(
     'Invoice succesfully created',
   );
@@ -24,6 +29,7 @@ export function InvoiceFormContainer() {
           startDate: defaultDate,
         },
       },
+      { query: GET_LAST_INVOICE_NUMBER },
     ],
   });
   return (
@@ -35,6 +41,7 @@ export function InvoiceFormContainer() {
         type="Invoice"
         submitButtonText="Create invoice"
         submitForm={submitForm}
+        lastInvoiceNumber={invoiceData?.lastInvoiceNumber}
       />
       <LoadingModal
         isOpen={isModalVisible}

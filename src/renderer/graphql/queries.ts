@@ -132,3 +132,9 @@ export const GET_OFFERS = gql`
   }
   ${offerFragment}
 `;
+
+export const GET_LAST_INVOICE_NUMBER = gql`
+  query GetLastInvoiceNumber {
+    lastInvoiceNumber
+  }
+`;

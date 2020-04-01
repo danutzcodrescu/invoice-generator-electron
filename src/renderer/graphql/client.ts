@@ -7,4 +7,17 @@ export const client = new ApolloClient({
     uri: 'http://localhost:4000',
   }),
   cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network',
+      errorPolicy: 'ignore',
+    },
+    query: {
+      fetchPolicy: 'network-only',
+      errorPolicy: 'all',
+    },
+    mutate: {
+      errorPolicy: 'all',
+    },
+  },
 });

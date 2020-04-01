@@ -12,6 +12,7 @@ import { Client, ClientData } from '../entities/Client.entity';
 import { Invoice, Item } from '../entities/Invoice.entity';
 import { Profile, ProfileData } from '../entities/Profile.entity';
 import { setParams } from '../utils/helpers';
+import { getInvoiceNumber } from '../utils/invoices';
 import {
   ClientInput,
   InvoiceInput,
@@ -23,7 +24,11 @@ export class InvoiceResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query((returns) => [Invoice])
+  @Query(() => String)
+  async lastInvoiceNumber() {
+    return getInvoiceNumber();
+  }
+  @Query(() => [Invoice])
   invoices(
     @Arg('startDate', { nullable: true }) startDate: string,
     @Arg('endDate', { nullable: true }) endDate: string,
@@ -46,7 +51,7 @@ export class InvoiceResolver {
     );
   }
 
-  @Mutation((returns) => Invoice)
+  @Mutation(() => Invoice)
   async createInvoice(
     @Arg('client') client: ClientInput,
     @Arg('profile') profile: ProfileInput,
@@ -74,22 +79,22 @@ export class InvoiceResolver {
     return inv;
   }
 
-  @FieldResolver((returns) => ClientData)
+  @FieldResolver(() => ClientData)
   clientData(@Root() invoice: Invoice) {
     return JSON.parse(invoice.clientData);
   }
 
-  @FieldResolver((returns) => ProfileData)
+  @FieldResolver(() => ProfileData)
   profileData(@Root() invoice: Invoice) {
     return JSON.parse(invoice.profileData);
   }
 
-  @FieldResolver((returns) => [Item])
+  @FieldResolver(() => [Item])
   items(@Root() invoice: Invoice) {
     return JSON.parse(invoice.items);
   }
 
-  @FieldResolver((returns) => String)
+  @FieldResolver(() => String)
   invoiceDate(@Root() invoice: Invoice) {
     return invoice.invoiceDate.split(' ')[0];
   }

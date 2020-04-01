@@ -25,7 +25,9 @@ export const offersPath = path.resolve(
 function getPaths(data: ItemDetails) {
   const dirPath = (data as Invoice).invoiceNumber ? invoicesPath : offersPath;
   const title = (data as Invoice).invoiceNumber
-    ? `${(data as Invoice).invoiceNumber}-${data.invoiceDate}-invoice.pdf`
+    ? `${(data as Invoice).invoiceNumber.replace('/', '-')}-${
+        data.invoiceDate
+      }-invoice.pdf`
     : `${data.invoiceDate}-${(data as Offer).id}-offer.pdf`;
   const documentPath = path.resolve(`${dirPath}/${title}`);
   return { dirPath, documentPath };

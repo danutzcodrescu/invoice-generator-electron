@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import { set } from 'lodash';
 import {
   Arg,
   FieldResolver,
@@ -10,11 +10,13 @@ import {
 } from 'type-graphql';
 import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
+import { defaultInvoiceNumber } from '../../renderer/components/utils/invoices';
 import { Client, ClientData } from '../entities/Client.entity';
 import { Invoice, Item } from '../entities/Invoice.entity';
 import { Offer } from '../entities/Offer.entity';
 import { Profile, ProfileData } from '../entities/Profile.entity';
 import { setParams } from '../utils/helpers';
+import { getInvoiceNumber } from '../utils/invoices';
 import { OfferInsert } from './types/arguments.helpers';
 
 @Resolver(Offer)
@@ -32,6 +34,7 @@ export class OfferResolver {
       startDate,
       endDate,
     });
+    set(params, 'where.invoiced', false);
     // @ts-ignore
     return this.entityManager.find(Offer, params);
   }
@@ -64,33 +67,35 @@ export class OfferResolver {
 
   @Mutation(() => Invoice)
   async invoiceOffer(@Arg('id', (type) => ID) id: string) {
-    await this.entityManager.update(Offer, id, {
-      invoiced: true,
-    });
     const offer = await this.entityManager.findOne(Offer, id, {
       relations: ['client', 'profile'],
     });
     // eslint-disable-next-line no-undef
-    const [profile, client] = await Promise.all([
+    const [profile, client, invoiceNumber] = await Promise.all([
       offer?.profile,
       offer?.client,
+      getInvoiceNumber(),
     ]);
-    // @ts-ignore
-    const invoice = this.entityManager.create(Invoice, {
-      invoiceDate: offer?.invoiceDate,
-      amount: offer?.amount,
-      vat: offer?.vat,
-      items: offer?.items,
-      profile: profile,
-      profileId: profile!.id,
-      profileData: offer?.profileData,
-      client: client,
-      clientData: offer?.clientData,
-      vatRuleName: offer?.vatRuleName,
-      invoiceNumber: crypto.randomBytes(16).toString('hex'),
+    return this.entityManager.transaction(async (transationManager) => {
+      transationManager.update(Offer, id, {
+        invoiced: true,
+      });
+      const invoice = transationManager.create(Invoice as any, {
+        invoiceDate: offer?.invoiceDate,
+        amount: offer?.amount,
+        vat: offer?.vat,
+        items: offer?.items,
+        profile: profile,
+        profileId: profile!.id,
+        profileData: offer?.profileData,
+        client: client,
+        clientData: offer?.clientData,
+        vatRuleName: offer?.vatRuleName,
+        invoiceNumber: defaultInvoiceNumber(invoiceNumber),
+      });
+
+      return transationManager.save(invoice);
     });
-    const invoiceCreated = await this.entityManager.save(invoice);
-    return invoiceCreated;
   }
 
   @FieldResolver(() => ClientData)

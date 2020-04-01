@@ -27,17 +27,11 @@ export async function insertTransaction<T>(
   return entityValue;
 }
 
-interface ParamsArg {
-  startDate: string;
-  endDate: string;
-  relations: string[];
-}
-
-export function setParams({ startDate, endDate, relations }: ParamsArg) {
-  const params = {
-    relations,
-    order: { invoiceDate: 'DESC' },
-  };
+export function setDates(
+  params: Record<string, any>,
+  startDate?: string,
+  endDate?: string,
+) {
   if (startDate && !endDate) {
     set(
       params,
@@ -63,4 +57,28 @@ export function setParams({ startDate, endDate, relations }: ParamsArg) {
     );
   }
   return params;
+}
+
+interface ParamsArg {
+  startDate?: string;
+  endDate?: string;
+  relations?: string[];
+}
+
+export function setParams({ startDate, endDate, relations }: ParamsArg) {
+  const params = {
+    relations,
+    order: { invoiceDate: 'DESC' },
+  };
+
+  return setDates(params, startDate, endDate);
+}
+
+export function setParamsClientQuerries(
+  clientId: string,
+  startDate?: string,
+  endDate?: string,
+) {
+  const params = { clientId, order: { invoiceDate: 'DESC' } };
+  return setDates(params, startDate, endDate);
 }
