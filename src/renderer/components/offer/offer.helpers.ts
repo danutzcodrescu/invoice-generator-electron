@@ -9,7 +9,6 @@ export function submitOffer(
   data: Query,
   createOffer: any,
 ) {
-  console.log(values);
   const errors = { [ARRAY_ERROR]: [] as string[] };
   if (!values.invoiceDate) {
     errors[ARRAY_ERROR].push('Invoice date is required');

@@ -5,7 +5,6 @@ import {
   format,
   isAfter,
   isBefore,
-  startOfToday,
   startOfYesterday,
   subMonths,
   subWeeks,
@@ -24,7 +23,7 @@ interface Props {
 export function SelectDates(props: Props) {
   const { onChange, defaultValue, refetchCustom } = props;
   const items = [
-    <MenuItem key="today" value={format(startOfToday(), 'yyyy-MM-dd')}>
+    <MenuItem key="today" value={format(new Date(), 'yyyy-MM-dd')}>
       Today
     </MenuItem>,
     <MenuItem key="yesterday" value={format(startOfYesterday(), 'yyyy-MM-dd')}>

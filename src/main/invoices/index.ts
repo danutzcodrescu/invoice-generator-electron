@@ -22,7 +22,7 @@ export const offersPath = path.resolve(
   'invoices/offers',
 );
 
-function getPaths(data: ItemDetails) {
+export function getPaths(data: ItemDetails) {
   const dirPath = (data as Invoice).invoiceNumber ? invoicesPath : offersPath;
   const title = (data as Invoice).invoiceNumber
     ? `${(data as Invoice).invoiceNumber.replace('/', '-')}-${
@@ -33,52 +33,52 @@ function getPaths(data: ItemDetails) {
   return { dirPath, documentPath };
 }
 
-export function createInvoice(win: BrowserWindow) {
-  ipcMain.on(CREATE_PDF_EVENT, (_, invoice: Invoice | Offer) => {
-    pdfWindow = new BrowserWindow({
-      width: 1000,
-      height: 660,
-      webPreferences: {
-        nodeIntegration: true,
-      },
-      show: false,
-    });
-    if (isDev) {
-      pdfWindow.loadURL(`http://localhost:2003/#/invoice`);
-    } else {
-      pdfWindow.loadURL(
-        url.format({
-          pathname: path.join(__dirname, 'index.html'),
-          protocol: 'file:',
-          hash: '#/invoice',
-          slashes: true,
-        }),
-      );
-    }
-    pdfWindow.webContents.once('did-finish-load', () => {
-      pdfWindow!.webContents.send(LOAD_PDF_DATA, {
-        invoiceDate: invoice.invoiceDate,
-        items: invoice.items,
-        vat: invoice.vat,
-        vatRuleName: invoice.vatRuleName,
-        amount: invoice.amount,
-        client: invoice.clientData,
-        profile: invoice.profileData,
-        ...((invoice as Invoice).invoiceNumber
-          ? {
-              invoiceNumber: (invoice as Invoice).invoiceNumber,
-              title: 'Facture',
-            }
-          : {
-              title: 'Devis',
-              validUntil: (invoice as Offer).validUntil,
-              id: invoice.id,
-            }),
-      });
+export function loadInvoiceData(invoice: Invoice | Offer) {
+  pdfWindow = new BrowserWindow({
+    width: 1000,
+    height: 660,
+    webPreferences: {
+      nodeIntegration: true,
+    },
+    show: false,
+  });
+  if (isDev) {
+    pdfWindow.loadURL(`http://localhost:2003/#/invoice`);
+  } else {
+    pdfWindow.loadURL(
+      url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file:',
+        hash: '#/invoice',
+        slashes: true,
+      }),
+    );
+  }
+  pdfWindow.webContents.once('did-finish-load', () => {
+    pdfWindow!.webContents.send(LOAD_PDF_DATA, {
+      invoiceDate: invoice.invoiceDate,
+      items: invoice.items,
+      vat: invoice.vat,
+      vatRuleName: invoice.vatRuleName,
+      amount: invoice.amount,
+      client: invoice.clientData,
+      profile: invoice.profileData,
+      ...((invoice as Invoice).invoiceNumber
+        ? {
+            invoiceNumber: (invoice as Invoice).invoiceNumber,
+            title: 'Facture',
+          }
+        : {
+            title: 'Devis',
+            validUntil: (invoice as Offer).validUntil,
+            id: invoice.id,
+          }),
     });
   });
+}
 
-  ipcMain.on(LOAD_PDF_DATA, (_, data: ItemDetails) => {
+export function pdfInvoice(callback: Function) {
+  ipcMain.once(LOAD_PDF_DATA, (_, data: ItemDetails) => {
     pdfWindow!.webContents.printToPDF({ pageSize: 'A4' }).then(async (resp) => {
       const { dirPath, documentPath } = getPaths(data);
       if (!fs.existsSync(dirPath)) {
@@ -91,8 +91,15 @@ export function createInvoice(win: BrowserWindow) {
       }
       pdfWindow!.close();
       pdfWindow = null;
-      win.webContents.send(CREATE_PDF_EVENT, documentPath);
+      callback(documentPath);
     });
+  });
+}
+
+export function createInvoice(win: BrowserWindow) {
+  ipcMain.on(CREATE_PDF_EVENT, (_, invoice: Invoice | Offer) => {
+    loadInvoiceData(invoice);
+    pdfInvoice((path: string) => win.webContents.send(CREATE_PDF_EVENT, path));
   });
 }
 

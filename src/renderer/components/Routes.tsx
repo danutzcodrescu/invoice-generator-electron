@@ -5,6 +5,7 @@ import { ClientFormContainer } from '../containers/ClientForm.container';
 import { ClientTableContainer } from '../containers/ClientTable.container';
 import { ExpenseFormContainer } from '../containers/ExpenseForm.container';
 import { ExpenseTableContainer } from '../containers/ExpenseTable.container';
+import { ExportContainer } from '../containers/Export.container';
 import { InvoiceContainer } from '../containers/Invoice.container';
 import { InvoiceFormContainer } from '../containers/InvoiceForm.container';
 import { InvoiceTableContainer } from '../containers/InvoiceTable.container';
@@ -64,6 +65,7 @@ export function Routes() {
       <Route exact path="/newVat" component={VATFormContainer}></Route>
       <Route exact path="/newService" component={ServiceFormContainer}></Route>
       <Route exact path="/services" component={ServicesTableContainer}></Route>
+      <Route exact path="/" component={ExportContainer} />
     </Switch>
   );
 }

@@ -1,4 +1,5 @@
 import { makeStyles, Paper, Popper, Theme } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface Props {
@@ -69,7 +70,7 @@ export const useMenuStyles = makeStyles((theme: Theme) => ({
 
 export const PopperSC = styled(Popper)`
   && {
-    z-index: ${props => (props.theme as Theme).zIndex.drawer + 2};
+    z-index: ${(props) => (props.theme as Theme).zIndex.drawer + 2};
   }
 `;
 
@@ -77,12 +78,12 @@ export const PaperSC = styled(Paper)`
   && {
     padding: 0;
     & a {
-      color: ${props => (props.theme as Theme).palette.text.primary};
+      color: ${(props) => (props.theme as Theme).palette.text.primary};
       text-decoration: none;
     }
 
     & svg {
-      margin-right: ${props => props.theme.spacing(1)}px;
+      margin-right: ${(props) => props.theme.spacing(1)}px;
     }
   }
 `;
@@ -98,4 +99,9 @@ export const ToolbarContainer = styled.div`
   & > *:last-child {
     margin-left: auto;
   }
+`;
+
+export const AppTitle = styled(Link)`
+  color: currentColor;
+  text-decoration: none;
 `;
