@@ -138,3 +138,17 @@ export const GET_LAST_INVOICE_NUMBER = gql`
     lastInvoiceNumber
   }
 `;
+
+export const GET_EXPORT_DATA = gql`
+  query EXPORT_DATA($startDate: String!, $endDate: String!) {
+    invoices(startDate: $startDate, endDate: $endDate) {
+      ...InvoiceFragment
+    }
+    expenses(startDate: $startDate, endDate: $endDate) {
+      ...ExpenseFragment
+      clientName
+    }
+  }
+  ${invoiceFragment}
+  ${expenseFragment}
+`;

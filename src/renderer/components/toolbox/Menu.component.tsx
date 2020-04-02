@@ -31,6 +31,7 @@ import clsx from 'clsx';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import {
+  AppTitle,
   PaperSC,
   PopperSC,
   ToolbarContainer,
@@ -81,7 +82,7 @@ export function Menu(props: { children: React.ReactNode }) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              InvoiceR
+              <AppTitle to="/">InvoiceR</AppTitle>
             </Typography>
             <Button
               color="secondary"

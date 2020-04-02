@@ -3,6 +3,7 @@ import { app, BrowserWindow } from 'electron';
 import isDev from 'electron-is-dev';
 import * as path from 'path';
 import * as url from 'url';
+import { exportData } from './export';
 import { createInvoice, openInvoice } from './invoices';
 
 let win: BrowserWindow | null;
@@ -86,6 +87,7 @@ app.on('ready', () => {
   createWindow();
   startBEforFE();
   openInvoice();
+  exportData();
 });
 
 app.on('window-all-closed', () => {

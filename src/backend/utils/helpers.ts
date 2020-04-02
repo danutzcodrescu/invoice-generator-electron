@@ -1,3 +1,4 @@
+import { addDays } from 'date-fns';
 import { identity, pickBy, set } from 'lodash';
 import { DeepPartial, EntityManager, Raw } from 'typeorm';
 import { Event } from '../entities/Event.entity';
@@ -47,12 +48,16 @@ export function setDates(
     );
   }
   if (startDate && endDate) {
+    const operator = startDate === endDate ? '<' : '<=';
+    if (startDate === endDate) {
+      endDate = addDays(new Date(endDate), 1).toISOString();
+    }
     set(
       params,
       'where.invoiceDate',
       Raw(
         (alias) =>
-          `${alias} >= date("${startDate}") and ${alias} <= date("${endDate}")`,
+          `${alias} >= date("${startDate}") and ${alias} ${operator} date("${endDate}")`,
       ),
     );
   }
