@@ -1,6 +1,7 @@
 {
-  "name": "invoices2",
-  "version": "1.0.0",
+  "name": "invoicer",
+  "productName": "InvoiceR",
+  "version": "0.0.1",
   "main": "./dist/main.js",
   "license": "MIT",
   "homepage": "https://github.com/danutzcodrescu/invoice-generator-electron",
@@ -129,7 +130,7 @@
     "pretest:e2e": "npm run build",
     "test:e2e": "jest '(\\/test\\/e2e/).*'",
     "pack": "npm run build && electron-builder --dir",
-    "dist": "npm run build && electron-builder",
+    "dist": "npm run build && electron-builder -p onTagOrDraft",
     "postinstall": "electron-builder install-app-deps",
     "storybook": "cross-env STORYBOOK=true start-storybook -p 6006",
     "build-storybook": "build-storybook",
