@@ -18,8 +18,10 @@ import { ServiceFormContainer } from '../containers/ServiceForm.container';
 import { ServicesTableContainer } from '../containers/ServiceTable.container';
 import { VATFormContainer } from '../containers/VatRuleForm.container';
 import { VatTableContainer } from '../containers/VatTable.container';
+import { useScrollToTop } from './toolbox/scrollTop.hook';
 
 export function Routes() {
+  useScrollToTop();
   return (
     <Switch>
       <Route exact path="/invoiceForm">
