@@ -6,6 +6,7 @@ import * as url from 'url';
 import { checkForUpdates } from './autoupdater';
 import { exportData } from './export';
 import { createInvoice, openInvoice } from './invoices';
+import { setMenu } from './menu';
 
 let win: BrowserWindow | null;
 let serverProcess: ChildProcess;
@@ -87,6 +88,7 @@ const createWindow = async () => {
 app.on('ready', () => {
   createWindow();
   startBEforFE();
+  setMenu();
   openInvoice();
   exportData();
   checkForUpdates();
