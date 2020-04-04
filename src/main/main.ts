@@ -8,6 +8,7 @@ import { exportData } from './export';
 import { createInvoice, openInvoice } from './invoices';
 import { init } from '@sentry/electron';
 import { SENTRY_DSN } from '../backend/constants';
+import { setMenu } from './menu';
 
 if (process.env.NODE_ENV === 'production') {
   init({
@@ -97,6 +98,7 @@ const createWindow = async () => {
 app.on('ready', () => {
   createWindow();
   startBEforFE();
+  setMenu();
   openInvoice();
   exportData();
   checkForUpdates();
