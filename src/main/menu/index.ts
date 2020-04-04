@@ -1,47 +1,75 @@
-const { Menu } = require('electron');
-
-const template = [
-  {
-    label: 'File',
-    submenu: [{ role: 'quit' }],
-  },
-  // { role: 'editMenu' }
-  {
-    label: 'Edit',
-    submenu: [
-      { role: 'undo' },
-      { role: 'redo' },
-      { type: 'separator' },
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }],
-    ],
-  },
-  // { role: 'viewMenu' }
-  {
-    label: 'View',
-    submenu: [
-      { role: 'reload' },
-      { role: 'forcereload' },
-      { role: 'toggledevtools' },
-      { type: 'separator' },
-      { role: 'resetzoom' },
-      { role: 'zoomin' },
-      { role: 'zoomout' },
-      { type: 'separator' },
-      { role: 'togglefullscreen' },
-    ],
-  },
-  // { role: 'windowMenu' }
-  {
-    label: 'Window',
-    submenu: [{ role: 'minimize' }, { role: 'zoom' }, { role: 'close' }],
-  },
-];
+import { Menu, app } from 'electron';
 
 export function setMenu() {
   if (process.env.NODE_ENV === 'production') {
+    const template = [
+      {
+        label: app.name,
+        submenu: [
+          {
+            label: `Quit ${app.name}`,
+            accelerator: 'CmdOrCtrl+Q',
+            click() {
+              app.quit();
+            },
+          },
+        ],
+      },
+      {
+        label: 'Edit',
+        submenu: [
+          { role: 'undo' },
+          { role: 'redo' },
+          { role: 'cut' },
+          { role: 'copy' },
+          { role: 'paste' },
+          { role: 'selectall' },
+        ],
+      },
+      {
+        label: 'View',
+        submenu: [
+          {
+            role: 'reload',
+          },
+          {
+            role: 'forcereload',
+          },
+          {
+            role: 'toggledevtools',
+          },
+          {
+            type: 'separator',
+          },
+          {
+            role: 'resetzoom',
+          },
+          {
+            role: 'zoomin',
+          },
+          {
+            role: 'zoomout',
+          },
+          {
+            type: 'separator',
+          },
+          {
+            role: 'togglefullscreen',
+          },
+        ],
+      },
+      {
+        role: 'window',
+        submenu: [
+          {
+            role: 'minimize',
+          },
+          {
+            role: 'close',
+          },
+        ],
+      },
+    ];
     const menu = Menu.buildFromTemplate(template as any);
     Menu.setApplicationMenu(menu);
   }
