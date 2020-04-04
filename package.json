@@ -1,6 +1,5 @@
 {
   "name": "invoicer",
-  "productName": "InvoiceR",
   "version": "0.0.1",
   "main": "./dist/main.js",
   "license": "MIT",
@@ -130,7 +129,7 @@
     "pretest:e2e": "npm run build",
     "test:e2e": "jest '(\\/test\\/e2e/).*'",
     "pack": "npm run build && electron-builder --dir",
-    "dist": "npm run build && electron-builder -p onTagOrDraft",
+    "dist": "npm run build && electron-builder -p always",
     "postinstall": "electron-builder install-app-deps",
     "storybook": "cross-env STORYBOOK=true start-storybook -p 6006",
     "build-storybook": "build-storybook",
@@ -142,8 +141,8 @@
     }
   },
   "build": {
-    "productName": "invoice",
-    "appId": "org.invoice.com",
+    "productName": "InvoiceR",
+    "appId": "org.invoicer.com",
     "mac": {
       "category": "public.app-category.business"
     },
