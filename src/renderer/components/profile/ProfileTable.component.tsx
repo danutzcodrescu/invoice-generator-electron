@@ -1,17 +1,18 @@
 import { Visibility } from '@material-ui/icons';
 import MaterialTable from 'material-table';
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { Profile } from '../../generated/graphql';
 import { tableIcons } from '../invoices/icons';
 import { clientName } from '../utils/client';
 
-interface Props extends RouteComponentProps {
+interface Props {
   profiles: Profile[];
 }
 
-export const ProfileTable = withRouter((props: Props) => {
-  const { profiles, history } = props;
+export const ProfileTable = (props: Props) => {
+  const { profiles } = props;
+  const history = useHistory();
   return (
     <MaterialTable
       title="Profiles"
@@ -19,7 +20,7 @@ export const ProfileTable = withRouter((props: Props) => {
       columns={[
         {
           title: 'Profile name',
-          render: rowData => clientName(rowData),
+          render: (rowData) => clientName(rowData),
           customFilterAndSearch: (filter, rowData) =>
             clientName(rowData).includes(filter),
         },
@@ -46,4 +47,4 @@ export const ProfileTable = withRouter((props: Props) => {
       data={profiles}
     ></MaterialTable>
   );
-});
+};
