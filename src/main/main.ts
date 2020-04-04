@@ -6,6 +6,16 @@ import * as url from 'url';
 import { checkForUpdates } from './autoupdater';
 import { exportData } from './export';
 import { createInvoice, openInvoice } from './invoices';
+import { init } from '@sentry/electron';
+import { SENTRY_DSN } from '../backend/constants';
+
+if (process.env.NODE_ENV === 'production') {
+  init({
+    dsn: SENTRY_DSN,
+    enableNative: false,
+    release: `${app.name}_${app.getVersion()}`,
+  });
+}
 
 let win: BrowserWindow | null;
 let serverProcess: ChildProcess;
