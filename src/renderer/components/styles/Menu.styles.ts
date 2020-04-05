@@ -20,7 +20,9 @@ export const useMenuStyles = makeStyles((theme: Theme) => ({
   },
   drawer: {
     width: drawerWidth,
-    flexShrink: 0,
+    position: 'fixed',
+    left: 0,
+    overflow: 'hidden',
   },
   drawerPaper: {
     width: drawerWidth,
@@ -41,7 +43,6 @@ export const useMenuStyles = makeStyles((theme: Theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    overflowX: 'hidden',
     width: theme.spacing(7) + 1,
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(9) + 1,
@@ -51,19 +52,24 @@ export const useMenuStyles = makeStyles((theme: Theme) => ({
     marginTop: '60px',
     minHeight: `calc(100vh - ${theme.spacing(3) + 60}px)`,
     marginBottom: theme.spacing(3),
-    marginLeft: theme.spacing(3),
+    marginLeft: theme.spacing(7) + 30,
     width: `calc(100vw - ${theme.spacing(7) + theme.spacing(5)}px)`,
     '&$isOpen': {
       width: `calc(100vw - ${drawerWidth + theme.spacing(7)}px)`,
-      marginLeft: `${drawerWidth - 40}px`,
+      marginLeft: `${drawerWidth + 10}px`,
     },
     [theme.breakpoints.up('sm')]: {
-      width: `calc(100vw - ${theme.spacing(9) + +theme.spacing(5)}px)`,
+      width: `calc(100vw - ${theme.spacing(9) + theme.spacing(5)}px)`,
     },
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create('margin-left', {
       easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: `${theme.transitions.duration.leavingScreen + 150}ms`,
     }),
+  },
+  listItemRoot: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   isOpen: {},
 }));
@@ -90,6 +96,8 @@ export const PaperSC = styled(Paper)`
 
 export const Container = styled.div`
   display: flex;
+  overflow-y: hidden;
+  width: 100%;
 `;
 
 export const ToolbarContainer = styled.div`

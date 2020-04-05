@@ -2,7 +2,6 @@ import {
   AppBar,
   Button,
   ClickAwayListener,
-  Container,
   Divider,
   Drawer,
   Grow,
@@ -36,6 +35,7 @@ import {
   PopperSC,
   ToolbarContainer,
   useMenuStyles,
+  Container,
 } from '../styles/Menu.styles';
 
 const sidebarLinks = [
@@ -118,6 +118,7 @@ export function Menu(props: { children: React.ReactNode }) {
         <List>
           {sidebarLinks.map((item) => (
             <ListItem
+              classes={{ root: classes.listItemRoot }}
               button
               key={item.text}
               disableGutters
