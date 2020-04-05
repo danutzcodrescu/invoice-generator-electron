@@ -8,11 +8,14 @@ jobs:
     runs-on: windows-latest
     env:
       GH_TOKEN: ${{secrets.GH_TOKEN}}
+      SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
+      SENTRY_ORG: ${{secrets.SENTRY_ORG}}
+      SENTRY_PROJECT: ${{SENTRY_PROJECT}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: "12.x"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
