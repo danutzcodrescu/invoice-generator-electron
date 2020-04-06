@@ -22,7 +22,7 @@ export function ClientForm(props: Props) {
   const { createClient, title } = props;
   const submit = React.useCallback(
     function onSubmit(values: MutationAddClientArgs) {
-      createClient({ variables: values });
+      createClient({ variables: { ...values, vat: (values as any).vatnb } });
     },
     [createClient],
   );
