@@ -34,7 +34,7 @@ export function VatTableContainer() {
   }
   return (
     <>
-      <VatTable vats={data!.vatRules} openEdit={setRule} />
+      <VatTable vats={data?.vatRules ?? []} openEdit={setRule} />
       <Dialog open={Boolean(rule)}>
         <VatRuleForm
           close={() => setRule(undefined)}

@@ -75,25 +75,6 @@ export function InvoiceForm({
           ...arrayMutators,
           setBulkValue,
         }}
-        validate={(values: any) => {
-          const errors: any = {};
-          if (!values.invoiceDate) {
-            errors.invoiceDate = 'Required';
-          }
-          if (type === 'Invoice' && !values.invoiceNumber) {
-            errors.invoiceNumber = 'Required';
-          }
-          if (!values.profileVat) {
-            errors.profileVat = 'Required';
-          }
-          if (!values.vat) {
-            errors.vat = 'Required';
-          }
-          if (type === 'Offer' && !values.validUntil) {
-            errors.validUntil = 'Required';
-          }
-          return errors;
-        }}
         render={({
           handleSubmit,
           submitting,
@@ -166,7 +147,6 @@ export function InvoiceForm({
             <InvoiceFormItems push={push} />
             <InvoiceFormVat values={values} data={data} />
             <InvoiceFormErrors submitErrors={submitErrors} />
-
             <Button
               color="primary"
               type="submit"

@@ -1,3 +1,4 @@
+import { getYear } from 'date-fns';
 import { set } from 'lodash';
 import {
   Arg,
@@ -10,7 +11,6 @@ import {
 } from 'type-graphql';
 import { EntityManager } from 'typeorm';
 import { InjectManager } from 'typeorm-typedi-extensions';
-import { defaultInvoiceNumber } from '../../renderer/components/utils/invoices';
 import { Client, ClientData } from '../entities/Client.entity';
 import { Invoice, Item } from '../entities/Invoice.entity';
 import { Offer } from '../entities/Offer.entity';
@@ -122,4 +122,11 @@ export class OfferResolver {
   invoiceDate(@Root() offer: Offer) {
     return offer.invoiceDate.split(' ')[0];
   }
+}
+
+function defaultInvoiceNumber(lastInvoice?: string) {
+  const currentYear = getYear(new Date());
+  if (!lastInvoice || !lastInvoice.endsWith(`/${currentYear}`))
+    return `1/${currentYear}`;
+  return `${parseInt(lastInvoice.split('/')[0]) + 1}/${currentYear}`;
 }
