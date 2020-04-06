@@ -14,11 +14,10 @@ import { Client } from './Client.entity';
 @Entity()
 @ObjectType()
 export class Expense extends BaseEntity {
-  @Field(type => ID)
+  @Field((type) => ID)
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Field()
   @Column({ type: 'text', nullable: false })
   invoiceDate: string;
 
@@ -34,8 +33,8 @@ export class Expense extends BaseEntity {
   @Column({ type: 'text' })
   createdAt: string;
 
-  @Field(type => Client, { nullable: true })
-  @ManyToOne(type => Client, { lazy: true })
+  @Field((type) => Client, { nullable: true })
+  @ManyToOne((type) => Client, { lazy: true })
   client: Promise<Client>;
   @Column({ nullable: true })
   clientId: string;

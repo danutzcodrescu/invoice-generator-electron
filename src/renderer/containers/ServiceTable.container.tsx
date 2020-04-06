@@ -31,7 +31,7 @@ export function ServicesTableContainer() {
   }
   return (
     <>
-      <ServiceTable services={data!.services} openEdit={setService} />
+      <ServiceTable services={data?.services ?? []} openEdit={setService} />
       <Dialog open={Boolean(service)}>
         <ServiceForm
           close={() => setService(undefined)}
