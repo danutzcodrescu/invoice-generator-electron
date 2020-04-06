@@ -20,7 +20,7 @@ import { OfferResolver } from './resolvers/offers.resolver';
 import { ProfileResolver } from './resolvers/profile.resolver';
 import { ServiceResolver } from './resolvers/service.resolver';
 import { VatRuleResolver } from './resolvers/vatRules.resolver';
-import { init } from '@sentry/electron';
+import { init } from '@sentry/electron/dist/main';
 import { SENTRY_DSN } from './constants';
 
 if (process.env.NODE_ENV === 'production') {
