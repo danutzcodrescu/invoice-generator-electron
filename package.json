@@ -1,7 +1,7 @@
 {
   "name": "invoicer",
   "productName": "InvoicerR",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "main": "./dist/main.js",
   "license": "MIT",
   "homepage": "https://github.com/danutzcodrescu/invoice-generator-electron",
