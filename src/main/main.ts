@@ -6,10 +6,12 @@ import * as url from 'url';
 import { checkForUpdates } from './autoupdater';
 import { exportData } from './export';
 import { createInvoice, openInvoice } from './invoices';
-import { init } from '@sentry/electron';
+import { init } from '@sentry/electron/dist/main';
 import { SENTRY_DSN } from '../backend/constants';
 import { setMenu } from './menu';
 
+let win: BrowserWindow | null;
+let serverProcess: ChildProcess;
 if (process.env.NODE_ENV === 'production') {
   init({
     dsn: SENTRY_DSN,
@@ -17,9 +19,6 @@ if (process.env.NODE_ENV === 'production') {
     release: `${app.name}_${app.getVersion()}`,
   });
 }
-
-let win: BrowserWindow | null;
-let serverProcess: ChildProcess;
 
 const installExtensions = async () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
