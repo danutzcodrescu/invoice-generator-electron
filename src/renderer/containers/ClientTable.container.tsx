@@ -10,5 +10,5 @@ export function ClientTableContainer() {
   if (loading) {
     return <Loading />;
   }
-  return <ClientTable clients={data!.clients} />;
+  return <ClientTable clients={data?.clients ?? []} />;
 }

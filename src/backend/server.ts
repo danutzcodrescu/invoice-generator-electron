@@ -20,16 +20,6 @@ import { OfferResolver } from './resolvers/offers.resolver';
 import { ProfileResolver } from './resolvers/profile.resolver';
 import { ServiceResolver } from './resolvers/service.resolver';
 import { VatRuleResolver } from './resolvers/vatRules.resolver';
-import { init } from '@sentry/electron/dist/main';
-import { SENTRY_DSN } from './constants';
-
-if (process.env.NODE_ENV === 'production') {
-  init({
-    dsn: SENTRY_DSN,
-    enableNative: false,
-    release: `${process.env.npm_package_productName}_${process.env.npm_package_version}`,
-  });
-}
 
 useContainer(Container);
 

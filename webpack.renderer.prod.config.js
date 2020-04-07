@@ -9,6 +9,7 @@ module.exports = merge.smart(baseConfig, {
     new SentryWebpackPlugin({
       include: './dist',
       release: `${process.env.npm_package_productName}_${process.env.npm_package_version}`,
+      urlPrefix: '~/dist/',
     }),
   ],
 });

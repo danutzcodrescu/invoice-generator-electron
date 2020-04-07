@@ -25,6 +25,9 @@ export function submitOffer(
       'Please provide a fullname or a company name for the client',
     );
   }
+  if (!values.clientAddress) {
+    errors[ARRAY_ERROR].push('Please provide an address for the client');
+  }
   if (
     (!values.profileLastName || !values.profileFirstName) &&
     !values.profileCompany
