@@ -51,8 +51,8 @@ export class Expense extends BaseEntity {
   @Column()
   amount: number;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   description: string;
 
   @BeforeUpdate()

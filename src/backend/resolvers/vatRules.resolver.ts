@@ -10,12 +10,12 @@ export class VatRuleResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query(returns => [VatRule])
+  @Query(() => [VatRule])
   vatRules(): Promise<VatRule[]> {
     return this.entityManager.find(VatRule);
   }
 
-  @Mutation(returns => VatRule)
+  @Mutation(() => VatRule)
   async addVatRule(
     @Arg('percentage') percentage: number,
     @Arg('name', { nullable: true }) name?: string,
@@ -25,7 +25,7 @@ export class VatRuleResolver {
       name,
       percentage,
     });
-    await this.entityManager.transaction(async transactionManager => {
+    await this.entityManager.transaction(async (transactionManager) => {
       vatRule = await insertTransaction(
         VatRule,
         transactionManager,
@@ -35,9 +35,9 @@ export class VatRuleResolver {
     return vatRule!;
   }
 
-  @Mutation(returns => VatRule)
+  @Mutation(() => VatRule)
   async updateVatRule(
-    @Arg('id', type => ID) id: string,
+    @Arg('id', (type) => ID) id: string,
     @Arg('data') data: VatRuleUpdate,
   ): Promise<VatRule | undefined> {
     await this.entityManager.update(VatRule, id, data);

@@ -1,5 +1,5 @@
 import { addDays } from 'date-fns';
-import { identity, pickBy, set } from 'lodash';
+import { isNil, pickBy, set } from 'lodash';
 import { DeepPartial, EntityManager, Raw } from 'typeorm';
 import { Event } from '../entities/Event.entity';
 
@@ -8,7 +8,7 @@ export function nonNullObjectProperties<T extends object>(obj: T) {
     {
       ...obj,
     },
-    identity,
+    (val) => !isNil(val),
   ) as DeepPartial<T>;
 }
 
