@@ -1,6 +1,7 @@
 import {
   Arg,
   FieldResolver,
+  ID,
   Mutation,
   Query,
   Resolver,
@@ -17,7 +18,7 @@ export class ExpenseResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query((returns) => [Expense])
+  @Query(() => [Expense])
   expenses(
     @Arg('startDate', { nullable: true }) startDate: string,
     @Arg('endDate', { nullable: true }) endDate: string,
@@ -27,12 +28,17 @@ export class ExpenseResolver {
     return this.entityManager.find(Expense, params);
   }
 
-  @Mutation((returns) => Expense)
+  @Mutation(() => Expense)
   async createExpense(
     @Arg('expense') expense: CreateExpense,
   ): Promise<Expense> {
     const expenseInstance = this.entityManager.create(Expense, expense);
     return await this.entityManager.save(expenseInstance);
+  }
+  @Mutation(() => Boolean)
+  async deleteExpense(@Arg('id', () => ID) id: string) {
+    await this.entityManager.delete(Expense, id);
+    return true;
   }
 
   @FieldResolver(() => String)

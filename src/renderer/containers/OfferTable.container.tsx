@@ -6,8 +6,9 @@ import { Loading } from '../components/toolbox/Loading.component';
 import { useModalInvoice } from '../components/toolbox/pdf.hook';
 import { SelectDates } from '../components/toolbox/SelectDates.component';
 import { defaultDate } from '../components/utils/client';
+import { useNotification } from '../context/notification.context';
 import { Offer, Query } from '../generated/graphql';
-import { INVOICE_OFFER } from '../graphql/mutations';
+import { DELETE_OFFER, INVOICE_OFFER } from '../graphql/mutations';
 import { GET_OFFERS } from '../graphql/queries';
 import { refetchCustom, refetchData } from '../utils/refetchData';
 
@@ -19,6 +20,18 @@ export function OfferTableContainer() {
     'Invoice succesfully created',
   );
   const [invoiceOffer] = useMutation(INVOICE_OFFER, { onCompleted: createPDF });
+  const { showNotificationFor } = useNotification();
+  const [deleteOffer] = useMutation(DELETE_OFFER, {
+    onCompleted: () => {
+      showNotificationFor(5000, 'Offer deleted succesfully');
+    },
+    refetchQueries: [
+      {
+        query: GET_OFFERS,
+        variables: { startDate: defaultDate },
+      },
+    ],
+  });
   if (!data) {
     return <Loading />;
   }
@@ -49,6 +62,7 @@ export function OfferTableContainer() {
         data={data.offers}
         isLoading={loading}
         invoiceOffer={toInvoice}
+        deleteOffer={deleteOffer}
       />
       <LoadingModal
         isOpen={isModalVisible}

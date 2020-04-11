@@ -98,6 +98,12 @@ export class OfferResolver {
     });
   }
 
+  @Mutation(() => Boolean)
+  async deleteOffer(@Arg('id', () => ID) id: string) {
+    await this.entityManager.delete(Offer, id);
+    return true;
+  }
+
   @FieldResolver(() => ClientData)
   clientData(@Root() offer: Offer) {
     return JSON.parse(offer.clientData);

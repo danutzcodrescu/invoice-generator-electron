@@ -4,8 +4,9 @@ import * as React from 'react';
 import { Loading } from '../components/toolbox/Loading.component';
 import { VatRuleForm } from '../components/vatRules/VatRuleForm.component';
 import { VatTable } from '../components/vatRules/VatTable.component';
+import { useNotification } from '../context/notification.context';
 import { Query, VatRule } from '../generated/graphql';
-import { UPDATE_VAT } from '../graphql/mutations';
+import { DELETE_VAT, UPDATE_VAT } from '../graphql/mutations';
 import { GET_VAT_RULES } from '../graphql/queries';
 
 export function VatTableContainer() {
@@ -16,6 +17,17 @@ export function VatTableContainer() {
       setRule(undefined);
     },
     refetchQueries: [{ query: GET_VAT_RULES }],
+  });
+  const { showNotificationFor } = useNotification();
+  const [deleteVat] = useMutation(DELETE_VAT, {
+    onCompleted: () => {
+      showNotificationFor(5000, 'VAT rule deleted succesfully');
+    },
+    refetchQueries: [
+      {
+        query: GET_VAT_RULES,
+      },
+    ],
   });
   if (loading) {
     return <Loading />;
@@ -34,7 +46,11 @@ export function VatTableContainer() {
   }
   return (
     <>
-      <VatTable vats={data?.vatRules ?? []} openEdit={setRule} />
+      <VatTable
+        vats={data?.vatRules ?? []}
+        openEdit={setRule}
+        deleteVat={deleteVat}
+      />
       <Dialog open={Boolean(rule)}>
         <VatRuleForm
           close={() => setRule(undefined)}

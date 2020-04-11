@@ -35,7 +35,7 @@ export class Invoice extends BaseEntity {
   createdAt: string;
 
   @Field((type) => Profile)
-  @ManyToOne((type) => Profile, { lazy: true })
+  @ManyToOne((type) => Profile, { lazy: true, onDelete: 'SET NULL' })
   profile: Promise<Profile>;
   @Column()
   profileId: string;
@@ -44,7 +44,7 @@ export class Invoice extends BaseEntity {
   profileData: string;
 
   @Field((type) => Client, { nullable: true })
-  @ManyToOne((type) => Client, { lazy: true })
+  @ManyToOne((type) => Client, { lazy: true, onDelete: 'SET NULL' })
   client: Promise<Client>;
   @Column({ nullable: true })
   clientId: string;

@@ -10,28 +10,28 @@ export class ProfileResolver {
   @InjectManager()
   private entityManager: EntityManager;
 
-  @Query(returns => [Profile])
+  @Query(() => [Profile])
   profiles(): Promise<Profile[]> {
     return this.entityManager.find(Profile, { relations: ['invoices'] });
   }
 
-  @Query(returns => Profile)
+  @Query(() => Profile)
   profile(
-    @Arg('profileId', type => ID) id: string,
+    @Arg('profileId', (type) => ID) id: string,
   ): Promise<Profile | undefined> {
     return this.entityManager.findOne(Profile, id, { relations: ['invoices'] });
   }
 
-  @Mutation(returns => Profile)
+  @Mutation(() => Profile)
   async updateProfile(
-    @Arg('id', type => ID) id: string,
+    @Arg('id', (type) => ID) id: string,
     @Arg('profileData') profileData: UpdateProfileInput,
   ): Promise<any> {
     await this.entityManager.update(Profile, id, profileData);
     return this.entityManager.findOne(Profile, id, { relations: ['invoices'] });
   }
 
-  @Mutation(returns => Profile)
+  @Mutation(() => Profile)
   async addProfile(
     @Arg('firstName', { nullable: true }) firstName?: string,
     @Arg('lastName', { nullable: true }) lastName?: string,
@@ -53,7 +53,7 @@ export class ProfileResolver {
       bankAccount,
       phone,
     });
-    await this.entityManager.transaction(async transactionManager => {
+    await this.entityManager.transaction(async (transactionManager) => {
       profile = await insertTransaction(
         Profile,
         transactionManager,
@@ -61,5 +61,11 @@ export class ProfileResolver {
       );
     });
     return profile!;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteProfile(@Arg('id', (type) => ID) id: string) {
+    await this.entityManager.delete(Profile, id);
+    return true;
   }
 }

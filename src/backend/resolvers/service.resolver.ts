@@ -41,4 +41,10 @@ export class ServiceResolver {
     await this.entityManager.update(Service, id, data);
     return this.entityManager.findOne(Service, id);
   }
+
+  @Mutation(() => Boolean)
+  async deleteService(@Arg('id', () => ID) id: string) {
+    await this.entityManager.delete(Service, id);
+    return true;
+  }
 }

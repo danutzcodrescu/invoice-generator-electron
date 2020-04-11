@@ -41,9 +41,11 @@ export function Notification() {
       onClose={close}
       action={
         <React.Fragment>
-          <Button color="secondary" size="small" onClick={openInvoice}>
-            Open
-          </Button>
+          {path ? (
+            <Button color="secondary" size="small" onClick={openInvoice}>
+              Open
+            </Button>
+          ) : null}
           <IconButton
             size="small"
             aria-label="close"

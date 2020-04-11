@@ -18,10 +18,21 @@ interface Props {
     variables?: Record<string, any> | undefined,
   ) => Promise<ApolloQueryResult<Query>>;
   invoiceOffer: (event: any, data: Offer | Offer[]) => void;
+  deleteOffer: Function;
+  deleteInvoice: Function;
+  deleteExpense: Function;
 }
 
 export function ClientData(props: Props) {
-  const { client, isLoading, refetch, invoiceOffer } = props;
+  const {
+    client,
+    isLoading,
+    refetch,
+    invoiceOffer,
+    deleteInvoice,
+    deleteOffer,
+    deleteExpense,
+  } = props;
   const [isReadOnly, setReadOnly] = React.useState<boolean>(true);
   return (
     <>
@@ -42,15 +53,25 @@ export function ClientData(props: Props) {
       </div>
 
       <Typography variant="h2">Invoices</Typography>
-      <InvoiceTable data={client.invoices} isLoading={isLoading} clientTable />
+      <InvoiceTable
+        data={client.invoices}
+        isLoading={isLoading}
+        clientTable
+        deleteInvoice={deleteInvoice}
+      />
       <Typography variant="h2">Expenses</Typography>
-      <ExpenseTable expenses={client.expenses} clientTable />
+      <ExpenseTable
+        expenses={client.expenses}
+        clientTable
+        deleteExpense={deleteExpense}
+      />
       <Typography variant="h2">Offers</Typography>
       <OffersTable
         data={client.offers}
         clientTable
         isLoading={isLoading}
         invoiceOffer={invoiceOffer}
+        deleteOffer={deleteOffer}
       />
     </>
   );

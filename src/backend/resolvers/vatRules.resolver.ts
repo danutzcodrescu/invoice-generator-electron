@@ -43,4 +43,10 @@ export class VatRuleResolver {
     await this.entityManager.update(VatRule, id, data);
     return this.entityManager.findOne(VatRule, id);
   }
+
+  @Mutation(() => Boolean)
+  async deleteVat(@Arg('id', () => ID) id: string) {
+    await this.entityManager.delete(VatRule, id);
+    return true;
+  }
 }

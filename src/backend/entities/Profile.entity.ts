@@ -14,7 +14,7 @@ import { Invoice } from './Invoice.entity';
 @Entity()
 @ObjectType()
 export class Profile extends BaseEntity {
-  @Field(type => ID)
+  @Field((type) => ID)
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
@@ -58,12 +58,8 @@ export class Profile extends BaseEntity {
   @Column({ nullable: true })
   bankAccount: string;
 
-  @Field(type => [Invoice])
-  @OneToMany(
-    type => Invoice,
-    invoice => invoice.client,
-    { lazy: true },
-  )
+  @Field((type) => [Invoice])
+  @OneToMany((type) => Invoice, (invoice) => invoice.client, { lazy: true })
   invoices: Promise<Invoice[]>;
 
   @BeforeUpdate()

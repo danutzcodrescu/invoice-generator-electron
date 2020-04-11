@@ -34,7 +34,7 @@ export class Expense extends BaseEntity {
   createdAt: string;
 
   @Field((type) => Client, { nullable: true })
-  @ManyToOne((type) => Client, { lazy: true })
+  @ManyToOne((type) => Client, { lazy: true, onDelete: 'SET NULL' })
   client: Promise<Client>;
   @Column({ nullable: true })
   clientId: string;

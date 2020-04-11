@@ -149,3 +149,40 @@ export const INVOICE_OFFER = gql`
   ${invoiceFragment}
   ${invoicingDetailsFragment}
 `;
+
+export const DELETE_PROFILE = gql`
+  mutation DELETE_PROFILE($id: ID!) {
+    deleteProfile(id: $id)
+  }
+`;
+export const DELETE_INVOICE = gql`
+  mutation DELETE_INVOICE($id: ID!) {
+    deleteInvoice(id: $id)
+  }
+`;
+export const DELETE_OFFER = gql`
+  mutation DELETE_OFFER($id: ID!) {
+    deleteOffer(id: $id)
+  }
+`;
+export const DELETE_EXPENSE = gql`
+  mutation DELETE_EXPENSE($id: ID!) {
+    deleteExpense(id: $id)
+  }
+`;
+export const DELETE_CLIENT = gql`
+  mutation DELETE_CLIENT($id: ID!) {
+    deleteClient(id: $id)
+  }
+`;
+export const DELETE_VAT = gql`
+  mutation DELETE_VAT($id: ID!) {
+    deleteVat(id: $id)
+  }
+`;
+
+export const DELETE_SERVICE = gql`
+  mutation DELETE_SERVICE($id: ID!) {
+    deleteService(id: $id)
+  }
+`;
