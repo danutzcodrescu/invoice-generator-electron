@@ -1,6 +1,7 @@
 import {
   Arg,
   FieldResolver,
+  ID,
   Mutation,
   Query,
   Resolver,
@@ -77,6 +78,12 @@ export class InvoiceResolver {
     });
     const inv = await this.entityManager.save(invoice);
     return inv;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteInvoice(@Arg('id', (type) => ID) id: string) {
+    await this.entityManager.delete(Invoice, id);
+    return true;
   }
 
   @FieldResolver(() => ClientData)

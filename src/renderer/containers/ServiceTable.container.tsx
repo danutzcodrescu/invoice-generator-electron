@@ -4,8 +4,9 @@ import * as React from 'react';
 import { ServiceForm } from '../components/services/ServicesForm.component';
 import { ServiceTable } from '../components/services/ServiceTable.component';
 import { Loading } from '../components/toolbox/Loading.component';
+import { useNotification } from '../context/notification.context';
 import { Query, Service } from '../generated/graphql';
-import { UPDATE_SERVICE } from '../graphql/mutations';
+import { DELETE_SERVICE, UPDATE_SERVICE } from '../graphql/mutations';
 import { GET_SERVICES } from '../graphql/queries';
 
 export function ServicesTableContainer() {
@@ -17,9 +18,17 @@ export function ServicesTableContainer() {
     },
     refetchQueries: [{ query: GET_SERVICES }],
   });
-  if (loading) {
-    return <Loading />;
-  }
+  const { showNotificationFor } = useNotification();
+  const [deleteService] = useMutation(DELETE_SERVICE, {
+    onCompleted: () => {
+      showNotificationFor(5000, 'Service deleted succesfully');
+    },
+    refetchQueries: [
+      {
+        query: GET_SERVICES,
+      },
+    ],
+  });
 
   function submit(values: { name: string; measurement: string; cost: number }) {
     updateService({
@@ -29,9 +38,18 @@ export function ServicesTableContainer() {
       },
     });
   }
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <>
-      <ServiceTable services={data?.services ?? []} openEdit={setService} />
+      <ServiceTable
+        services={data?.services ?? []}
+        openEdit={setService}
+        deleteService={deleteService}
+      />
       <Dialog open={Boolean(service)}>
         <ServiceForm
           close={() => setService(undefined)}

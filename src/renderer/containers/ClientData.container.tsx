@@ -6,8 +6,14 @@ import { LoadingModal } from '../components/invoices/LoadingModal.component';
 import { Loading } from '../components/toolbox/Loading.component';
 import { useModalInvoice } from '../components/toolbox/pdf.hook';
 import { defaultDate } from '../components/utils/client';
+import { useNotification } from '../context/notification.context';
 import { Offer, Query } from '../generated/graphql';
-import { INVOICE_OFFER } from '../graphql/mutations';
+import {
+  DELETE_EXPENSE,
+  DELETE_INVOICE,
+  DELETE_OFFER,
+  INVOICE_OFFER,
+} from '../graphql/mutations';
 import { GET_CLIENT } from '../graphql/queries';
 
 interface Props extends RouteComponentProps<{ clientId: string }> {}
@@ -23,6 +29,49 @@ export function ClientDataContainer(props: Props) {
     },
   });
   const [invoiceOffer] = useMutation(INVOICE_OFFER, { onCompleted: createPDF });
+  const { showNotificationFor } = useNotification();
+  const [deleteOffer] = useMutation(DELETE_OFFER, {
+    onCompleted: () => {
+      showNotificationFor(5000, 'Offer deleted succesfully');
+    },
+    refetchQueries: [
+      {
+        query: GET_CLIENT,
+        variables: {
+          clientId: props.match.params.clientId,
+          startDate: defaultDate,
+        },
+      },
+    ],
+  });
+  const [deleteInvoice] = useMutation(DELETE_INVOICE, {
+    onCompleted: () => {
+      showNotificationFor(5000, 'Invoice deleted succesfully');
+    },
+    refetchQueries: [
+      {
+        query: GET_CLIENT,
+        variables: {
+          clientId: props.match.params.clientId,
+          startDate: defaultDate,
+        },
+      },
+    ],
+  });
+  const [deleteExpense] = useMutation(DELETE_EXPENSE, {
+    onCompleted: () => {
+      showNotificationFor(5000, 'Expense deleted succesfully');
+    },
+    refetchQueries: [
+      {
+        query: GET_CLIENT,
+        variables: {
+          clientId: props.match.params.clientId,
+          startDate: defaultDate,
+        },
+      },
+    ],
+  });
   function toInvoice(_: any, rowData: Offer | Offer[]) {
     invoiceOffer({
       variables: {
@@ -49,6 +98,9 @@ export function ClientDataContainer(props: Props) {
         isLoading={loading || !data}
         refetch={refetch}
         invoiceOffer={toInvoice}
+        deleteOffer={deleteOffer}
+        deleteInvoice={deleteInvoice}
+        deleteExpense={deleteExpense}
       ></ClientData>
       <LoadingModal
         isOpen={isModalVisible}

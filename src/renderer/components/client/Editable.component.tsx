@@ -62,7 +62,7 @@ export function Editable(props: Props) {
             }
           : {},
       )}
-      onSubmit={values => {
+      onSubmit={(values) => {
         updateClient({
           variables: {
             [type === 'client' ? 'clientId' : 'profileId']: client.id,
@@ -129,7 +129,7 @@ export function Editable(props: Props) {
                         placeholder="First Name"
                         label="First name"
                         fullWidth
-                        parse={value => value}
+                        parse={(value) => value}
                       />
                     </Grid>
                     <Grid item xs={6}>
@@ -138,7 +138,7 @@ export function Editable(props: Props) {
                         placeholder="Last Name"
                         label="Last name"
                         fullWidth
-                        parse={value => value}
+                        parse={(value) => value}
                       />
                     </Grid>
                   </NoPaddingGrid>
@@ -147,7 +147,7 @@ export function Editable(props: Props) {
                     placeholder="Company"
                     label="Company"
                     fullWidth
-                    parse={value => value}
+                    parse={(value) => value}
                   />
                   <Grid container>
                     <Grid item xs={2} md={1} alignItems="center" container>
@@ -163,7 +163,7 @@ export function Editable(props: Props) {
                         label="Email address"
                         type="email"
                         fullWidth
-                        parse={value => value}
+                        parse={(value) => value}
                       />
                     </Grid>
                   </Grid>
@@ -180,7 +180,7 @@ export function Editable(props: Props) {
                         placeholder="Address"
                         label="Address"
                         fullWidth
-                        parse={value => value}
+                        parse={(value) => value}
                       />
                     </Grid>
                   </Grid>
@@ -196,7 +196,7 @@ export function Editable(props: Props) {
                             placeholder="Phone"
                             label="Phone"
                             fullWidth
-                            parse={value => value}
+                            parse={(value) => value}
                           />
                         </Grid>
                       </Grid>
@@ -210,7 +210,7 @@ export function Editable(props: Props) {
                             placeholder="Bank account"
                             label="Bank account"
                             fullWidth
-                            parse={value => value}
+                            parse={(value) => value}
                           />
                         </Grid>
                       </Grid>
@@ -229,7 +229,7 @@ export function Editable(props: Props) {
                         placeholder="Vat number"
                         label="Tax number"
                         fullWidth
-                        parse={value => value}
+                        parse={(value) => value}
                       />
                     </Grid>
                   </Grid>

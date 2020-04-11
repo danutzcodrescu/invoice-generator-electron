@@ -98,6 +98,12 @@ export class ClientResolver {
     );
   }
 
+  @Mutation(() => Boolean)
+  async deleteClient(@Arg('id', () => ID) id: string) {
+    await this.entityManager.delete(Client, id);
+    return true;
+  }
+
   @FieldResolver(() => [Offer])
   async offers(
     @Root() client: Client,
