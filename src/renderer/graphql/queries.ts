@@ -152,3 +152,64 @@ export const GET_EXPORT_DATA = gql`
   ${invoiceFragment}
   ${expenseFragment}
 `;
+
+export const GET_INVOICE = gql`
+  query GET_INVOICE($id: ID!) {
+    getInvoice(id: $id) {
+      ...InvoiceFragment
+      ...InvoicingDetails
+      client {
+        id
+        lastName
+        firstName
+        company
+      }
+      profile {
+        id
+        lastName
+        firstName
+        company
+      }
+    }
+  }
+  ${invoiceFragment}
+  ${invoicingDetailsFragment}
+`;
+
+export const GET_OFFER = gql`
+  query GET_OFFER($id: ID!) {
+    getOffer(id: $id) {
+      ...OfferFragment
+      client {
+        id
+        firstName
+        lastName
+        company
+      }
+      profile {
+        id
+        firstName
+        lastName
+        company
+      }
+    }
+  }
+  ${offerFragment}
+`;
+
+export const GET_EXPENSE = gql`
+  query GET_EXPENSE($id: ID!) {
+    getExpense(id: $id) {
+      ...ExpenseFragment
+      client {
+        id
+        firstName
+        lastName
+        company
+      }
+      clientName
+      description
+    }
+  }
+  ${expenseFragment}
+`;

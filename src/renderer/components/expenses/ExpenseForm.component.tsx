@@ -3,53 +3,81 @@ import { useQuery } from '@apollo/react-hooks';
 import { Button, Grid, Paper, TextField, Typography } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import { omit } from 'lodash';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
-import { Client, Query } from '../../generated/graphql';
+import { Client, Expense, Query } from '../../generated/graphql';
 import { GET_CLIENTS } from '../../graphql/queries';
 import { DividerMargin } from '../invoices/InvoiceForm.styles';
 import { FormField } from '../toolbox/FormField.component';
 import { clientName } from '../utils/client';
+import { setInitialValuesExpense } from '../utils/editForm';
 
 interface Props {
   createExpense: MutationFunction;
+  initialValues?: Expense;
 }
 
 export function ExpenseForm(props: Props) {
-  const { createExpense } = props;
+  const { createExpense, initialValues } = props;
   const { data } = useQuery<Query>(GET_CLIENTS);
-  const inputRef = React.useRef<Client | null>(null);
+  const inputRef = React.useRef<Client | null | undefined>(
+    initialValues?.client,
+  );
   function submitForm(values: any) {
     let clientId: string | null = null;
+    console.log(values.clientName);
     if (
       inputRef.current &&
       values.clientName === clientName(inputRef.current)
     ) {
       clientId = inputRef.current.id;
     }
-    createExpense({
-      variables: {
-        expense: Object.assign(
-          {
-            ...values,
+    // TODO suboptimal, should be better refactored
+
+    if (initialValues) {
+      createExpense({
+        variables: {
+          data: {
+            ...omit(values, ['client']),
             amount: parseFloat(values.amount),
             vat: parseFloat(values.vat),
+            clientId,
+            id: initialValues.id,
           },
-          clientId ? { clientId } : {},
-        ),
-      },
-    });
+        },
+      });
+    } else {
+      createExpense({
+        variables: {
+          expense: Object.assign(
+            {
+              ...values,
+              amount: parseFloat(values.amount),
+              vat: parseFloat(values.vat),
+            },
+            clientId ? { clientId } : {},
+          ),
+        },
+      });
+    }
+  }
+  let initialValue = {
+    invoiceDate: new Date(),
+  };
+  if (initialValues) {
+    initialValue = setInitialValuesExpense(initialValues);
   }
   return (
     <Paper>
       <Typography gutterBottom variant="h1">
-        New expense
+        {initialValues
+          ? `Update expense ${initialValues.invoiceNumber}`
+          : 'New expense'}
       </Typography>
       <Form
         onSubmit={submitForm}
-        initialValues={{
-          invoiceDate: new Date(),
-        }}
+        initialValues={initialValue}
         render={({ handleSubmit, submitting, pristine, submitErrors }) => (
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
@@ -90,10 +118,15 @@ export function ExpenseForm(props: Props) {
                   {({ input }) => (
                     <Autocomplete
                       freeSolo
-                      getOptionLabel={(option: Client) => clientName(option)}
+                      getOptionLabel={(option: Client) =>
+                        clientName(option) as any
+                      }
                       options={data ? data.clients : []}
                       onChange={(_: any, val: any) => (inputRef.current = val)}
-                      onInputChange={(_, val) => input.onChange(val)}
+                      onInputChange={(_, val) => {
+                        console.log(val);
+                        input.onChange(val);
+                      }}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -103,6 +136,9 @@ export function ExpenseForm(props: Props) {
                           fullWidth
                         />
                       )}
+                      {...((initialValues
+                        ? { defaultValue: initialValues?.client }
+                        : {}) as any)}
                     />
                   )}
                 </Field>
@@ -141,9 +177,9 @@ export function ExpenseForm(props: Props) {
             <Button
               color="primary"
               type="submit"
-              disabled={pristine || submitting}
+              disabled={(pristine && !initialValues) || submitting}
             >
-              Create invoice
+              {initialValues ? 'Update' : 'Create'} invoice
             </Button>
           </form>
         )}

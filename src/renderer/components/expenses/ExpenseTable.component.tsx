@@ -1,8 +1,8 @@
-import { Delete } from '@material-ui/icons';
+import { Create, Delete } from '@material-ui/icons';
 import { format } from 'date-fns';
 import MaterialTable from 'material-table';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Expense } from '../../generated/graphql';
 import { filterInvoiceDate } from '../invoices/helpers';
 import { tableIcons } from '../invoices/icons';
@@ -18,6 +18,7 @@ interface Props {
 export function ExpenseTable(props: Props) {
   const { expenses, clientTable, deleteExpense } = props;
   const { obj, setObj, close } = useDeleteItem();
+  const history = useHistory();
   return (
     <>
       <MaterialTable
@@ -77,6 +78,14 @@ export function ExpenseTable(props: Props) {
           actionsColumnIndex: 6,
         }}
         actions={[
+          {
+            // eslint-disable-next-line react/display-name
+            icon: () => <Create />,
+            tooltip: 'Edit expense',
+            onClick: (_, rowData) =>
+              history.push(`/expenses/${(rowData as Expense).id}`),
+          },
+
           {
             // eslint-disable-next-line react/display-name
             icon: () => <Delete />,

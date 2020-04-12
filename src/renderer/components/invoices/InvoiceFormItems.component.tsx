@@ -50,6 +50,7 @@ export function InvoiceFormItems({ push }: Props) {
                       freeSolo
                       clearOnEscape
                       options={data?.services ?? []}
+                      defaultValue={{ name: input.value } as any}
                       onChange={(_: any, obj: any) => {
                         fields.update(index, {
                           name: obj.name,

@@ -16,6 +16,7 @@ interface Props {
   required?: boolean;
   multiline?: boolean;
   parse?: (value: string) => string;
+  defaultValue?: string;
 }
 
 export function FormField(props: Props) {

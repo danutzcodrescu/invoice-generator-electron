@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import {
   clientFragment,
+  expenseFragment,
   invoiceFragment,
   invoicingDetailsFragment,
   offerFragment,
@@ -185,4 +186,33 @@ export const DELETE_SERVICE = gql`
   mutation DELETE_SERVICE($id: ID!) {
     deleteService(id: $id)
   }
+`;
+
+export const UPDATE_INVOICE = gql`
+  mutation UPDATE_INVOICE($data: InvoiceUpdate!) {
+    updateInvoice(data: $data) {
+      ...InvoiceFragment
+      ...InvoicingDetails
+    }
+  }
+  ${invoiceFragment}
+  ${invoicingDetailsFragment}
+`;
+
+export const UPDATE_OFFER = gql`
+  mutation UPDATE_OFFER($data: OfferUpdate!) {
+    updateOffer(data: $data) {
+      ...OfferFragment
+    }
+  }
+  ${offerFragment}
+`;
+
+export const UPDATE_EXPENSE = gql`
+  mutation UPDATE_EXPENSE($data: ExpenseUpdate!) {
+    updateExpense(data: $data) {
+      ...ExpenseFragment
+    }
+  }
+  ${expenseFragment}
 `;

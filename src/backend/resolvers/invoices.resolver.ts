@@ -14,6 +14,7 @@ import { Invoice, Item } from '../entities/Invoice.entity';
 import { Profile, ProfileData } from '../entities/Profile.entity';
 import { setParams } from '../utils/helpers';
 import { getInvoiceNumber } from '../utils/invoices';
+import { InvoiceUpdate } from './types/arguments.helpers';
 import {
   ClientInput,
   InvoiceInput,
@@ -52,6 +53,11 @@ export class InvoiceResolver {
     );
   }
 
+  @Query(() => Invoice)
+  async getInvoice(@Arg('id', () => ID) id: string) {
+    return this.entityManager.findOne(Invoice, id);
+  }
+
   @Mutation(() => Invoice)
   async createInvoice(
     @Arg('client') client: ClientInput,
@@ -65,7 +71,7 @@ export class InvoiceResolver {
     const clientDB = await this.entityManager.findOne(Client, client.clientId);
     // @ts-ignore
     const invoice = this.entityManager.create(Invoice, {
-      createDate: invoiceData.invoiceDate,
+      invoiceDate: invoiceData.invoiceDate,
       amount: invoiceData.amount,
       vat: invoiceData.vat,
       items: invoiceData.items,
@@ -78,6 +84,33 @@ export class InvoiceResolver {
     });
     const inv = await this.entityManager.save(invoice);
     return inv;
+  }
+
+  @Mutation(() => Invoice)
+  async updateInvoice(@Arg('data') data: InvoiceUpdate) {
+    const [currentProfile, clientDB] = await Promise.all([
+      this.entityManager.findOne(Profile, data.profileId),
+      this.entityManager.findOne(Client, data.clientId),
+    ]);
+    // @ts-ignore
+    await this.entityManager
+      .createQueryBuilder()
+      .update(Invoice)
+      .set({
+        invoiceDate: data.invoiceDate,
+        amount: data.amount,
+        vat: data.vat,
+        items: data.items,
+        profileId: currentProfile?.id,
+        profileData: data.profileData,
+        clientId: clientDB?.id,
+        clientData: data.clientData,
+        vatRuleName: data.vatRuleName,
+        invoiceNumber: data.invoiceNumber,
+      })
+      .where({ id: data.id })
+      .execute();
+    return this.entityManager.findOne(Invoice, data.id);
   }
 
   @Mutation(() => Boolean)

@@ -1,21 +1,11 @@
 import { format } from 'date-fns';
-import { Field, ID, ObjectType } from 'type-graphql';
-import {
-  BaseEntity,
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Field, ObjectType } from 'type-graphql';
+import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { Base } from './Base.entity';
 
 @Entity()
 @ObjectType()
-export class VatRule extends BaseEntity {
-  @Field(type => ID)
-  @PrimaryGeneratedColumn('uuid')
-  readonly id: string;
-
+export class VatRule extends Base {
   @Field()
   @Column()
   name: string;

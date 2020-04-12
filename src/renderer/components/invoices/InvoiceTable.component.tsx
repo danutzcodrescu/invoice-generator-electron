@@ -1,8 +1,9 @@
 /* eslint-disable react/display-name */
-import { Delete, Visibility } from '@material-ui/icons';
+import { Create, Delete, Visibility } from '@material-ui/icons';
 import { format } from 'date-fns';
 import MaterialTable from 'material-table';
 import * as React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Invoice } from '../../generated/graphql';
 import { useDeleteItem } from '../toolbox/delete.hook';
 import { DeleteModal } from '../toolbox/DeleteModal.component';
@@ -22,6 +23,7 @@ interface Props {
 export const InvoiceTable = (props: Props) => {
   const { data, title, isLoading, clientTable, deleteInvoice } = props;
   const { obj, setObj, close } = useDeleteItem();
+  const { push } = useHistory();
   return (
     <>
       <MaterialTable
@@ -82,6 +84,13 @@ export const InvoiceTable = (props: Props) => {
             icon: () => <Visibility />,
             tooltip: 'View invoice',
             onClick: openInvoice,
+          },
+          {
+            // eslint-disable-next-line react/display-name
+            icon: () => <Create />,
+            tooltip: 'Edit invoice',
+            onClick: (_, rowData) =>
+              push(`/invoices/${(rowData as Invoice).id}`),
           },
           {
             // eslint-disable-next-line react/display-name

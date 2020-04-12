@@ -4,12 +4,15 @@ import { ClientDataContainer } from '../containers/ClientData.container';
 import { ClientFormContainer } from '../containers/ClientForm.container';
 import { ClientTableContainer } from '../containers/ClientTable.container';
 import { ExpenseFormContainer } from '../containers/ExpenseForm.container';
+import { ExpenseEditFormContainer } from '../containers/ExpenseFormEdit.container';
 import { ExpenseTableContainer } from '../containers/ExpenseTable.container';
 import { ExportContainer } from '../containers/Export.container';
 import { InvoiceContainer } from '../containers/Invoice.container';
 import { InvoiceFormContainer } from '../containers/InvoiceForm.container';
+import { InvoiceEditContainer } from '../containers/InvoiceFormEdit.container';
 import { InvoiceTableContainer } from '../containers/InvoiceTable.container';
 import { OfferFormContainer } from '../containers/OfferForm.container';
+import { OfferEditContainer } from '../containers/OfferFormEdit.container';
 import { OfferTableContainer } from '../containers/OfferTable.container';
 import { ProfileDataContainer } from '../containers/ProfileData.container';
 import { ProfileFormContainer } from '../containers/ProfileForm.container';
@@ -45,11 +48,17 @@ export function Routes() {
       <Route exact path="/invoices">
         <InvoiceTableContainer />
       </Route>
+      <Route exact path="/invoices/:id">
+        <InvoiceEditContainer />
+      </Route>
       <Route exact path="/clients">
         <ClientTableContainer />
       </Route>
       <Route exact path="/offers">
         <OfferTableContainer />
+      </Route>
+      <Route exact path="/offers/:id">
+        <OfferEditContainer />
       </Route>
       <Route
         exact
@@ -63,6 +72,11 @@ export function Routes() {
       ></Route>
       <Route exact path="/profiles" component={ProfileTableContainer} />
       <Route exact path="/expenses" component={ExpenseTableContainer}></Route>
+      <Route
+        exact
+        path="/expenses/:id"
+        component={ExpenseEditFormContainer}
+      ></Route>
       <Route exact path="/vatrules" component={VatTableContainer}></Route>
       <Route exact path="/newVat" component={VATFormContainer}></Route>
       <Route exact path="/newService" component={ServiceFormContainer}></Route>

@@ -1,4 +1,5 @@
 import { Typography } from '@material-ui/core';
+import { format } from 'date-fns';
 import * as React from 'react';
 import { MarginTop } from '../invoices/Invoice.styles';
 import { Signature } from './OfferSignature.styles';
@@ -21,9 +22,10 @@ export function OfferSignature({ validUntil }: Props) {
         <Signature>Date:</Signature>
         <Signature>Signature</Signature>
       </MarginTop>
-      <MarginTop style={{ marginTop: '100px' }}>
+      <MarginTop style={{ marginTop: '80px' }}>
         <Typography>
-          Validité du devis jusqua: <strong>{validUntil}</strong>.
+          Validité du devis jusqua:{' '}
+          <strong>{format(new Date(validUntil), 'dd-MM-yyyy')}</strong>.
         </Typography>
         <Typography>
           <em>
