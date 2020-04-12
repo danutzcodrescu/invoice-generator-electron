@@ -84,6 +84,6 @@ export function setParamsClientQuerries(
   startDate?: string,
   endDate?: string,
 ) {
-  const params = { clientId, order: { invoiceDate: 'DESC' } };
+  const params = { where: { clientId }, order: { invoiceDate: 'DESC' } };
   return setDates(params, startDate, endDate);
 }
