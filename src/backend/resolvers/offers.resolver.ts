@@ -17,7 +17,7 @@ import { Offer } from '../entities/Offer.entity';
 import { Profile, ProfileData } from '../entities/Profile.entity';
 import { setParams } from '../utils/helpers';
 import { getInvoiceNumber } from '../utils/invoices';
-import { OfferInsert } from './types/arguments.helpers';
+import { OfferInsert, OfferUpdate } from './types/arguments.helpers';
 
 @Resolver(Offer)
 export class OfferResolver {
@@ -37,6 +37,11 @@ export class OfferResolver {
     set(params, 'where.invoiced', false);
     // @ts-ignore
     return this.entityManager.find(Offer, params);
+  }
+
+  @Query(() => Offer)
+  async getOffer(@Arg('id', () => ID) id: string) {
+    return this.entityManager.findOne(Offer, id);
   }
 
   @Mutation(() => Offer)
@@ -102,6 +107,35 @@ export class OfferResolver {
   async deleteOffer(@Arg('id', () => ID) id: string) {
     await this.entityManager.delete(Offer, id);
     return true;
+  }
+
+  @Mutation(() => Offer)
+  async updateOffer(@Arg('data') data: OfferUpdate) {
+    const [currentProfile, clientDB] = await Promise.all([
+      this.entityManager.findOne(Profile, data.profileId),
+      data.clientId
+        ? this.entityManager.findOne(Client, data.clientId)
+        : undefined,
+    ]);
+    // @ts-ignore
+    await this.entityManager
+      .createQueryBuilder()
+      .update(Offer)
+      .set({
+        invoiceDate: data.invoiceDate,
+        amount: data.amount,
+        vat: data.vat,
+        items: data.items,
+        profileId: currentProfile?.id,
+        profileData: data.profileData,
+        clientId: clientDB?.id,
+        clientData: data.clientData,
+        vatRuleName: data.vatRuleName,
+        validUntil: data.validUntil,
+      })
+      .where({ id: data.id })
+      .execute();
+    return this.entityManager.findOne(Offer, data.id);
   }
 
   @FieldResolver(() => ClientData)

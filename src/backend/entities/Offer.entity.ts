@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { Field, ObjectType } from 'type-graphql';
-import { BeforeInsert, Column, Entity, ManyToOne } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne } from 'typeorm';
 import { Base } from './Base.entity';
 import { Client } from './Client.entity';
 import { Profile } from './Profile.entity';
@@ -53,8 +53,19 @@ export class Offer extends Base {
   @BeforeInsert()
   createDate() {
     this.createdAt = format(new Date(), 'yyyy-MM:dd HH:mm:SS');
+    console.log('created', this.createdAt);
     this.updatedAt = format(new Date(), 'yyyy-MM-dd HH:mm:SS');
+    console.log('update', this.updatedAt);
+    this.invoiceDate = format(
+      new Date(this.invoiceDate),
+      'yyyy-MM-dd HH:mm:SS',
+    );
+    this.validUntil = format(new Date(this.validUntil), 'yyyy-MM-dd HH:mm:SS');
+  }
 
+  @BeforeUpdate()
+  updateDate() {
+    this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
     this.invoiceDate = format(
       new Date(this.invoiceDate),
       'yyyy-MM-dd HH:mm:SS',

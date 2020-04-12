@@ -25,7 +25,7 @@ export function InvoiceFormVat(props: Props) {
         fullWidth
       >
         {data ? (
-          data.vatRules.map(option => (
+          data.vatRules.map((option) => (
             <MenuItem key={option.id} value={option.id}>
               {option.name
                 ? `${option.name} - ${option.percentage}%`
@@ -53,7 +53,7 @@ export function InvoiceFormVat(props: Props) {
           {data && (values as any).vat
             ? calculateVat(
                 (values as any).items,
-                data!.vatRules.find(rule => rule.id === (values as any).vat)!
+                data!.vatRules.find((rule) => rule.id === (values as any).vat)!
                   .percentage,
               )
             : 0}
@@ -67,7 +67,7 @@ export function InvoiceFormVat(props: Props) {
           {data && (values as any).vat
             ? calculateTotal(
                 (values as any).items,
-                data!.vatRules.find(rule => rule.id === (values as any).vat)!
+                data!.vatRules.find((rule) => rule.id === (values as any).vat)!
                   .percentage,
               )
             : 0}

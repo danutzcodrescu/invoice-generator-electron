@@ -81,7 +81,6 @@ export interface Event {
 export interface Expense {
   __typename?: 'Expense';
   id: Scalars['ID'];
-  invoiceDate: Scalars['String'];
   invoiceNumber: Scalars['String'];
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
@@ -89,7 +88,19 @@ export interface Expense {
   clientName: Scalars['String'];
   vat: Scalars['Float'];
   amount: Scalars['Float'];
+  description?: Maybe<Scalars['String']>;
+  invoiceDate: Scalars['String'];
+}
+
+export interface ExpenseUpdate {
+  id: Scalars['String'];
+  invoiceDate: Scalars['String'];
+  clientId?: Maybe<Scalars['String']>;
+  clientName: Scalars['String'];
+  amount: Scalars['Float'];
+  vat: Scalars['Float'];
   description: Scalars['String'];
+  invoiceNumber: Scalars['String'];
 }
 
 export interface Invoice {
@@ -118,6 +129,20 @@ export interface InvoiceInput {
   vatRuleName: Scalars['String'];
 }
 
+export interface InvoiceUpdate {
+  id: Scalars['String'];
+  invoiceDate: Scalars['String'];
+  clientId?: Maybe<Scalars['String']>;
+  clientData: Scalars['String'];
+  profileData: Scalars['String'];
+  profileId?: Maybe<Scalars['String']>;
+  items: Scalars['String'];
+  amount: Scalars['Float'];
+  vat: Scalars['Float'];
+  vatRuleName: Scalars['String'];
+  invoiceNumber: Scalars['String'];
+}
+
 export interface Item {
   __typename?: 'Item';
   name: Scalars['String'];
@@ -130,16 +155,26 @@ export interface Mutation {
   __typename?: 'Mutation';
   updateClient: Client;
   addClient: Client;
+  deleteClient: Scalars['Boolean'];
   createExpense: Expense;
+  deleteExpense: Scalars['Boolean'];
+  updateExpense: Expense;
   createInvoice: Invoice;
+  updateInvoice: Invoice;
+  deleteInvoice: Scalars['Boolean'];
   insertOffer: Offer;
   invoiceOffer: Invoice;
+  deleteOffer: Scalars['Boolean'];
+  updateOffer: Offer;
   updateProfile: Profile;
   addProfile: Profile;
+  deleteProfile: Scalars['Boolean'];
   addService: Service;
   updateService: Service;
+  deleteService: Scalars['Boolean'];
   addVatRule: VatRule;
   updateVatRule: VatRule;
+  deleteVat: Scalars['Boolean'];
 }
 
 export interface MutationUpdateClientArgs {
@@ -156,8 +191,20 @@ export interface MutationAddClientArgs {
   firstName?: Maybe<Scalars['String']>;
 }
 
+export interface MutationDeleteClientArgs {
+  id: Scalars['ID'];
+}
+
 export interface MutationCreateExpenseArgs {
   expense: CreateExpense;
+}
+
+export interface MutationDeleteExpenseArgs {
+  id: Scalars['ID'];
+}
+
+export interface MutationUpdateExpenseArgs {
+  data: ExpenseUpdate;
 }
 
 export interface MutationCreateInvoiceArgs {
@@ -166,12 +213,28 @@ export interface MutationCreateInvoiceArgs {
   client: ClientInput;
 }
 
+export interface MutationUpdateInvoiceArgs {
+  data: InvoiceUpdate;
+}
+
+export interface MutationDeleteInvoiceArgs {
+  id: Scalars['ID'];
+}
+
 export interface MutationInsertOfferArgs {
   objet: OfferInsert;
 }
 
 export interface MutationInvoiceOfferArgs {
   id: Scalars['ID'];
+}
+
+export interface MutationDeleteOfferArgs {
+  id: Scalars['ID'];
+}
+
+export interface MutationUpdateOfferArgs {
+  data: OfferUpdate;
 }
 
 export interface MutationUpdateProfileArgs {
@@ -190,6 +253,10 @@ export interface MutationAddProfileArgs {
   firstName?: Maybe<Scalars['String']>;
 }
 
+export interface MutationDeleteProfileArgs {
+  id: Scalars['ID'];
+}
+
 export interface MutationAddServiceArgs {
   cost?: Maybe<Scalars['Float']>;
   measurement?: Maybe<Scalars['String']>;
@@ -201,6 +268,10 @@ export interface MutationUpdateServiceArgs {
   id: Scalars['ID'];
 }
 
+export interface MutationDeleteServiceArgs {
+  id: Scalars['ID'];
+}
+
 export interface MutationAddVatRuleArgs {
   name?: Maybe<Scalars['String']>;
   percentage: Scalars['Float'];
@@ -208,6 +279,10 @@ export interface MutationAddVatRuleArgs {
 
 export interface MutationUpdateVatRuleArgs {
   data: VatRuleUpdate;
+  id: Scalars['ID'];
+}
+
+export interface MutationDeleteVatArgs {
   id: Scalars['ID'];
 }
 
@@ -229,6 +304,20 @@ export interface Offer {
 }
 
 export interface OfferInsert {
+  invoiceDate: Scalars['String'];
+  clientId?: Maybe<Scalars['String']>;
+  clientData: Scalars['String'];
+  profileData: Scalars['String'];
+  profileId: Scalars['String'];
+  items: Scalars['String'];
+  amount: Scalars['Float'];
+  vat: Scalars['Float'];
+  vatRuleName: Scalars['String'];
+  validUntil: Scalars['String'];
+}
+
+export interface OfferUpdate {
+  id: Scalars['String'];
   invoiceDate: Scalars['String'];
   clientId?: Maybe<Scalars['String']>;
   clientData: Scalars['String'];
@@ -280,9 +369,12 @@ export interface Query {
   client: Client;
   events: Array<Event>;
   expenses: Array<Expense>;
+  getExpense: Expense;
   lastInvoiceNumber: Scalars['String'];
   invoices: Array<Invoice>;
+  getInvoice: Invoice;
   offers: Array<Offer>;
+  getOffer: Offer;
   profiles: Array<Profile>;
   profile: Profile;
   services: Array<Service>;
@@ -298,14 +390,26 @@ export interface QueryExpensesArgs {
   startDate?: Maybe<Scalars['String']>;
 }
 
+export interface QueryGetExpenseArgs {
+  id: Scalars['String'];
+}
+
 export interface QueryInvoicesArgs {
   endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
 }
 
+export interface QueryGetInvoiceArgs {
+  id: Scalars['ID'];
+}
+
 export interface QueryOffersArgs {
   endDate?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['String']>;
+}
+
+export interface QueryGetOfferArgs {
+  id: Scalars['ID'];
 }
 
 export interface QueryProfileArgs {
@@ -351,10 +455,10 @@ export interface UpdateProfileInput {
 export interface VatRule {
   __typename?: 'VatRule';
   id: Scalars['ID'];
-  name: Scalars['String'];
-  percentage: Scalars['Float'];
   updatedAt: Scalars['String'];
   createdAt: Scalars['String'];
+  name: Scalars['String'];
+  percentage: Scalars['Float'];
 }
 
 export interface VatRuleUpdate {

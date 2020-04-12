@@ -11,6 +11,7 @@ interface Props {
   data: any[];
   searchKeys: string[];
   placeholder: string;
+  initialSelectedItem?: any;
 }
 
 export const Autocomplete = (props: Props) => {

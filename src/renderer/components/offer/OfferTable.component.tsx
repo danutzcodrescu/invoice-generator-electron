@@ -1,8 +1,9 @@
 /* eslint-disable react/display-name */
-import { Delete, Receipt, Visibility } from '@material-ui/icons';
+import { Create, Delete, Receipt, Visibility } from '@material-ui/icons';
 import { format } from 'date-fns';
 import MaterialTable from 'material-table';
 import * as React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Offer } from '../../generated/graphql';
 import { filterClientName, filterInvoiceDate } from '../invoices/helpers';
 import { tableIcons } from '../invoices/icons';
@@ -30,6 +31,7 @@ export function OffersTable(props: Props) {
     deleteOffer,
   } = props;
   const { obj, setObj, close } = useDeleteItem();
+  const history = useHistory();
   return (
     <>
       <MaterialTable
@@ -96,6 +98,13 @@ export function OffersTable(props: Props) {
             icon: () => <Visibility />,
             tooltip: 'View offer',
             onClick: openInvoice,
+          },
+          {
+            // eslint-disable-next-line react/display-name
+            icon: () => <Create />,
+            tooltip: 'Edit offer',
+            onClick: (_, rowData) =>
+              history.push(`/offers/${(rowData as Offer).id}`),
           },
           {
             icon: () => <Receipt />,

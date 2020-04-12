@@ -55,9 +55,6 @@ export function InvoiceHeader({
               <Typography align="right">{invoiceNumber}</Typography>
             </Grid>
           ) : null}
-          <Grid item xs={4}>
-            <Typography align="right">{invoiceNumber}</Typography>
-          </Grid>
         </Grid>
         <Grid>
           <Grid item xs={4}>

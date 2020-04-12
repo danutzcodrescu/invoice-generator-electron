@@ -58,6 +58,10 @@ export class Expense extends BaseEntity {
   @BeforeUpdate()
   updateDate() {
     this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
+    this.invoiceDate = format(
+      new Date(this.invoiceDate),
+      'yyyy-MM-dd HH:mm:SS',
+    );
   }
 
   @BeforeInsert()

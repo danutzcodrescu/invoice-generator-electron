@@ -12,7 +12,7 @@ import {
 @Entity()
 @ObjectType()
 export class Base extends BaseEntity {
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 

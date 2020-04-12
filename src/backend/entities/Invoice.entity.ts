@@ -23,7 +23,7 @@ export class Invoice extends BaseEntity {
   invoiceDate: string;
 
   @Field()
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: 'text', nullable: false, unique: true })
   invoiceNumber: string;
 
   @Field()
@@ -70,6 +70,10 @@ export class Invoice extends BaseEntity {
   @BeforeUpdate()
   updateDate() {
     this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
+    this.invoiceDate = format(
+      new Date(this.invoiceDate),
+      'yyyy-MM-dd HH:mm:SS',
+    );
   }
 
   @BeforeInsert()

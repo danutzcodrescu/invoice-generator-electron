@@ -7,6 +7,7 @@ import { Field, Form } from 'react-final-form';
 import { Client, Profile, Query } from '../../generated/graphql';
 import { setBulkValue } from '../../utils/react-final-form';
 import { FormField } from '../toolbox/FormField.component';
+import { setInitialValues } from '../utils/editForm';
 import { defaultInvoiceNumber } from '../utils/invoices';
 import { DividerMargin } from './InvoiceForm.styles';
 import { InvoiceFormClient } from './InvoiceFormClient.component';
@@ -23,6 +24,7 @@ interface Props {
   type: 'Invoice' | 'Offer';
   submitForm: Function;
   lastInvoiceNumber?: string;
+  values?: any;
 }
 
 export function itemToString(item: Profile | Client) {
@@ -45,9 +47,28 @@ export function InvoiceForm({
   submitButtonText,
   submitForm,
   lastInvoiceNumber,
+  values: initialData,
 }: Props) {
-  const selectedClient = React.useRef<string>();
-  const selectedProfile = React.useRef<string>();
+  const selectedClient = React.useRef<string>(initialData?.client?.id);
+  const selectedProfile = React.useRef<string>(initialData?.profile?.id);
+  let initialValues = {
+    invoiceDate: new Date(),
+    invoiceNumber: defaultInvoiceNumber(lastInvoiceNumber),
+    items: [{ name: '', value: '0', quantity: '1', measurement: '' }],
+    ...(type === 'Offer'
+      ? { validUntil: addBusinessDays(new Date(), 30) }
+      : {}),
+  };
+  if (initialData) {
+    // suboptimal since it relies on names
+    // need to look into a migration posibility
+    const vat = data?.vatRules.find(
+      (rule) =>
+        rule.name === initialData.vatRuleName ||
+        rule.percentage == initialData.vatRuleName.replace('%', ''),
+    );
+    initialValues = setInitialValues(initialData, type, vat) as any;
+  }
   return (
     <>
       <Typography gutterBottom variant="h1">
@@ -63,14 +84,7 @@ export function InvoiceForm({
             createInvoice,
           )
         }
-        initialValues={{
-          invoiceDate: new Date(),
-          invoiceNumber: defaultInvoiceNumber(lastInvoiceNumber),
-          items: [{ name: '', value: '0', quantity: '1', measurement: '' }],
-          ...(type === 'Offer'
-            ? { validUntil: addBusinessDays(new Date(), 30) }
-            : {}),
-        }}
+        initialValues={initialValues}
         mutators={{
           ...arrayMutators,
           setBulkValue,
@@ -150,7 +164,7 @@ export function InvoiceForm({
             <Button
               color="primary"
               type="submit"
-              disabled={pristine || submitting}
+              disabled={(!initialData && pristine) || submitting}
             >
               {submitButtonText}
             </Button>
