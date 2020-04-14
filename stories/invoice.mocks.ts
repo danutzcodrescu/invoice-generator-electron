@@ -40,6 +40,7 @@ export const invoiceWithQuantity = {
   vat: 39,
   amount: 650,
   vatRuleName: '21%',
+  paymentDeadline: '2020-04-29',
 };
 
 export const invoiceWithoutQuantity = {
@@ -84,6 +85,7 @@ export const invoiceWithoutQuantity = {
     vat: 'BE1234567',
   },
   vatRuleName: '6%',
+  paymentDeadline: '2020-04-29',
 };
 
 export const offer = {

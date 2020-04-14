@@ -1,7 +1,11 @@
 import { ARRAY_ERROR } from 'final-form';
 import { omit } from 'lodash';
 import { Expense, Query, VatRule } from '../../generated/graphql';
-import { calculateNet, calculateVat } from '../invoices/helpers';
+import {
+  calculateNet,
+  calculateVat,
+  checkForErrors,
+} from '../invoices/helpers';
 
 export const submitForm = (id: string) => (
   values: any,
@@ -11,41 +15,8 @@ export const submitForm = (id: string) => (
   createInvoice: any,
 ) => {
   const errors = { [ARRAY_ERROR]: [] as string[] };
-  if (!values.invoiceDate) {
-    errors[ARRAY_ERROR].push('Invoice date is required');
-  }
-  if (!values.vat) {
-    errors[ARRAY_ERROR].push('Vat value is required');
-  }
 
-  if (
-    (!values.clientLastName || !values.clientFirstName) &&
-    !values.clientCompany
-  ) {
-    errors[ARRAY_ERROR].push(
-      'Please provide a fullname or a company name for the client',
-    );
-  }
-  if (!values.clientAddress) {
-    errors[ARRAY_ERROR].push('Please provide an address for the client');
-  }
-  if (
-    (!values.profileLastName || !values.profileFirstName) &&
-    !values.profileCompany
-  ) {
-    errors[ARRAY_ERROR].push(
-      'Please provide a fullname or a company name for your profile',
-    );
-  }
-  if (!values.profileVat) {
-    errors[ARRAY_ERROR].push('Please add a VAT number for your profile');
-  }
-
-  if (!values.invoiceNumber) {
-    errors[ARRAY_ERROR].push('Please add an invoice number');
-  }
-
-  if (errors[ARRAY_ERROR].length) {
+  if (checkForErrors(errors, values)[ARRAY_ERROR].length) {
     return errors;
   }
   const vat = data.vatRules.find((rule) => rule.id === (values as any).vat);
@@ -58,6 +29,7 @@ export const submitForm = (id: string) => (
     vatRuleName: vat?.name ?? vat?.percentage,
     amount: parseFloat(calculateNet(values.items).toString()),
     invoiceNumber: values.invoiceNumber,
+    paymentDeadline: values.paymentDeadline,
   };
   const client = {
     clientId: selectedClient.current,
@@ -112,7 +84,10 @@ export function setInitialValues(
     vat: vat?.id,
     clientVat: initialData.clientData.vat,
     ...(type === 'Invoice'
-      ? { invoiceNumber: initialData.invoiceNumber }
+      ? {
+          invoiceNumber: initialData.invoiceNumber,
+          paymentDeadline: new Date(initialData.paymentDeadline),
+        }
       : { validUntil: new Date(initialData.validUntil) }),
   };
 }

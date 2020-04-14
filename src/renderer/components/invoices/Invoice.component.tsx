@@ -18,6 +18,7 @@ interface BaseProps {
 interface InvoiceProps extends BaseProps {
   title: 'Facture';
   invoiceNumber: string;
+  deadline: string;
 }
 
 interface OfferProps extends BaseProps {
@@ -47,6 +48,7 @@ export function Invoice(props: Props) {
         profile={profile}
         client={client}
         title={title}
+        deadline={(other as InvoiceProps).deadline}
       />
       <InvoiceItemTable
         profile={profile}

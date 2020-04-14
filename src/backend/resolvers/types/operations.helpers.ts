@@ -43,6 +43,9 @@ export class InvoiceInput implements Partial<Invoice> {
 
   @Field()
   vatRuleName: string;
+
+  @Field()
+  paymentDeadline: string;
 }
 
 @InputType()

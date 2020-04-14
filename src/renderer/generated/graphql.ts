@@ -99,7 +99,7 @@ export interface ExpenseUpdate {
   clientName: Scalars['String'];
   amount: Scalars['Float'];
   vat: Scalars['Float'];
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   invoiceNumber: Scalars['String'];
 }
 
@@ -114,6 +114,7 @@ export interface Invoice {
   vat: Scalars['Float'];
   vatRuleName: Scalars['String'];
   amount: Scalars['Float'];
+  paymentDeadline: Scalars['String'];
   clientData: ClientData;
   profileData: ProfileData;
   items: Array<Item>;
@@ -127,6 +128,7 @@ export interface InvoiceInput {
   amount: Scalars['Float'];
   invoiceNumber: Scalars['String'];
   vatRuleName: Scalars['String'];
+  paymentDeadline: Scalars['String'];
 }
 
 export interface InvoiceUpdate {
@@ -141,6 +143,7 @@ export interface InvoiceUpdate {
   vat: Scalars['Float'];
   vatRuleName: Scalars['String'];
   invoiceNumber: Scalars['String'];
+  paymentDeadline: Scalars['String'];
 }
 
 export interface Item {
@@ -391,7 +394,7 @@ export interface QueryExpensesArgs {
 }
 
 export interface QueryGetExpenseArgs {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 }
 
 export interface QueryInvoicesArgs {

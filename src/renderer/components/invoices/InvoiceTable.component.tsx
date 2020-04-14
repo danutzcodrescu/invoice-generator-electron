@@ -54,6 +54,13 @@ export const InvoiceTable = (props: Props) => {
               format(new Date(rowData.invoiceDate), 'yyyy-MM-dd'),
             customFilterAndSearch: filterInvoiceDate,
           },
+          {
+            title: 'Due date',
+            field: 'paymentDeadline',
+            type: 'date',
+            render: (rowData) =>
+              format(new Date(rowData.paymentDeadline), 'yyyy-MM-dd'),
+          },
 
           {
             title: 'Amount',

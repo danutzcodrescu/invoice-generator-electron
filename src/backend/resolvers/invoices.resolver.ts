@@ -63,12 +63,11 @@ export class InvoiceResolver {
     @Arg('client') client: ClientInput,
     @Arg('profile') profile: ProfileInput,
     @Arg('invoiceData') invoiceData: InvoiceInput,
-  ): Promise<Invoice> {
-    const currentProfile = await this.entityManager.findOne(
-      Profile,
-      profile.profileId,
-    );
-    const clientDB = await this.entityManager.findOne(Client, client.clientId);
+  ) {
+    const [currentProfile, clientDB] = await Promise.all([
+      this.entityManager.findOne(Profile, profile.profileId),
+      this.entityManager.findOne(Client, client.clientId),
+    ]);
     // @ts-ignore
     const invoice = this.entityManager.create(Invoice, {
       invoiceDate: invoiceData.invoiceDate,
@@ -81,6 +80,7 @@ export class InvoiceResolver {
       clientData: client.clientData,
       vatRuleName: invoiceData.vatRuleName,
       invoiceNumber: invoiceData.invoiceNumber,
+      paymentDeadline: invoiceData.paymentDeadline,
     });
     const inv = await this.entityManager.save(invoice);
     return inv;
@@ -107,6 +107,7 @@ export class InvoiceResolver {
         clientData: data.clientData,
         vatRuleName: data.vatRuleName,
         invoiceNumber: data.invoiceNumber,
+        paymentDeadline: data.paymentDeadline,
       })
       .where({ id: data.id })
       .execute();
@@ -137,5 +138,10 @@ export class InvoiceResolver {
   @FieldResolver(() => String)
   invoiceDate(@Root() invoice: Invoice) {
     return invoice.invoiceDate.split(' ')[0];
+  }
+
+  @FieldResolver(() => String)
+  paymentDeadline(@Root() invoice: Invoice) {
+    return invoice.paymentDeadline.split(' ')[0];
   }
 }
