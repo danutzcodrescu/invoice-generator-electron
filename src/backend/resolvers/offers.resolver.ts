@@ -46,10 +46,9 @@ export class OfferResolver {
 
   @Mutation(() => Offer)
   async insertOffer(@Arg('objet') obj: OfferInsert): Promise<Offer> {
-    const currentProfile = await this.entityManager.findOne(
-      Profile,
-      obj.profileId,
-    );
+    const currentProfile = await this.entityManager.findOne(Profile, {
+      id: obj.profileId,
+    });
     const clientDB = obj.clientId
       ? await this.entityManager.findOne(Client, obj.clientId)
       : undefined;
@@ -112,9 +111,9 @@ export class OfferResolver {
   @Mutation(() => Offer)
   async updateOffer(@Arg('data') data: OfferUpdate) {
     const [currentProfile, clientDB] = await Promise.all([
-      this.entityManager.findOne(Profile, data.profileId),
+      this.entityManager.findOne(Profile, { id: data.profileId }),
       data.clientId
-        ? this.entityManager.findOne(Client, data.clientId)
+        ? this.entityManager.findOne(Client, { id: data.clientId })
         : undefined,
     ]);
     // @ts-ignore
