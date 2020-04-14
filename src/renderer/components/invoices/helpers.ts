@@ -107,16 +107,12 @@ export function filterInvoiceDate(
   return false;
 }
 
-export function submitForm(
-  values: any,
-  selectedClient: React.MutableRefObject<string | undefined>,
-  selectedProfile: React.MutableRefObject<string | undefined>,
-  data: Query,
-  createInvoice: any,
-) {
-  const errors = { [ARRAY_ERROR]: [] as string[] };
+export function checkForErrors(errors: any, values: any) {
   if (!values.invoiceDate) {
     errors[ARRAY_ERROR].push('Invoice date is required');
+  }
+  if (!values.paymentDeadline) {
+    errors[ARRAY_ERROR].push('Due date is required');
   }
   if (!values.vat) {
     errors[ARRAY_ERROR].push('Vat value is required');
@@ -148,8 +144,19 @@ export function submitForm(
   if (!values.invoiceNumber) {
     errors[ARRAY_ERROR].push('Please add an invoice number');
   }
+  return errors;
+}
 
-  if (errors[ARRAY_ERROR].length) {
+export function submitForm(
+  values: any,
+  selectedClient: React.MutableRefObject<string | undefined>,
+  selectedProfile: React.MutableRefObject<string | undefined>,
+  data: Query,
+  createInvoice: any,
+) {
+  const errors = { [ARRAY_ERROR]: [] as string[] };
+
+  if (checkForErrors(errors, values)[ARRAY_ERROR].length) {
     return errors;
   }
   const vat = data.vatRules.find((rule) => rule.id === (values as any).vat);
@@ -160,6 +167,7 @@ export function submitForm(
     vatRuleName: vat?.name ?? vat?.percentage,
     amount: parseFloat(calculateNet(values.items).toString()),
     invoiceNumber: values.invoiceNumber,
+    paymentDeadline: values.paymentDeadline,
   };
   const client = {
     clientId: selectedClient.current,

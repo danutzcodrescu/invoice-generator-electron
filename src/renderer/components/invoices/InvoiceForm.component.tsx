@@ -1,6 +1,6 @@
 import { Button, Grid, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import { addBusinessDays } from 'date-fns';
+import { addBusinessDays, addDays } from 'date-fns';
 import arrayMutators from 'final-form-arrays';
 import * as React from 'react';
 import { Field, Form } from 'react-final-form';
@@ -57,7 +57,7 @@ export function InvoiceForm({
     items: [{ name: '', value: '0', quantity: '1', measurement: '' }],
     ...(type === 'Offer'
       ? { validUntil: addBusinessDays(new Date(), 30) }
-      : {}),
+      : { paymentDeadline: addDays(new Date(), 15) }),
   };
   if (initialData) {
     // suboptimal since it relies on names
@@ -123,15 +123,40 @@ export function InvoiceForm({
               </Grid>
               {/* TODO Maybe extract in separate component */}
               {type === 'Invoice' ? (
-                <Grid item xs={3} style={{ position: 'relative', top: '15px' }}>
-                  <FormField
-                    name="invoiceNumber"
-                    required
-                    placeholder="Invoice number"
-                    label="Invoice number"
-                    fullWidth
-                  />
-                </Grid>
+                <>
+                  <Grid item xs={3}>
+                    <Field name="paymentDeadline">
+                      {({ input }) => (
+                        <KeyboardDatePicker
+                          autoOk
+                          disableToolbar
+                          variant="inline"
+                          margin="normal"
+                          format="dd/MM/yyyy"
+                          label={`Due date`}
+                          required
+                          KeyboardButtonProps={{
+                            'aria-label': 'change due date date',
+                          }}
+                          {...input}
+                        />
+                      )}
+                    </Field>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={3}
+                    style={{ position: 'relative', top: '15px' }}
+                  >
+                    <FormField
+                      name="invoiceNumber"
+                      required
+                      placeholder="Invoice number"
+                      label="Invoice number"
+                      fullWidth
+                    />
+                  </Grid>
+                </>
               ) : (
                 <Grid item xs={3}>
                   <Field name="validUntil">

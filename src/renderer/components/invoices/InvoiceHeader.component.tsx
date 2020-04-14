@@ -10,6 +10,7 @@ interface Props {
   invoiceDate: string;
   title: string;
   invoiceNumber?: string;
+  deadline?: string;
 }
 
 export function InvoiceHeader({
@@ -18,6 +19,7 @@ export function InvoiceHeader({
   invoiceDate,
   invoiceNumber,
   title,
+  deadline,
 }: Props) {
   return (
     <>
@@ -56,12 +58,20 @@ export function InvoiceHeader({
             </Grid>
           ) : null}
         </Grid>
-        <Grid>
+        <Grid container justify="space-between">
           <Grid item xs={4}>
             {profile.bankAccount ? (
               <Typography>{profile.bankAccount}</Typography>
             ) : null}
           </Grid>
+          {deadline ? (
+            <Grid item xs={6}>
+              <Typography align="right">
+                <em>Date de payment avant:</em>{' '}
+                {format(new Date(deadline), 'dd/MM/yyyy')}
+              </Typography>
+            </Grid>
+          ) : null}
         </Grid>
       </MarginTop>
       <MarginTop>

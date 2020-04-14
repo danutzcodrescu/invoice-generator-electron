@@ -77,6 +77,8 @@ export class InvoiceUpdate implements Partial<Invoice> {
   vatRuleName: string;
   @Field()
   invoiceNumber: string;
+  @Field()
+  paymentDeadline: string;
 }
 
 @InputType()

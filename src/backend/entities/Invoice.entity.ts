@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
@@ -67,11 +67,18 @@ export class Invoice extends BaseEntity {
   @Column()
   amount: number;
 
+  @Column({ default: format(addDays(new Date(), 15), 'yyyy-MM-dd HH:mm:SS') })
+  paymentDeadline: string;
+
   @BeforeUpdate()
   updateDate() {
     this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
     this.invoiceDate = format(
       new Date(this.invoiceDate),
+      'yyyy-MM-dd HH:mm:SS',
+    );
+    this.paymentDeadline = format(
+      new Date(this.paymentDeadline),
       'yyyy-MM-dd HH:mm:SS',
     );
   }
@@ -80,6 +87,10 @@ export class Invoice extends BaseEntity {
   createDate() {
     this.createdAt = format(new Date(), 'yyyy-MM:dd HH:mm:SS');
     this.updatedAt = format(new Date(), 'yyyy-MM-dd HH:mm:SS');
+    this.paymentDeadline = format(
+      new Date(this.paymentDeadline),
+      'yyyy-MM-dd HH:mm:SS',
+    );
     if (!this.invoiceDate) {
       // TODO format it
       this.invoiceDate = format(new Date(), 'yyyy-MM-dd HH:mm:SS');

@@ -67,6 +67,7 @@ export function loadInvoiceData(invoice: Invoice | Offer) {
         ? {
             invoiceNumber: (invoice as Invoice).invoiceNumber,
             title: 'Facture',
+            paymentDeadline: (invoice as Invoice).paymentDeadline,
           }
         : {
             title: 'Devis',

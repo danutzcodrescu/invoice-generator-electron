@@ -16,6 +16,7 @@ export function InvoiceContainer() {
     title: null,
     validUntil: null,
     id: null,
+    paymentDeadline: null,
   });
 
   function setData(_: Event, data: any) {
@@ -55,6 +56,7 @@ export function InvoiceContainer() {
       validUntil={invoice.validUntil as any}
       invoiceNumber={invoice.invoiceNumber}
       vatRuleName={invoice.vatRuleName}
+      deadline={invoice.paymentDeadline as any}
     />
   );
 }

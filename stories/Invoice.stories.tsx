@@ -33,6 +33,7 @@ storiesOf('Components/invoices', module)
         invoiceNumber={invoiceWithQuantity.invoiceNumber}
         vatRuleName={invoiceWithQuantity.vatRuleName}
         title="Facture"
+        deadline={invoiceWithQuantity.paymentDeadline}
       />
     </Wrapper>
   ))
@@ -48,13 +49,16 @@ storiesOf('Components/invoices', module)
         invoiceNumber={invoiceWithoutQuantity.invoiceNumber}
         vatRuleName={invoiceWithoutQuantity.vatRuleName}
         title="Facture"
+        deadline={invoiceWithoutQuantity.paymentDeadline}
       />
     </Wrapper>
   ))
   .add('InvoiceTable', () => (
     <Wrapper>
-      <Paper>
-        <InvoiceTableContainer />
-      </Paper>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Paper>
+          <InvoiceTableContainer />
+        </Paper>
+      </MuiPickersUtilsProvider>
     </Wrapper>
   ));

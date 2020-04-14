@@ -1,6 +1,7 @@
 export const ipcRenderer = {
   on: () => null,
   off: () => null,
+  once: () => null,
   send: () => null,
   invoke: () => null,
 };
