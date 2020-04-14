@@ -67,6 +67,10 @@ export class Invoice extends BaseEntity {
   @Column()
   amount: number;
 
+  @Field()
+  @Column({ default: false })
+  paid: boolean;
+
   @Column({ default: format(addDays(new Date(), 15), 'yyyy-MM-dd HH:mm:SS') })
   paymentDeadline: string;
 

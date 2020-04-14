@@ -7,12 +7,13 @@ import { Loading } from '../components/toolbox/Loading.component';
 import { useModalInvoice } from '../components/toolbox/pdf.hook';
 import { defaultDate } from '../components/utils/client';
 import { useNotification } from '../context/notification.context';
-import { Offer, Query } from '../generated/graphql';
+import { Offer, Query, Mutation } from '../generated/graphql';
 import {
   DELETE_EXPENSE,
   DELETE_INVOICE,
   DELETE_OFFER,
   INVOICE_OFFER,
+  UPDATE_INVOICE_STATUS,
 } from '../graphql/mutations';
 import { GET_CLIENT } from '../graphql/queries';
 
@@ -72,6 +73,25 @@ export function ClientDataContainer(props: Props) {
       },
     ],
   });
+  const [toggleInvoiceStatus] = useMutation(UPDATE_INVOICE_STATUS, {
+    onCompleted: (resp: Mutation) => {
+      showNotificationFor(
+        5000,
+        `Invoice status changed to ${
+          resp.toggleInvoiceStatus.paid ? 'paid' : 'not paid'
+        }`,
+      );
+    },
+    refetchQueries: [
+      {
+        query: GET_CLIENT,
+        variables: {
+          clientId: props.match.params.clientId,
+          startDate: defaultDate,
+        },
+      },
+    ],
+  });
   function toInvoice(_: any, rowData: Offer | Offer[]) {
     invoiceOffer({
       variables: {
@@ -101,6 +121,7 @@ export function ClientDataContainer(props: Props) {
         deleteOffer={deleteOffer}
         deleteInvoice={deleteInvoice}
         deleteExpense={deleteExpense}
+        toggleInvoiceStatus={toggleInvoiceStatus}
       ></ClientData>
       <LoadingModal
         isOpen={isModalVisible}

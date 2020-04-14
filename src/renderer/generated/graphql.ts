@@ -114,11 +114,12 @@ export interface Invoice {
   vat: Scalars['Float'];
   vatRuleName: Scalars['String'];
   amount: Scalars['Float'];
-  paymentDeadline: Scalars['String'];
+  paid: Scalars['Boolean'];
   clientData: ClientData;
   profileData: ProfileData;
   items: Array<Item>;
   invoiceDate: Scalars['String'];
+  paymentDeadline: Scalars['String'];
 }
 
 export interface InvoiceInput {
@@ -165,6 +166,7 @@ export interface Mutation {
   createInvoice: Invoice;
   updateInvoice: Invoice;
   deleteInvoice: Scalars['Boolean'];
+  toggleInvoiceStatus: Invoice;
   insertOffer: Offer;
   invoiceOffer: Invoice;
   deleteOffer: Scalars['Boolean'];
@@ -222,6 +224,11 @@ export interface MutationUpdateInvoiceArgs {
 
 export interface MutationDeleteInvoiceArgs {
   id: Scalars['ID'];
+}
+
+export interface MutationToggleInvoiceStatusArgs {
+  id: Scalars['ID'];
+  status: Scalars['Boolean'];
 }
 
 export interface MutationInsertOfferArgs {

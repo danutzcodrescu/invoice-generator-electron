@@ -1,5 +1,12 @@
 /* eslint-disable react/display-name */
-import { Create, Delete, Visibility } from '@material-ui/icons';
+import {
+  Create,
+  Delete,
+  Visibility,
+  CheckCircleOutline,
+  Close,
+  AccountBalance,
+} from '@material-ui/icons';
 import { format } from 'date-fns';
 import MaterialTable from 'material-table';
 import * as React from 'react';
@@ -18,10 +25,18 @@ interface Props {
   isLoading: boolean;
   clientTable: boolean;
   deleteInvoice: Function;
+  toggleStatus: Function;
 }
 
 export const InvoiceTable = (props: Props) => {
-  const { data, title, isLoading, clientTable, deleteInvoice } = props;
+  const {
+    data,
+    title,
+    isLoading,
+    clientTable,
+    deleteInvoice,
+    toggleStatus,
+  } = props;
   const { obj, setObj, close } = useDeleteItem();
   const { push } = useHistory();
   return (
@@ -78,12 +93,19 @@ export const InvoiceTable = (props: Props) => {
             render: (rowData) =>
               rowData.vat.toLocaleString('nl-BE', { minimumFractionDigits: 2 }),
           },
+          {
+            title: 'Paid',
+            field: 'paid',
+            type: 'boolean',
+            render: (rowData) =>
+              rowData.paid ? <CheckCircleOutline /> : <Close />,
+          },
         ]}
         data={data}
         options={{
           toolbar: !clientTable,
           pageSize: !clientTable ? 20 : 10,
-          actionsColumnIndex: 5,
+          actionsColumnIndex: 7,
         }}
         actions={[
           {
@@ -91,6 +113,18 @@ export const InvoiceTable = (props: Props) => {
             icon: () => <Visibility />,
             tooltip: 'View invoice',
             onClick: openInvoice,
+          },
+          {
+            // eslint-disable-next-line react/display-name
+            icon: () => <AccountBalance />,
+            tooltip: 'Toggle invoice status',
+            onClick: (_, rowData) =>
+              toggleStatus({
+                variables: {
+                  id: (rowData as Invoice).id,
+                  status: !(rowData as Invoice).paid,
+                },
+              }),
           },
           {
             // eslint-disable-next-line react/display-name

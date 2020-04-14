@@ -216,3 +216,12 @@ export const UPDATE_EXPENSE = gql`
   }
   ${expenseFragment}
 `;
+
+export const UPDATE_INVOICE_STATUS = gql`
+  mutation UPDATE_INVOICE_STATUS($id: ID!, $status: Boolean!) {
+    toggleInvoiceStatus(status: $status, id: $id) {
+      id
+      paid
+    }
+  }
+`;
