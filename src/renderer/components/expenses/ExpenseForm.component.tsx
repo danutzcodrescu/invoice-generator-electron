@@ -78,7 +78,13 @@ export function ExpenseForm(props: Props) {
       <Form
         onSubmit={submitForm}
         initialValues={initialValue}
-        render={({ handleSubmit, submitting, pristine, submitErrors }) => (
+        render={({
+          handleSubmit,
+          submitting,
+          pristine,
+          submitSucceeded,
+          submitErrors,
+        }) => (
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid xs={3} item>
@@ -121,6 +127,7 @@ export function ExpenseForm(props: Props) {
                       getOptionLabel={(option: Client) =>
                         clientName(option) as any
                       }
+                      key={(submitSucceeded && pristine).toString()}
                       options={data ? data.clients : []}
                       onChange={(_: any, val: any) => (inputRef.current = val)}
                       onInputChange={(_, val) => {
