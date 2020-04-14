@@ -120,6 +120,20 @@ export class InvoiceResolver {
     return true;
   }
 
+  @Mutation(() => Invoice)
+  async toggleInvoiceStatus(
+    @Arg('status', () => Boolean) status: boolean,
+    @Arg('id', () => ID) id: string,
+  ) {
+    await this.entityManager
+      .createQueryBuilder()
+      .update(Invoice)
+      .set({ paid: status })
+      .where({ id })
+      .execute();
+    return this.entityManager.findOne(Invoice, id);
+  }
+
   @FieldResolver(() => ClientData)
   clientData(@Root() invoice: Invoice) {
     return JSON.parse(invoice.clientData);

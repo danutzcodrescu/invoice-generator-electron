@@ -60,6 +60,7 @@ export const GET_INVOICES = gql`
         lastName
         company
       }
+      paid
     }
   }
   ${invoiceFragment}

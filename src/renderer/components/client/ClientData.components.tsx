@@ -21,6 +21,7 @@ interface Props {
   deleteOffer: Function;
   deleteInvoice: Function;
   deleteExpense: Function;
+  toggleInvoiceStatus: Function;
 }
 
 export function ClientData(props: Props) {
@@ -32,6 +33,7 @@ export function ClientData(props: Props) {
     deleteInvoice,
     deleteOffer,
     deleteExpense,
+    toggleInvoiceStatus,
   } = props;
   const [isReadOnly, setReadOnly] = React.useState<boolean>(true);
   return (
@@ -58,6 +60,7 @@ export function ClientData(props: Props) {
         isLoading={isLoading}
         clientTable
         deleteInvoice={deleteInvoice}
+        toggleStatus={toggleInvoiceStatus}
       />
       <Typography variant="h2">Expenses</Typography>
       <ExpenseTable
