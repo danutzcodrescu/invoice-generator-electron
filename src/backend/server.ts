@@ -20,6 +20,8 @@ import { OfferResolver } from './resolvers/offers.resolver';
 import { ProfileResolver } from './resolvers/profile.resolver';
 import { ServiceResolver } from './resolvers/service.resolver';
 import { VatRuleResolver } from './resolvers/vatRules.resolver';
+import { Discount } from './entities/Discount.entity';
+import { DiscountResolver } from './resolvers/discount.resolver';
 
 useContainer(Container);
 
@@ -39,6 +41,7 @@ async function bootstrap() {
         Expense,
         Service,
         Offer,
+        Discount,
       ],
     });
     // build TypeGraphQL executable schema
@@ -52,6 +55,7 @@ async function bootstrap() {
         ExpenseResolver,
         ServiceResolver,
         OfferResolver,
+        DiscountResolver,
       ],
       container: Container,
       // authChecker, // register auth checking function

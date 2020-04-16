@@ -17,10 +17,11 @@ interface Props {
   multiline?: boolean;
   parse?: (value: string) => string;
   defaultValue?: string;
+  endAdornment?: any;
 }
 
 export function FormField(props: Props) {
-  const { name, children, parse, ...rest } = props;
+  const { name, children, parse, endAdornment, ...rest } = props;
   return (
     <Field name={name} parse={parse}>
       {({ input, meta }) => (
@@ -29,6 +30,13 @@ export function FormField(props: Props) {
           {...rest}
           error={meta.dirty && meta.invalid}
           helperText={meta.error}
+          {...(endAdornment
+            ? {
+                InputProps: {
+                  endAdornment,
+                },
+              }
+            : {})}
         >
           {children ? children : null}
         </TextField>

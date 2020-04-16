@@ -70,6 +70,20 @@ export interface CreateExpense {
   clientName: Scalars['String'];
 }
 
+export interface Discount {
+  __typename?: 'Discount';
+  id: Scalars['ID'];
+  updatedAt: Scalars['String'];
+  createdAt: Scalars['String'];
+  name: Scalars['String'];
+  percentage: Scalars['Float'];
+}
+
+export interface DiscountInsert {
+  name?: Maybe<Scalars['String']>;
+  percentage: Scalars['Float'];
+}
+
 export interface Event {
   __typename?: 'Event';
   id: Scalars['ID'];
@@ -180,6 +194,9 @@ export interface Mutation {
   addVatRule: VatRule;
   updateVatRule: VatRule;
   deleteVat: Scalars['Boolean'];
+  addDiscount: Discount;
+  updateDiscount: Discount;
+  deleteDiscount: Scalars['Boolean'];
 }
 
 export interface MutationUpdateClientArgs {
@@ -296,6 +313,19 @@ export interface MutationDeleteVatArgs {
   id: Scalars['ID'];
 }
 
+export interface MutationAddDiscountArgs {
+  data: DiscountInsert;
+}
+
+export interface MutationUpdateDiscountArgs {
+  data: DiscountInsert;
+  id: Scalars['ID'];
+}
+
+export interface MutationDeleteDiscountArgs {
+  id: Scalars['ID'];
+}
+
 export interface Offer {
   __typename?: 'Offer';
   id: Scalars['ID'];
@@ -389,6 +419,7 @@ export interface Query {
   profile: Profile;
   services: Array<Service>;
   vatRules: Array<VatRule>;
+  discounts: Array<Discount>;
 }
 
 export interface QueryClientArgs {

@@ -2,6 +2,7 @@ import { Field, InputType } from 'type-graphql';
 import { Expense } from '../../entities/Expense.entity';
 import { Invoice } from '../../entities/Invoice.entity';
 import { Offer } from '../../entities/Offer.entity';
+import { Discount } from '../../entities/Discount.entity';
 
 @InputType()
 export class OfferInsert implements Partial<Offer> {
@@ -99,4 +100,12 @@ export class ExpenseUpdate implements Partial<Expense> {
   description: string;
   @Field()
   invoiceNumber: string;
+}
+
+@InputType()
+export class DiscountInsert implements Partial<Discount> {
+  @Field({ nullable: true })
+  name?: string;
+  @Field()
+  percentage: number;
 }
