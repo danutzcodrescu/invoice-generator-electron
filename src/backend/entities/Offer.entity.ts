@@ -47,6 +47,10 @@ export class Offer extends Base {
   @Column()
   validUntil: string;
 
+  @Field()
+  @Column({ default: 0 })
+  discount: number;
+
   @Column({ default: false })
   invoiced: boolean;
 
@@ -65,11 +69,15 @@ export class Offer extends Base {
 
   @BeforeUpdate()
   updateDate() {
+    console.log('0');
     this.updatedAt = format(new Date(), 'yyyy-mm-dd HH:MM:SS');
+    console.log('1');
     this.invoiceDate = format(
       new Date(this.invoiceDate),
       'yyyy-MM-dd HH:mm:SS',
     );
+    console.log('2');
     this.validUntil = format(new Date(this.validUntil), 'yyyy-MM-dd HH:mm:SS');
+    console.log('3');
   }
 }

@@ -25,11 +25,17 @@ export const submitForm = (id: string) => (
     items: JSON.stringify(
       values.items.map((val: any) => omit(val, ['__typename'])),
     ),
-    vat: parseFloat(calculateVat(values.items, vat!.percentage).toString()),
+    vat: parseFloat(
+      calculateVat(values.items, vat!.percentage, values.discount).toString(),
+    ),
     vatRuleName: vat?.name ?? vat?.percentage,
     amount: parseFloat(calculateNet(values.items).toString()),
     invoiceNumber: values.invoiceNumber,
     paymentDeadline: values.paymentDeadline,
+    discount: values.discount
+      ? (calculateNet((values as any).items) * parseFloat(values.discount)) /
+        100
+      : 0,
   };
   const client = {
     clientId: selectedClient.current,
@@ -82,6 +88,9 @@ export function setInitialValues(
     clientCompany: initialData.clientData.company,
     clientAddress: initialData.clientData.address,
     vat: vat?.id,
+    discount: initialData.discount
+      ? (initialData.discount / initialData.amount) * 100
+      : '',
     clientVat: initialData.clientData.vat,
     ...(type === 'Invoice'
       ? {
@@ -141,10 +150,16 @@ export const submitFormOffer = (id: string) => (
   const offerData = {
     invoiceDate: values.invoiceDate,
     items: JSON.stringify(values.items),
-    vat: parseFloat(calculateVat(values.items, vat!.percentage).toString()),
+    vat: parseFloat(
+      calculateVat(values.items, vat!.percentage, values.discount).toString(),
+    ),
     vatRuleName: vat?.name ?? vat?.percentage,
     amount: parseFloat(calculateNet(values.items).toString()),
     validUntil: values.validUntil,
+    discount: values.discount
+      ? (calculateNet((values as any).items) * parseFloat(values.discount)) /
+        100
+      : 0,
   };
   const client = {
     clientId: selectedClient.current,

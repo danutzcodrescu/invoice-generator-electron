@@ -35,6 +35,7 @@ export const invoiceFragment = gql`
     invoiceNumber
     vatRuleName
     paymentDeadline
+    discount
     clientData {
       firstName
       lastName
@@ -107,5 +108,6 @@ export const offerFragment = gql`
       name
     }
     validUntil
+    discount
   }
 `;

@@ -129,6 +129,7 @@ export interface Invoice {
   vatRuleName: Scalars['String'];
   amount: Scalars['Float'];
   paid: Scalars['Boolean'];
+  discount: Scalars['Float'];
   clientData: ClientData;
   profileData: ProfileData;
   items: Array<Item>;
@@ -144,6 +145,7 @@ export interface InvoiceInput {
   invoiceNumber: Scalars['String'];
   vatRuleName: Scalars['String'];
   paymentDeadline: Scalars['String'];
+  discount: Scalars['Float'];
 }
 
 export interface InvoiceUpdate {
@@ -159,6 +161,7 @@ export interface InvoiceUpdate {
   vatRuleName: Scalars['String'];
   invoiceNumber: Scalars['String'];
   paymentDeadline: Scalars['String'];
+  discount: Scalars['Float'];
 }
 
 export interface Item {
@@ -336,6 +339,7 @@ export interface Offer {
   vat: Scalars['Float'];
   vatRuleName: Scalars['String'];
   amount: Scalars['Float'];
+  discount: Scalars['Float'];
   clientData: ClientData;
   profileData: ProfileData;
   items: Array<Item>;
@@ -354,6 +358,7 @@ export interface OfferInsert {
   vat: Scalars['Float'];
   vatRuleName: Scalars['String'];
   validUntil: Scalars['String'];
+  discount: Scalars['Float'];
 }
 
 export interface OfferUpdate {
@@ -368,6 +373,7 @@ export interface OfferUpdate {
   vat: Scalars['Float'];
   vatRuleName: Scalars['String'];
   validUntil: Scalars['String'];
+  discount: Scalars['Float'];
 }
 
 export interface Profile {

@@ -1,8 +1,8 @@
 import { Field, InputType } from 'type-graphql';
+import { Discount } from '../../entities/Discount.entity';
 import { Expense } from '../../entities/Expense.entity';
 import { Invoice } from '../../entities/Invoice.entity';
 import { Offer } from '../../entities/Offer.entity';
-import { Discount } from '../../entities/Discount.entity';
 
 @InputType()
 export class OfferInsert implements Partial<Offer> {
@@ -26,6 +26,8 @@ export class OfferInsert implements Partial<Offer> {
   vatRuleName: string;
   @Field()
   validUntil: string;
+  @Field()
+  discount: number;
 }
 
 @InputType()
@@ -52,6 +54,8 @@ export class OfferUpdate implements Partial<Offer> {
   vatRuleName: string;
   @Field()
   validUntil: string;
+  @Field()
+  discount: number;
 }
 
 @InputType()
@@ -80,6 +84,8 @@ export class InvoiceUpdate implements Partial<Invoice> {
   invoiceNumber: string;
   @Field()
   paymentDeadline: string;
+  @Field()
+  discount: number;
 }
 
 @InputType()

@@ -65,6 +65,7 @@ export class OfferResolver {
       clientData: obj.clientData,
       vatRuleName: obj.vatRuleName,
       validUntil: obj.validUntil,
+      discount: obj.discount,
     });
     const offerCreated = await this.entityManager.save(offer);
     return offerCreated;
@@ -82,9 +83,12 @@ export class OfferResolver {
       getInvoiceNumber(),
     ]);
     return this.entityManager.transaction(async (transationManager) => {
-      transationManager.update(Offer, id, {
-        invoiced: true,
-      });
+      transationManager
+        .createQueryBuilder()
+        .update(Offer)
+        .set({ invoiced: true })
+        .where({ id })
+        .execute();
       const invoice = transationManager.create(Invoice as any, {
         invoiceDate: offer?.invoiceDate,
         amount: offer?.amount,
@@ -97,6 +101,7 @@ export class OfferResolver {
         clientData: offer?.clientData,
         vatRuleName: offer?.vatRuleName,
         invoiceNumber: defaultInvoiceNumber(invoiceNumber),
+        discount: offer?.discount,
       });
 
       return transationManager.save(invoice);
@@ -132,6 +137,7 @@ export class OfferResolver {
         clientData: data.clientData,
         vatRuleName: data.vatRuleName,
         validUntil: data.validUntil,
+        discount: data.discount,
       })
       .where({ id: data.id })
       .execute();

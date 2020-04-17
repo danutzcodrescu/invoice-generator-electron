@@ -34,6 +34,7 @@ storiesOf('Components/invoices', module)
         vatRuleName={invoiceWithQuantity.vatRuleName}
         title="Facture"
         deadline={invoiceWithQuantity.paymentDeadline}
+        discount={invoiceWithQuantity.discount}
       />
     </Wrapper>
   ))
@@ -50,6 +51,7 @@ storiesOf('Components/invoices', module)
         vatRuleName={invoiceWithoutQuantity.vatRuleName}
         title="Facture"
         deadline={invoiceWithoutQuantity.paymentDeadline}
+        discount={0}
       />
     </Wrapper>
   ))

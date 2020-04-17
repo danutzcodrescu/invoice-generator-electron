@@ -7,6 +7,7 @@ import { LoadingModal } from '../components/invoices/LoadingModal.component';
 import { useModalInvoice } from '../components/toolbox/pdf.hook';
 import { defaultDate } from '../components/utils/client';
 import { Query } from '../generated/graphql';
+import { GET_DISCOUNTS } from '../graphql/discounts/queries';
 import { CREATE_INVOICE } from '../graphql/mutations';
 import {
   GET_INVOICES,
@@ -17,6 +18,7 @@ import {
 export function InvoiceFormContainer() {
   const { data } = useQuery<Query>(GET_VAT_RULES);
   const { data: invoiceData } = useQuery<Query>(GET_LAST_INVOICE_NUMBER);
+  const { data: discountsData } = useQuery<Query>(GET_DISCOUNTS);
   const { isModalVisible, createPDF } = useModalInvoice(
     'Invoice succesfully created',
   );
@@ -36,6 +38,7 @@ export function InvoiceFormContainer() {
     <>
       <InvoiceForm
         vat={data}
+        discounts={discountsData}
         title="New invoice"
         createInvoice={createInvoice}
         type="Invoice"

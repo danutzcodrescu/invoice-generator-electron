@@ -14,6 +14,7 @@ interface Props {
   vat: number;
   amount: number;
   profile: ProfileData;
+  discount: number;
 }
 
 export function InvoiceItemTable({
@@ -22,6 +23,7 @@ export function InvoiceItemTable({
   vat,
   vatRuleName,
   profile,
+  discount,
 }: Props) {
   return (
     <MarginTop
@@ -30,7 +32,7 @@ export function InvoiceItemTable({
         boxSizing: 'border-box',
       }}
     >
-      <GridContainer>
+      <GridContainer discount={Boolean(discount)}>
         <Heading>
           <span>Description</span>
           {items.some((item) => item?.quantity > 1) ? (
@@ -73,6 +75,17 @@ export function InvoiceItemTable({
             </Grid>
           ))}
         </div>
+        {discount ? (
+          <>
+            <div></div>
+            <div>
+              <Grid container justify="space-between">
+                <Grid item>€</Grid>
+                <Grid item>-{discount}</Grid>
+              </Grid>
+            </div>
+          </>
+        ) : null}
         <Grid container justify="space-between">
           <span>TVA</span>
           <span>{vatRuleName}</span>
@@ -106,7 +119,7 @@ export function InvoiceItemTable({
           style={{ borderTop: '1px solid black' }}
         >
           <Grid item>€</Grid>
-          <Grid item>{vat + amount}</Grid>
+          <Grid item>{(vat + amount - discount).toFixed(2)}</Grid>
         </Grid>
       </GridContainer>
     </MarginTop>

@@ -13,6 +13,7 @@ interface BaseProps {
   amount: number;
   invoiceDate: string;
   vatRuleName: string;
+  discount: number;
 }
 
 interface InvoiceProps extends BaseProps {
@@ -38,6 +39,7 @@ export function Invoice(props: Props) {
     invoiceDate,
     vatRuleName,
     title,
+    discount,
     ...other
   } = props;
   return (
@@ -56,6 +58,7 @@ export function Invoice(props: Props) {
         vatRuleName={vatRuleName}
         amount={amount}
         vat={vat}
+        discount={discount}
       />
       {(other as OfferProps).validUntil ? (
         <OfferSignature validUntil={(other as OfferProps).validUntil} />

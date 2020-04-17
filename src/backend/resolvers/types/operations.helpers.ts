@@ -46,6 +46,9 @@ export class InvoiceInput implements Partial<Invoice> {
 
   @Field()
   paymentDeadline: string;
+
+  @Field()
+  discount: number;
 }
 
 @InputType()

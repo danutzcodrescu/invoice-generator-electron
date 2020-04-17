@@ -37,9 +37,10 @@ export const invoiceWithQuantity = {
     bankAccount: 'KBC : BE23356789',
     vat: 'BE1234567',
   },
-  vat: 39,
-  amount: 650,
+  vat: 183.38,
+  amount: 929,
   vatRuleName: '21%',
+  discount: 55.74,
   paymentDeadline: '2020-04-29',
 };
 

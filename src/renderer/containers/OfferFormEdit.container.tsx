@@ -9,6 +9,7 @@ import { useModalInvoice } from '../components/toolbox/pdf.hook';
 import { defaultDate } from '../components/utils/client';
 import { submitFormOffer } from '../components/utils/editForm';
 import { Offer, Query } from '../generated/graphql';
+import { GET_DISCOUNTS } from '../graphql/discounts/queries';
 import { UPDATE_OFFER } from '../graphql/mutations';
 import { GET_OFFER, GET_OFFERS, GET_VAT_RULES } from '../graphql/queries';
 
@@ -22,6 +23,7 @@ export function OfferEditContainer() {
       variables: { id },
     },
   );
+  const { data: discountsData } = useQuery<Query>(GET_DISCOUNTS);
   const { isModalVisible, createPDF } = useModalInvoice(
     'Offer succesfully updated',
   );
@@ -58,6 +60,7 @@ export function OfferEditContainer() {
         submitButtonText="Update offer"
         createInvoice={updateInvoice}
         values={invoiceData.getOffer}
+        discounts={discountsData}
       ></InvoiceForm>
       <LoadingModal
         isOpen={isModalVisible}

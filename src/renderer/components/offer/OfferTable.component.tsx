@@ -79,6 +79,15 @@ export function OffersTable(props: Props) {
               }),
           },
           {
+            title: 'Discount value',
+            field: 'discount',
+            type: 'numeric',
+            render: (rowData) =>
+              rowData.discount.toLocaleString('nl-BE', {
+                minimumFractionDigits: 2,
+              }),
+          },
+          {
             title: 'VAT',
             field: 'vat',
             type: 'numeric',
@@ -90,7 +99,7 @@ export function OffersTable(props: Props) {
         options={{
           toolbar: !clientTable,
           pageSize: !clientTable ? 20 : 10,
-          actionsColumnIndex: 5,
+          actionsColumnIndex: 6,
         }}
         actions={[
           {
