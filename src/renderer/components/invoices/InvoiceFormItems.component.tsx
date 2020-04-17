@@ -25,9 +25,10 @@ export const useAutocompleteStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   push: Function;
+  submitted: boolean;
 }
 
-export function InvoiceFormItems({ push }: Props) {
+export function InvoiceFormItems({ push, submitted }: Props) {
   const { data } = useQuery<Query>(GET_SERVICES);
   const classes = useAutocompleteStyles();
   return (
@@ -45,17 +46,18 @@ export function InvoiceFormItems({ push }: Props) {
                   placeholder={`Item ${index + 1} name`}
                   label={`Item ${index + 1} name`}
                 >
-                  {({ input, meta }) => (
+                  {({ input }) => (
                     <Autocomplete
                       freeSolo
                       clearOnEscape
+                      key={submitted.toString()}
                       options={data?.services ?? []}
                       defaultValue={{ name: input.value } as any}
                       onChange={(_: any, obj: any) => {
                         fields.update(index, {
-                          name: obj.name,
-                          measurement: obj.measurement ?? '',
-                          value: obj.cost ?? 0,
+                          name: obj?.name ?? '',
+                          measurement: obj?.measurement ?? '',
+                          value: obj?.cost ?? 0,
                           quantity: fields.value[index].quantity,
                         });
                       }}
@@ -66,7 +68,11 @@ export function InvoiceFormItems({ push }: Props) {
                           {...params}
                           {...input}
                           fullWidth
-                          InputProps={{ ...params.InputProps, type: 'search' }}
+                          InputProps={{
+                            ...params.InputProps,
+                            type: 'search',
+                            endAdornment: null,
+                          }}
                         />
                       )}
                     ></Autocomplete>

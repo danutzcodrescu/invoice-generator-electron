@@ -62,8 +62,8 @@ export class InvoiceResolver {
     @Arg('invoiceData') invoiceData: InvoiceInput,
   ) {
     const [currentProfile, clientDB] = await Promise.all([
-      this.entityManager.findOne(Profile, profile.profileId),
-      this.entityManager.findOne(Client, client.clientId),
+      this.entityManager.findOne(Profile, { id: profile.profileId }),
+      this.entityManager.findOne(Client, { id: client.clientId }),
     ]);
     // @ts-ignore
     const invoice = this.entityManager.create(Invoice, {
@@ -87,8 +87,8 @@ export class InvoiceResolver {
   @Mutation(() => Invoice)
   async updateInvoice(@Arg('data') data: InvoiceUpdate) {
     const [currentProfile, clientDB] = await Promise.all([
-      this.entityManager.findOne(Profile, data.profileId),
-      this.entityManager.findOne(Client, data.clientId),
+      this.entityManager.findOne(Profile, { id: data.profileId }),
+      this.entityManager.findOne(Client, { id: data.clientId }),
     ]);
     // @ts-ignore
     await this.entityManager

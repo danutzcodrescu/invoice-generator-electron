@@ -95,6 +95,7 @@ export function InvoiceForm({
         render={({
           handleSubmit,
           submitting,
+          submitSucceeded,
           pristine,
           values,
           submitErrors,
@@ -186,7 +187,10 @@ export function InvoiceForm({
             <DividerMargin />
             <InvoiceFormClient set={set} selectedClient={selectedClient} />
             <DividerMargin />
-            <InvoiceFormItems push={push} />
+            <InvoiceFormItems
+              push={push}
+              submitted={submitSucceeded && pristine}
+            />
             <InvoiceFormDiscounts discounts={discounts} />
             <InvoiceFormVat values={values} data={data} />
             <InvoiceFormErrors submitErrors={submitErrors} />
