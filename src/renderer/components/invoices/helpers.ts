@@ -26,30 +26,27 @@ export function calculateNet(items: Items[]) {
   );
 }
 
-export function calculateVat(items: Items[], vat: number) {
-  return (
-    (
-      (items.reduce(
-        (acc, val) => acc + parseFloat(val.value) * parseInt(val.quantity),
-        0,
-      ) *
-        vat) /
-      100
-    ).toFixed(2) || 0
+export function calculateVat(items: Items[], vat: number, discount: string) {
+  let total = items.reduce(
+    (acc, val) => acc + parseFloat(val.value) * parseInt(val.quantity),
+    0,
   );
+  if (discount) {
+    total *= (100 - parseFloat(discount)) / 100;
+  }
+  return ((total * vat) / 100).toFixed(2) || 0;
 }
 
-export function calculateTotal(items: Items[], vat: number) {
-  return (
-    (
-      (items.reduce(
-        (acc, val) => acc + parseFloat(val.value) * parseInt(val.quantity),
-        0,
-      ) *
-        (100 + vat)) /
-      100
-    ).toFixed(2) || 0
+export function calculateTotal(items: Items[], vat: number, discount: string) {
+  let total = items.reduce(
+    (acc, val) => acc + parseFloat(val.value) * parseInt(val.quantity),
+    0,
   );
+  if (discount) {
+    total *= (100 - parseFloat(discount)) / 100;
+  }
+  total *= (100 + vat) / 100;
+  return total.toFixed(2) || 0;
 }
 
 export function filterClientName(
@@ -163,11 +160,17 @@ export function submitForm(
   const invoiceData = {
     invoiceDate: values.invoiceDate,
     items: JSON.stringify(values.items),
-    vat: parseFloat(calculateVat(values.items, vat!.percentage).toString()),
+    vat: parseFloat(
+      calculateVat(values.items, vat!.percentage, values.discount).toString(),
+    ),
     vatRuleName: vat?.name ?? vat?.percentage,
     amount: parseFloat(calculateNet(values.items).toString()),
     invoiceNumber: values.invoiceNumber,
     paymentDeadline: values.paymentDeadline,
+    discount: values.discount
+      ? (calculateNet((values as any).items) * parseFloat(values.discount)) /
+        100
+      : 0,
   };
   const client = {
     clientId: selectedClient.current,

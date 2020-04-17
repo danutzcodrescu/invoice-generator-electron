@@ -43,13 +43,10 @@ export class InvoiceResolver {
     return this.entityManager.find(
       // @ts-ignore
       Invoice,
-      Object.assign(
-        {
-          relations: ['client', 'profile'],
-          order: { invoiceDate: 'DESC' },
-        },
-        params,
-      ),
+      Object.assign(params, {
+        relations: ['client', 'profile'],
+        order: { invoiceNumber: 'DESC' },
+      }),
     );
   }
 
@@ -81,6 +78,7 @@ export class InvoiceResolver {
       vatRuleName: invoiceData.vatRuleName,
       invoiceNumber: invoiceData.invoiceNumber,
       paymentDeadline: invoiceData.paymentDeadline,
+      discount: invoiceData.discount,
     });
     const inv = await this.entityManager.save(invoice);
     return inv;
@@ -108,6 +106,7 @@ export class InvoiceResolver {
         vatRuleName: data.vatRuleName,
         invoiceNumber: data.invoiceNumber,
         paymentDeadline: data.paymentDeadline,
+        discount: data.discount,
       })
       .where({ id: data.id })
       .execute();

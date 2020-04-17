@@ -25,6 +25,7 @@ import {
   MonetizationOn,
   MoneyOff,
   Receipt,
+  Shop,
 } from '@material-ui/icons';
 import clsx from 'clsx';
 import * as React from 'react';
@@ -46,6 +47,7 @@ const sidebarLinks = [
   { text: 'Clients', icon: <Contacts /> },
   { text: 'VAT rules', icon: <MonetizationOn /> },
   { text: 'Services', icon: <AddShoppingCart /> },
+  { text: 'Discounts', icon: <Shop /> },
 ];
 
 const createItems = [
@@ -59,6 +61,11 @@ const createItems = [
     text: 'Create service/item',
     link: '/newService',
     icon: <AddShoppingCart />,
+  },
+  {
+    text: 'Create discount',
+    link: '/newDiscount',
+    icon: <Shop />,
   },
 ];
 

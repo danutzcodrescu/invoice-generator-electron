@@ -70,6 +70,20 @@ export interface CreateExpense {
   clientName: Scalars['String'];
 }
 
+export interface Discount {
+  __typename?: 'Discount';
+  id: Scalars['ID'];
+  updatedAt: Scalars['String'];
+  createdAt: Scalars['String'];
+  name: Scalars['String'];
+  percentage: Scalars['Float'];
+}
+
+export interface DiscountInsert {
+  name?: Maybe<Scalars['String']>;
+  percentage: Scalars['Float'];
+}
+
 export interface Event {
   __typename?: 'Event';
   id: Scalars['ID'];
@@ -115,6 +129,7 @@ export interface Invoice {
   vatRuleName: Scalars['String'];
   amount: Scalars['Float'];
   paid: Scalars['Boolean'];
+  discount: Scalars['Float'];
   clientData: ClientData;
   profileData: ProfileData;
   items: Array<Item>;
@@ -130,6 +145,7 @@ export interface InvoiceInput {
   invoiceNumber: Scalars['String'];
   vatRuleName: Scalars['String'];
   paymentDeadline: Scalars['String'];
+  discount: Scalars['Float'];
 }
 
 export interface InvoiceUpdate {
@@ -145,6 +161,7 @@ export interface InvoiceUpdate {
   vatRuleName: Scalars['String'];
   invoiceNumber: Scalars['String'];
   paymentDeadline: Scalars['String'];
+  discount: Scalars['Float'];
 }
 
 export interface Item {
@@ -180,6 +197,9 @@ export interface Mutation {
   addVatRule: VatRule;
   updateVatRule: VatRule;
   deleteVat: Scalars['Boolean'];
+  addDiscount: Discount;
+  updateDiscount: Discount;
+  deleteDiscount: Scalars['Boolean'];
 }
 
 export interface MutationUpdateClientArgs {
@@ -296,6 +316,19 @@ export interface MutationDeleteVatArgs {
   id: Scalars['ID'];
 }
 
+export interface MutationAddDiscountArgs {
+  data: DiscountInsert;
+}
+
+export interface MutationUpdateDiscountArgs {
+  data: DiscountInsert;
+  id: Scalars['ID'];
+}
+
+export interface MutationDeleteDiscountArgs {
+  id: Scalars['ID'];
+}
+
 export interface Offer {
   __typename?: 'Offer';
   id: Scalars['ID'];
@@ -306,6 +339,7 @@ export interface Offer {
   vat: Scalars['Float'];
   vatRuleName: Scalars['String'];
   amount: Scalars['Float'];
+  discount: Scalars['Float'];
   clientData: ClientData;
   profileData: ProfileData;
   items: Array<Item>;
@@ -324,6 +358,7 @@ export interface OfferInsert {
   vat: Scalars['Float'];
   vatRuleName: Scalars['String'];
   validUntil: Scalars['String'];
+  discount: Scalars['Float'];
 }
 
 export interface OfferUpdate {
@@ -338,6 +373,7 @@ export interface OfferUpdate {
   vat: Scalars['Float'];
   vatRuleName: Scalars['String'];
   validUntil: Scalars['String'];
+  discount: Scalars['Float'];
 }
 
 export interface Profile {
@@ -389,6 +425,7 @@ export interface Query {
   profile: Profile;
   services: Array<Service>;
   vatRules: Array<VatRule>;
+  discounts: Array<Discount>;
 }
 
 export interface QueryClientArgs {

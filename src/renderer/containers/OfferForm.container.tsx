@@ -6,6 +6,7 @@ import { submitOffer } from '../components/offer/offer.helpers';
 import { useModalInvoice } from '../components/toolbox/pdf.hook';
 import { defaultDate } from '../components/utils/client';
 import { Query } from '../generated/graphql';
+import { GET_DISCOUNTS } from '../graphql/discounts/queries';
 import { CREATE_OFFER } from '../graphql/mutations';
 import { GET_OFFERS, GET_VAT_RULES } from '../graphql/queries';
 
@@ -14,6 +15,7 @@ export function OfferFormContainer() {
   const { createPDF, isModalVisible } = useModalInvoice(
     'Offer succesfully created',
   );
+  const { data: discountsData } = useQuery<Query>(GET_DISCOUNTS);
   const [createInvoice] = useMutation(CREATE_OFFER, {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     onCompleted: createPDF,
@@ -30,6 +32,7 @@ export function OfferFormContainer() {
         submitButtonText="Create offer"
         type="Offer"
         submitForm={submitOffer}
+        discounts={discountsData}
       />
       {/* TODO mock in storybook  */}
       <LoadingModal

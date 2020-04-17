@@ -17,6 +17,7 @@ export function InvoiceContainer() {
     validUntil: null,
     id: null,
     paymentDeadline: null,
+    discount: 0,
   });
 
   function setData(_: Event, data: any) {
@@ -53,6 +54,7 @@ export function InvoiceContainer() {
       client={invoice.client!}
       profile={invoice.profile!}
       title={invoice.title as any}
+      discount={invoice.discount}
       validUntil={invoice.validUntil as any}
       invoiceNumber={invoice.invoiceNumber}
       vatRuleName={invoice.vatRuleName}

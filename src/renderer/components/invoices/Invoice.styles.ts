@@ -1,5 +1,5 @@
 import { Paper } from '@material-ui/core';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 export const Container = styled.div`
   padding: ${(props) => props.theme.spacing(5)}px;
 `;
@@ -8,7 +8,11 @@ export const MarginTop = styled.div`
   margin-top: ${(props) => props.theme.spacing(4)}px;
 `;
 
-export const GridContainer = styled.div`
+interface GridProps {
+  discount: boolean;
+}
+
+export const GridContainer = styled.div<GridProps>`
   display: grid;
   grid-template-columns: 1fr minmax(150px, 20%);
   grid-template-rows: 53px 1fr;
@@ -21,6 +25,17 @@ export const GridContainer = styled.div`
   > *:not(:nth-of-type(1)):not(:nth-of-type(2)) {
     padding: ${(props) => props.theme.spacing(2)}px;
   }
+  ${(props) =>
+    props.discount
+      ? css`
+          > *:nth-of-type(5) {
+            padding: 0 ${(props) => props.theme.spacing(2)}px !important;
+          }
+          > *:nth-of-type(6) {
+            padding: 0 ${(props) => props.theme.spacing(2)}px !important;
+          }
+        `
+      : null}
   min-height: 400px;
 `;
 

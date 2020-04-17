@@ -45,6 +45,20 @@ export function InvoiceFormVat(props: Props) {
           {calculateNet((values as any).items)}
         </Grid>
       </Grid>
+      {values.discount ? (
+        <Grid container>
+          <Grid item xs={3}>
+            Discount:
+          </Grid>
+          <Grid item xs={2} style={{ textAlign: 'right' }}>
+            -
+            {(calculateNet((values as any).items) *
+              parseFloat(values.discount)) /
+              100}
+          </Grid>
+        </Grid>
+      ) : null}
+
       <Grid container>
         <Grid item xs={3}>
           VAT:
@@ -55,6 +69,7 @@ export function InvoiceFormVat(props: Props) {
                 (values as any).items,
                 data!.vatRules.find((rule) => rule.id === (values as any).vat)!
                   .percentage,
+                values.discount,
               )
             : 0}
         </Grid>
@@ -69,6 +84,7 @@ export function InvoiceFormVat(props: Props) {
                 (values as any).items,
                 data!.vatRules.find((rule) => rule.id === (values as any).vat)!
                   .percentage,
+                values.discount,
               )
             : 0}
         </Grid>

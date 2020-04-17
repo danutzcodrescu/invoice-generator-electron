@@ -9,6 +9,7 @@ import { setBulkValue } from '../../utils/react-final-form';
 import { FormField } from '../toolbox/FormField.component';
 import { setInitialValues } from '../utils/editForm';
 import { defaultInvoiceNumber } from '../utils/invoices';
+import { InvoiceFormDiscounts } from './InvoiceDiscounts.component';
 import { DividerMargin } from './InvoiceForm.styles';
 import { InvoiceFormClient } from './InvoiceFormClient.component';
 import { InvoiceFormErrors } from './InvoiceFormErrors.component';
@@ -25,6 +26,7 @@ interface Props {
   submitForm: Function;
   lastInvoiceNumber?: string;
   values?: any;
+  discounts: Query | undefined;
 }
 
 export function itemToString(item: Profile | Client) {
@@ -48,6 +50,7 @@ export function InvoiceForm({
   submitForm,
   lastInvoiceNumber,
   values: initialData,
+  discounts,
 }: Props) {
   const selectedClient = React.useRef<string>(initialData?.client?.id);
   const selectedProfile = React.useRef<string>(initialData?.profile?.id);
@@ -188,6 +191,7 @@ export function InvoiceForm({
               push={push}
               submitted={submitSucceeded && pristine}
             />
+            <InvoiceFormDiscounts discounts={discounts} />
             <InvoiceFormVat values={values} data={data} />
             <InvoiceFormErrors submitErrors={submitErrors} />
             <Button

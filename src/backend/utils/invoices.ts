@@ -15,7 +15,7 @@ export async function getInvoiceNumber() {
       ),
     },
     order: {
-      invoiceDate: 'DESC',
+      invoiceNumber: 'DESC',
     },
     take: 1,
   });

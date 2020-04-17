@@ -62,6 +62,7 @@ export function loadInvoiceData(invoice: Invoice | Offer) {
       vatRuleName: invoice.vatRuleName,
       amount: invoice.amount,
       client: invoice.clientData,
+      discount: invoice.discount,
       profile: invoice.profileData,
       ...((invoice as Invoice).invoiceNumber
         ? {

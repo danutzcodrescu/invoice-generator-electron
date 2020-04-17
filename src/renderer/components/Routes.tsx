@@ -22,6 +22,8 @@ import { ServicesTableContainer } from '../containers/ServiceTable.container';
 import { VATFormContainer } from '../containers/VatRuleForm.container';
 import { VatTableContainer } from '../containers/VatTable.container';
 import { useScrollToTop } from './toolbox/scrollTop.hook';
+import { DiscountFormContainer } from '../containers/discounts/DiscountFormContainer';
+import { DiscountsTableContainer } from '../containers/discounts/DiscountTableContainer';
 
 export function Routes() {
   useScrollToTop();
@@ -81,6 +83,16 @@ export function Routes() {
       <Route exact path="/newVat" component={VATFormContainer}></Route>
       <Route exact path="/newService" component={ServiceFormContainer}></Route>
       <Route exact path="/services" component={ServicesTableContainer}></Route>
+      <Route
+        exact
+        path="/newDiscount"
+        component={DiscountFormContainer}
+      ></Route>
+      <Route
+        exact
+        path="/discounts"
+        component={DiscountsTableContainer}
+      ></Route>
       <Route exact path="/" component={ExportContainer} />
     </Switch>
   );

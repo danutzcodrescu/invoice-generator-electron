@@ -1,11 +1,11 @@
 /* eslint-disable react/display-name */
 import {
+  AccountBalance,
+  CheckCircleOutline,
+  Close,
   Create,
   Delete,
   Visibility,
-  CheckCircleOutline,
-  Close,
-  AccountBalance,
 } from '@material-ui/icons';
 import { format } from 'date-fns';
 import MaterialTable from 'material-table';
@@ -87,6 +87,15 @@ export const InvoiceTable = (props: Props) => {
               }),
           },
           {
+            title: 'Discount value',
+            field: 'discount',
+            type: 'numeric',
+            render: (rowData) =>
+              rowData.discount.toLocaleString('nl-BE', {
+                minimumFractionDigits: 2,
+              }),
+          },
+          {
             title: 'VAT',
             field: 'vat',
             type: 'numeric',
@@ -105,7 +114,7 @@ export const InvoiceTable = (props: Props) => {
         options={{
           toolbar: !clientTable,
           pageSize: !clientTable ? 20 : 10,
-          actionsColumnIndex: 7,
+          actionsColumnIndex: 8,
         }}
         actions={[
           {
